@@ -16,7 +16,7 @@ const Form = ({ setParentVal }) => {
 
   return (
     <form>
-      <label htmlFor="">label</label>
+      <label htmlFor="">Username: </label>
       <input
         type="text"
         name=""
