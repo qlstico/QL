@@ -1,15 +1,16 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Switch, Route } from 'react-router';
-import routes from './constants/routes';
-import App from './containers/App';
+import { routeNames } from './constants/routeNames';
 import Form from './components/reuse/Form';
 
-const Routes = () => (
-  <App>
-    <Switch>
-      <Route path={routes.Home} component={Form} />
-    </Switch>
-  </App>
-);
+class Routes extends Component {
+  render() {
+    return (
+      <Switch>
+        <Route path={routeNames.home} component={Form} />
+      </Switch>
+    );
+  }
+}
 
 export default Routes;
