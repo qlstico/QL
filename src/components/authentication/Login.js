@@ -1,14 +1,28 @@
 import React, { useState } from 'react';
-const defaultConnectionSettings = require('../../../defaultConnection.json');
 const fs = require('fs');
-const writeToUserFile = json =>
-  fs.writeFile('../../../userConnection.json', json, 'utf8', function(err) {
-    if (err) {
-      console.error(err);
-    } else {
-      console.log('User connection specified');
+const path = require('path');
+const defaultConnectionSettings = require('../../../defaultConnection.json');
+
+console.log(path.join(__dirname));
+
+const writeToUserFile = obj => {
+  fs.writeFile(
+    path.join(__dirname, '..', 'userConnection.txt'),
+    obj,
+    'utf8',
+    function(err) {
+      if (err) {
+        console.error(err);
+      } else {
+        console.log('User connection specified');
+      }
     }
-  });
+  );
+};
+
+const prepareObjForTxt = obj => {
+  writeToUserFile(Object.values(obj).join('\n'));
+};
 
 const Login = () => {
   const [values, setValues] = useState(defaultConnectionSettings);
@@ -20,8 +34,7 @@ const Login = () => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    const stringified = JSON.stringify(values);
-    writeToUserFile(stringified);
+    prepareObjForTxt(values);
   };
 
   return (
