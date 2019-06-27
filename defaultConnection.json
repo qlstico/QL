@@ -1,0 +1,13 @@
+{
+  "databaseType": "postgres",
+  "runPort": "4466",
+  "databases": "",
+  "connector": "postgres",
+  "host": "postgres",
+  "port": "5432",
+  "user": "prisma",
+  "password": "prisma",
+  "dbTypeUser": "",
+  "dbTypePassword": "",
+  "volumes": "~"
+}
