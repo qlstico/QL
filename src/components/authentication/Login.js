@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import clsx from "clsx";
+import { withRouter } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
@@ -46,7 +47,7 @@ const prepareObjForTxt = obj => {
   writeToUserFile(Object.values(obj).join("\n"));
 };
 
-const Login = () => {
+const Login = props => {
   const classes = useStyles();
   const [values, setValues] = useState(defaultConnectionSettings);
 
@@ -57,6 +58,7 @@ const Login = () => {
 
   const handleSubmit = e => {
     e.preventDefault();
+    props.history.push("/dbs");
     prepareObjForTxt(values);
   };
 
@@ -132,4 +134,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default withRouter(Login);

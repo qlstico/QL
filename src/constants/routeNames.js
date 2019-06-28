@@ -1,3 +1,4 @@
 export const routeNames = {
-  home: '/'
+  home: "/",
+  allDBs: "/dbs"
 };
