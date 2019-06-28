@@ -43,6 +43,8 @@ const Login = props => {
     e.preventDefault();
     props.history.push('/dbs');
     writeToLocalStorage(values);
+    
+
   };
 
   return (
