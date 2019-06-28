@@ -4,7 +4,7 @@ import { DisplayCard } from '../index';
 const dummyDbs = [
   { dbName: 'Grace Shopper' },
   { dbName: 'qlStico' },
-  { dbName: 'nyscene.' }
+  { dbName: 'nyscene.' },
 ];
 
 const AllDBs = props => {
@@ -12,7 +12,7 @@ const AllDBs = props => {
     <div>
       <h1>Databases: </h1>
       {dummyDbs.map(db => (
-        <DisplayCard name={db.dbName} type="db" />
+        <DisplayCard name={db.dbName} type="db" key={db.dbName} />
       ))}
     </div>
   );
