@@ -1,10 +1,10 @@
-import React from 'react';
-import { Header, Footer } from '..';
+import React from "react";
+import { Header, Footer } from "..";
 
 const LayoutMain = ({ children }) => {
   return (
     <>
-      <Header />
+      <PrimarySearchAppBar />
       {children}
       <Footer />
     </>

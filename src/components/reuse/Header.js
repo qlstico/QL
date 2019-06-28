@@ -130,14 +130,6 @@ export default function PrimarySearchAppBar() {
       onClose={handleMobileMenuClose}
     >
       <MenuItem>
-        <IconButton aria-label='Show 4 new mails' color='inherit'>
-          <Badge badgeContent={4} color='secondary'>
-            <MailIcon />
-          </Badge>
-        </IconButton>
-        <p>Messages</p>
-      </MenuItem>
-      <MenuItem>
         <IconButton aria-label='Show 11 new notifications' color='inherit'>
           <Badge badgeContent={11} color='secondary'>
             <NotificationsIcon />
@@ -163,14 +155,6 @@ export default function PrimarySearchAppBar() {
     <div className={classes.grow}>
       <AppBar position='static'>
         <Toolbar>
-          <IconButton
-            edge='start'
-            className={classes.menuButton}
-            color='inherit'
-            aria-label='Open drawer'
-          >
-            <MenuIcon />
-          </IconButton>
           <Typography className={classes.title} variant='h6' noWrap>
             QLstico
           </Typography>
@@ -189,11 +173,6 @@ export default function PrimarySearchAppBar() {
           </div>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            <IconButton aria-label='Show 4 new mails' color='inherit'>
-              <Badge badgeContent={4} color='secondary'>
-                <MailIcon />
-              </Badge>
-            </IconButton>
             <IconButton aria-label='Show 17 new notifications' color='inherit'>
               <Badge badgeContent={17} color='secondary'>
                 <NotificationsIcon />
