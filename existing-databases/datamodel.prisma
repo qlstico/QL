@@ -1,0 +1,29 @@
+type Album @db(name: "albums") {
+  id: Int! @id(strategy: SEQUENCE) @sequence(name: "albums_id_seq", initialValue: 1, allocationSize: 1)
+  artistId: Artist
+  artworkUrl: String @default(value: "default-album.jpg")
+  createdAt: DateTime! @createdAt
+  name: String!
+  songs: [Song]
+  updatedAt: DateTime! @updatedAt
+}
+
+type Artist @db(name: "artists") {
+  id: Int! @id(strategy: SEQUENCE) @sequence(name: "artists_id_seq", initialValue: 1, allocationSize: 1)
+  albums: [Album]
+  createdAt: DateTime! @createdAt
+  name: String!
+  songs: [Song]
+  updatedAt: DateTime! @updatedAt
+}
+
+type Song @db(name: "songs") {
+  id: Int! @id(strategy: SEQUENCE) @sequence(name: "songs_id_seq", initialValue: 1, allocationSize: 1)
+  albumId: Album
+  artistId: Artist
+  audioUrl: String
+  createdAt: DateTime! @createdAt
+  genre: String
+  name: String!
+  updatedAt: DateTime! @updatedAt
+}
