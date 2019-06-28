@@ -1,30 +1,27 @@
 import React, { useState } from 'react';
 const storage = require('electron-json-storage');
-import clsx from 'clsx';
 import { withRouter } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-const fs = require('fs');
-const path = require('path');
 const defaultConnectionSettings = require('../../../defaultConnection.json');
 
 const useStyles = makeStyles(theme => ({
   container: {
     display: 'flex',
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
   },
   textField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
-    width: 200
+    width: 200,
   },
   dense: {
-    marginTop: 19
+    marginTop: 19,
   },
   menu: {
-    width: 200
-  }
+    width: 200,
+  },
 }));
 
 const Login = props => {
@@ -32,6 +29,7 @@ const Login = props => {
   const [values, setValues] = useState(defaultConnectionSettings);
 
   const writeToLocalStorage = obj => {
+    console.log(obj);
     const databaseSetConnectionData = Object.values(obj).join('\n');
     storage.set('connectionData', databaseSetConnectionData, function(error) {
       if (error) throw error;
