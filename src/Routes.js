@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
-import { Switch, Route } from 'react-router';
-import { routeNames } from './constants/routeNames';
-import { Login } from './components';
-
+import React, { Component } from "react";
+import { Switch, Route } from "react-router";
+import { routeNames } from "./constants/routeNames";
+import { Login, DBCard } from "./components";
 
 class Routes extends Component {
   render() {
     return (
       <Switch>
-        <Route path={routeNames.home} component={Login} />
+        <Route exact path={routeNames.home} component={Login} />
+        <Route exact path={routeNames.allDBs} component={DBCard} />
       </Switch>
     );
   }
