@@ -2,15 +2,15 @@ import React, { useState } from 'react';
 const defaultConnectionSettings = require('../../../defaultConnection.json');
 const storage = require('electron-json-storage');
 
-const prepareObjForTxt = obj => {
-  const databaseSetConnectionData = Object.values(obj).join('\n');
-  storage.set('connectionData', databaseSetConnectionData, function(error) {
-    if (error) throw error;
-  });
-};
-
 const Login = () => {
   const [values, setValues] = useState(defaultConnectionSettings);
+
+  const writeToLocalStorage = obj => {
+    const databaseSetConnectionData = Object.values(obj).join('\n');
+    storage.set('connectionData', databaseSetConnectionData, function(error) {
+      if (error) throw error;
+    });
+  };
 
   const handleInputChange = e => {
     const { name, value } = e.target;
@@ -19,7 +19,7 @@ const Login = () => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    prepareObjForTxt(values);
+    writeToLocalStorage(values);
   };
 
   return (
