@@ -38,6 +38,7 @@
     "@material-ui/icons": "^4.2.1",
     "clsx": "^1.0.4",
     "electron": "^5.0.2",
+    "electron-json-storage": "^4.1.6",
     "material-ui": "^0.20.2",
     "materialize-css": "^1.0.0",
     "prop-types": "^15.7.2",

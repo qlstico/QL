@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
+const storage = require('electron-json-storage');
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
@@ -6,8 +7,6 @@ import Button from "@material-ui/core/Button";
 const fs = require("fs");
 const path = require("path");
 const defaultConnectionSettings = require("../../../defaultConnection.json");
-
-console.log(path.join(__dirname));
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -27,28 +26,16 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const writeToUserFile = obj => {
-  fs.writeFile(
-    path.join(__dirname, "..", "userConnection.txt"),
-    obj,
-    "utf8",
-    function(err) {
-      if (err) {
-        console.error(err);
-      } else {
-        console.log("User connection specified");
-      }
-    }
-  );
-};
-
-const prepareObjForTxt = obj => {
-  writeToUserFile(Object.values(obj).join("\n"));
-};
-
 const Login = () => {
   const classes = useStyles();
   const [values, setValues] = useState(defaultConnectionSettings);
+
+  const writeToLocalStorage = obj => {
+    const databaseSetConnectionData = Object.values(obj).join('\n');
+    storage.set('connectionData', databaseSetConnectionData, function(error) {
+      if (error) throw error;
+    });
+  };
 
   const handleInputChange = e => {
     const { name, value } = e.target;
@@ -57,7 +44,7 @@ const Login = () => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    prepareObjForTxt(values);
+    writeToLocalStorage(values);
   };
 
   return (
