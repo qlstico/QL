@@ -27,7 +27,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Login = () => {
+const Login = props => {
   const classes = useStyles();
   const [values, setValues] = useState(defaultConnectionSettings);
 
@@ -45,78 +45,83 @@ const Login = () => {
 
   const handleSubmit = e => {
     e.preventDefault();
+    props.history.push('/dbs');
     writeToLocalStorage(values);
   };
 
   return (
-    <form className={classes.container} noValidate onSubmit={handleSubmit}>
-      <TextField
-        label="Database Type"
-        type="text"
-        name="databaseType"
-        className={classes.textField}
-        value={values.databaseType}
-        onChange={handleInputChange}
-        placeholder={values.databaseType}
-      />
-      <TextField
-        label="Port"
-        type="text"
-        name="port"
-        className={classes.textField}
-        value={values.port}
-        onChange={handleInputChange}
-        placeholder={values.port}
-      />
-      <TextField
-        label="User"
-        type="text"
-        name="user"
-        className={classes.textField}
-        value={values.user}
-        onChange={handleInputChange}
-        placeholder={values.user}
-      />
-      <TextField
-        label="Password"
-        type="text"
-        name="password"
-        className={classes.textField}
-        value={values.password}
-        onChange={handleInputChange}
-        placeholder={values.password}
-      />
-      <TextField
-        label="Database Type User"
-        type="text"
-        name="dbTypeUser"
-        className={classes.textField}
-        value={values.dbTypeUser}
-        onChange={handleInputChange}
-        placeholder={values.dbTypeUser}
-      />
-      <TextField
-        label="Database Type Password"
-        type="text"
-        name="dbTypePassword"
-        className={classes.textField}
-        value={values.dbTypePassword}
-        onChange={handleInputChange}
-        placeholder={values.dbTypePassword}
-      />
-      <TextField
-        label="Volumes"
-        type="text"
-        name="volumes"
-        className={classes.textField}
-        value={values.volumes}
-        onChange={handleInputChange}
-        placeholder={values.volumes}
-      />
-      <Button variant="contained" type="submit">
-        Submit
-      </Button>
-    </form>
+    <div>
+      <h1>Hello, QLstico!</h1>
+      <h1>Redfining databse access starts here!</h1>
+      <form className={classes.container} noValidate onSubmit={handleSubmit}>
+        <TextField
+          label="Database Type"
+          type="text"
+          name="databaseType"
+          className={classes.textField}
+          value={values.databaseType}
+          onChange={handleInputChange}
+          placeholder={values.databaseType}
+        />
+        <TextField
+          label="Port"
+          type="text"
+          name="port"
+          className={classes.textField}
+          value={values.port}
+          onChange={handleInputChange}
+          placeholder={values.port}
+        />
+        <TextField
+          label="User"
+          type="text"
+          name="user"
+          className={classes.textField}
+          value={values.user}
+          onChange={handleInputChange}
+          placeholder={values.user}
+        />
+        <TextField
+          label="Password"
+          type="text"
+          name="password"
+          className={classes.textField}
+          value={values.password}
+          onChange={handleInputChange}
+          placeholder={values.password}
+        />
+        <TextField
+          label="Database Type User"
+          type="text"
+          name="dbTypeUser"
+          className={classes.textField}
+          value={values.dbTypeUser}
+          onChange={handleInputChange}
+          placeholder={values.dbTypeUser}
+        />
+        <TextField
+          label="Database Type Password"
+          type="text"
+          name="dbTypePassword"
+          className={classes.textField}
+          value={values.dbTypePassword}
+          onChange={handleInputChange}
+          placeholder={values.dbTypePassword}
+        />
+        <TextField
+          label="Volumes"
+          type="text"
+          name="volumes"
+          className={classes.textField}
+          value={values.volumes}
+          onChange={handleInputChange}
+          placeholder={values.volumes}
+        />
+        <Button variant="contained" type="submit">
+          Submit
+        </Button>
+      </form>
+    </div>
   );
 };
 
