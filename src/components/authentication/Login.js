@@ -29,9 +29,7 @@ const Login = props => {
   const [values, setValues] = useState(defaultConnectionSettings);
 
   const writeToLocalStorage = obj => {
-    console.log(obj);
-    const databaseSetConnectionData = Object.values(obj).join('\n');
-    storage.set('connectionData', databaseSetConnectionData, function(error) {
+    storage.set('connectionData', JSON.stringify(obj), function(error) {
       if (error) throw error;
     });
   };
