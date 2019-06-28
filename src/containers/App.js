@@ -1,15 +1,13 @@
-import "../assets/css/App.css";
-import React, { Component } from "react";
-import Routes from "../Routes";
-import PrimarySearchAppBar from "../components/reuse/Header";
+import '../assets/css/App.css';
+import React, { Component } from 'react';
+import Routes from '../Routes';
+import PrimarySearchAppBar from '../components/reuse/Header';
 
 class App extends Component {
   render() {
     return (
       <div>
         <PrimarySearchAppBar />
-        <h1>Hello, QLstico!</h1>
-        <h1>Redfining databse access starts here!</h1>
         <Routes />
       </div>
     );
