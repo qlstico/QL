@@ -1,8 +1,33 @@
 import React, { useState } from 'react';
-const defaultConnectionSettings = require('../../../defaultConnection.json');
 const storage = require('electron-json-storage');
+import clsx from "clsx";
+import { makeStyles } from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button";
+const fs = require("fs");
+const path = require("path");
+const defaultConnectionSettings = require("../../../defaultConnection.json");
+
+const useStyles = makeStyles(theme => ({
+  container: {
+    display: "flex",
+    flexWrap: "wrap"
+  },
+  textField: {
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    width: 200
+  },
+  dense: {
+    marginTop: 19
+  },
+  menu: {
+    width: 200
+  }
+}));
 
 const Login = () => {
+  const classes = useStyles();
   const [values, setValues] = useState(defaultConnectionSettings);
 
   const writeToLocalStorage = obj => {
@@ -23,64 +48,73 @@ const Login = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label htmlFor="databaseType">Database Type: </label>
-      <input
-        type="text"
-        name="databaseType"
+    <form className={classes.container} noValidate onSubmit={handleSubmit}>
+      <TextField
+        label='Database Type'
+        type='text'
+        name='databaseType'
+        className={classes.textField}
         value={values.databaseType}
         onChange={handleInputChange}
         placeholder={values.databaseType}
       />
-      <label htmlFor="port">Port: </label>
-      <input
-        type="text"
-        name="port"
+      <TextField
+        label='Port'
+        type='text'
+        name='port'
+        className={classes.textField}
         value={values.port}
         onChange={handleInputChange}
         placeholder={values.port}
       />
-      <label htmlFor="user">User: </label>
-      <input
-        type="text"
-        name="user"
+      <TextField
+        label='User'
+        type='text'
+        name='user'
+        className={classes.textField}
         value={values.user}
         onChange={handleInputChange}
         placeholder={values.user}
       />
-      <label htmlFor="password">Password: </label>
-      <input
-        type="text"
-        name="password"
+      <TextField
+        label='Password'
+        type='text'
+        name='password'
+        className={classes.textField}
         value={values.password}
         onChange={handleInputChange}
         placeholder={values.password}
       />
-      <label htmlFor="dbTypeUser">Database Type User: </label>
-      <input
-        type="text"
-        name="dbTypeUser"
+      <TextField
+        label='Database Type User'
+        type='text'
+        name='dbTypeUser'
+        className={classes.textField}
         value={values.dbTypeUser}
         onChange={handleInputChange}
         placeholder={values.dbTypeUser}
       />
-      <label htmlFor="dbTypePassword">Database Type Password: </label>
-      <input
-        type="text"
-        name="dbTypePassword"
+      <TextField
+        label='Database Type Password'
+        type='text'
+        name='dbTypePassword'
+        className={classes.textField}
         value={values.dbTypePassword}
         onChange={handleInputChange}
         placeholder={values.dbTypePassword}
       />
-      <label htmlFor="volumes">Volumes: </label>
-      <input
-        type="text"
-        name="volumes"
+      <TextField
+        label='Volumes'
+        type='text'
+        name='volumes'
+        className={classes.textField}
         value={values.volumes}
         onChange={handleInputChange}
         placeholder={values.volumes}
       />
-      <button type="submit">Submit</button>
+      <Button variant='contained' type='submit'>
+        Submit
+      </Button>
     </form>
   );
 };
