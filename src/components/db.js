@@ -1,7 +1,7 @@
 const pg = require('pg')
-const storage = require('electron-json-storage');
-const {app} = require('electron')
-const electron = require('electron')
+// const storage = require('electron-json-storage');
+// const {app} = require('electron')
+// const electron = require('electron')
 
 const pool = new pg.Pool ({
     user: 'sri', // env var: PGUSER
@@ -14,17 +14,16 @@ const pool = new pg.Pool ({
 
 let obj;
 
-function setstorage(obj){
-  storage.set('dbnames', obj, function(error) {
-    if (error) throw error;
-  });
-}
+// function setstorage(obj){
+//   storage.set('dbnames', obj, function(error) {
+//     if (error) throw error;
+//   });
+// }
 
 pool.query("SELECT datname FROM pg_database WHERE datistemplate = false",(err,res) => {
   obj = res.rows.map(({datname}) => {
     return datname
   })
-  setstorage(obj)
   console.log(obj);
   pool.end()
 });

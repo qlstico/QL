@@ -41,16 +41,14 @@ const Login = props => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    props.history.push('/dbs');
     writeToLocalStorage(values);
-    
-
+    props.history.push('/dbs');
   };
 
   return (
     <div>
       <h1>Hello, QLstico!</h1>
-      <h1>Redfining databse access starts here!</h1>
+      <h1>Redefining databse access starts here!</h1>
       <form className={classes.container} noValidate onSubmit={handleSubmit}>
         <TextField
           label="Database Type"
