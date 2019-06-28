@@ -11,7 +11,9 @@ import { withRouter } from 'react-router-dom';
 
 const useStyles = makeStyles({
   card: {
-    minWidth: 275
+    // minWidth: 275
+    height: 150,
+    width: 150
   },
   pos: {
     marginBottom: 0
@@ -27,8 +29,8 @@ function DisplayCard(props) {
       <CardContent>
         <img
           src={props.type === 'db' ? dbImage : tableImage}
-          height="5%"
-          width="5%"
+          height="25%"
+          width="25%"
         />
         <Typography className={classes.pos} color="textSecondary">
           {props.name}

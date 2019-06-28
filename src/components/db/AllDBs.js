@@ -1,26 +1,53 @@
-import React from "react";
-import { DisplayCard } from "../index";
-import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
-import { root } from "postcss";
+import React from 'react';
+import { DisplayCard } from '../index';
+import Grid from '@material-ui/core/Grid';
+import { makeStyles } from '@material-ui/core/styles';
+import { root } from 'postcss';
 
 const dummyDbs = [
-  { dbName: "Grace Shopper" },
-  { dbName: "qlStico" },
-  { dbName: "nyscene." }
+  { dbName: 'Grace Shopper' },
+  { dbName: 'qlStico' },
+  { dbName: 'nyscene.' },
+  { dbName: 'Grace Shopper' },
+  { dbName: 'qlStico' },
+  { dbName: 'nyscene.' },
+  { dbName: 'Grace Shopper' },
+  { dbName: 'qlStico' },
+  { dbName: 'nyscene.' }
 ];
 
+const useStyles = makeStyles(theme => ({
+  root: {
+    flexGrow: 1
+  },
+  control: {
+    padding: theme.spacing(2)
+  }
+}));
+
 const AllDBs = props => {
+  const [spacing, setSpacing] = React.useState(2);
+  const classes = useStyles();
+
   return (
     <div>
       <h1>Databases: </h1>
-      {dummyDbs.map(db => (
-        <Grid container spacing={3}>
-          <Grid item xs={3}>
-            <DisplayCard name={db.dbName} type='db' key={db.dbName} />
+      <Grid container className={classes.root} spacing={3}>
+        <Grid item xs={12}>
+          <Grid container justify="center" spacing={spacing}>
+            {dummyDbs.map(db => (
+              <Grid key={db.dbName} item>
+                <DisplayCard
+                  className={classes.control}
+                  name={db.dbName}
+                  type="db"
+                  key={db.dbName}
+                />
+              </Grid>
+            ))}
           </Grid>
         </Grid>
-      ))}
+      </Grid>
     </div>
   );
 };
