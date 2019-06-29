@@ -1,6 +1,6 @@
 export const routeNames = {
-  pickDB: "/",
+  pickDB: "/beta",
   allDBs: "/dbs",
   tables: "/tables",
-  editDB: "/edit"
+  editDB: "/"
 };
