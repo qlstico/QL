@@ -17,34 +17,35 @@ import MoreIcon from "@material-ui/icons/MoreVert";
 import { withRouter } from "react-router-dom";
 import ThreeSixtyIcon from "@material-ui/icons/ThreeSixty";
 
-const pg = require('pg')
-const storage = require('electron-json-storage');
-const {app} = require('electron')
-const electron = require('electron')
+const pg = require("pg");
+const storage = require("electron-json-storage");
+const { app } = require("electron");
+const electron = require("electron");
 
-const pool = new pg.Pool ({
-    user: '', // env var: PGUSER
-    database: '', // env var: PGDATABASE
-    password: '', // env var: PGPASSWORD
-    host: 'localhost', // Server hosting the postgres database
-    port: 5432, // env var: PGPORT
-    idleTimeoutMillis: 300 // how long a client is allowed to remain idle before being closed
+const pool = new pg.Pool({
+  user: "", // env var: PGUSER
+  database: "", // env var: PGDATABASE
+  password: "", // env var: PGPASSWORD
+  host: "localhost", // Server hosting the postgres database
+  port: 5432, // env var: PGPORT
+  idleTimeoutMillis: 300 // how long a client is allowed to remain idle before being closed
 });
 
 let obj;
 
-
-pool.query("SELECT datname FROM pg_database WHERE datistemplate = false",(err,res) => {
-  obj = res.rows.map(({datname}) => {
-    return datname
-  })
-  console.log(obj);
-  pool.end()
-});
-
+pool.query(
+  "SELECT datname FROM pg_database WHERE datistemplate = false",
+  (err, res) => {
+    obj = res.rows.map(({ datname }) => {
+      return datname;
+    });
+    console.log(obj);
+    pool.end();
+  }
+);
 
 const writeToDB = obj => {
-  storage.set('dbnames', obj, function(error) {
+  storage.set("dbnames", obj, function(error) {
     if (error) throw error;
   });
 };
@@ -208,7 +209,11 @@ function PrimarySearchAppBar(props) {
           </div>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            <IconButton aria-label='autorenew' color='inherit' onClick={() => writeToDB(obj)}>
+            <IconButton
+              aria-label='autorenew'
+              color='inherit'
+              onClick={() => writeToDB(obj)}
+            >
               <ThreeSixtyIcon />
             </IconButton>
             <IconButton
@@ -219,7 +224,7 @@ function PrimarySearchAppBar(props) {
               onClick={handleProfileMenuOpen}
               color='inherit'
             >
-              <AccountCircle  />
+              <AccountCircle />
             </IconButton>
           </div>
           <div className={classes.sectionMobile}>
