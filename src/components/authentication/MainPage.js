@@ -35,7 +35,7 @@ const MainPage = props => {
 
   return (
     <div>
-      <h1>Choose a Database Type: </h1>
+      <h1>Compatibility with these databases coming soon! </h1>
       <Grid container className={classes.root} spacing={3}>
         <Grid item xs={12}>
           <Grid container justify='center' spacing={spacing}>
