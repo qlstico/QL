@@ -2,6 +2,7 @@
 export { default as Login } from "./authentication/Login";
 export { default as SignUp } from "./authentication/SignUp";
 export { default as MainPage } from "./authentication/MainPage";
+export { default as ConnectPage } from "./ConnectPage";
 
 // DB folder files
 export { default as AllTables } from "./db/AllTables";
