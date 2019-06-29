@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 const defaultConnectionSettings = require('../../../defaultConnection.json');
+const { ipcRenderer } = require('electron');
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -42,6 +43,7 @@ const Login = props => {
   const handleSubmit = e => {
     e.preventDefault();
     writeToLocalStorage(values);
+    ipcRenderer.send('login-form-data', values);
     props.history.push('/dbs');
   };
 
