@@ -46,12 +46,20 @@ const getAllTables = async database => {
   }
 };
 
-// getAllDbs().then(data => console.log('data', data));
-// getAllTables().then(data => console.log(data));
-
-// getAllTables();
+const getTableData = async (table, database) => {
+  setDatabase(database);
+  const pool = new pg.Pool(DB_CONNECTION);
+  try {
+    const response = await pool.query(`SELECT * from ${table}`);
+    console.log(response);
+    return response.rows;
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 module.exports = {
   getAllTables,
   getAllDbs,
+  getTableData,
 };
