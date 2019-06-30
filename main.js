@@ -5,6 +5,7 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 const storage = require('electron-json-storage');
 const path = require('path');
 const url = require('url');
+const { getAllDbs } = require('./src/components/db');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -84,6 +85,11 @@ ipcMain.on('login-form-data', (event, arg) => {
     if (err) console.log(err);
     console.log(data);
   });
+});
+
+ipcMain.on('GET_DB_NAMES', async event => {
+  const dbNames = await getAllDbs();
+  event.reply('GET_DB_NAMES_REPLY', dbNames);
 });
 
 // This method will be called when Electron has finished

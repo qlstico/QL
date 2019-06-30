@@ -8,23 +8,23 @@ const dummyTables = [
   { TableName: 'Products' },
   { TableName: 'Sessions' },
   { TableName: 'Orders' },
-  { TableName: 'Users' },
-  { TableName: 'Products' },
-  { TableName: 'Sessions' },
-  { TableName: 'Orders' },
-  { TableName: 'Users' },
-  { TableName: 'Products' },
-  { TableName: 'Sessions' },
-  { TableName: 'Orders' }
+  { TableName: 'Usersb' },
+  { TableName: 'Productse' },
+  { TableName: 'Sessionsd' },
+  { TableName: 'Ordersv' },
+  { TableName: 'Userse' },
+  { TableName: 'Productfs' },
+  { TableName: 'Sessionse' },
+  { TableName: 'Orderds' },
 ];
 
 const useStyles = makeStyles(theme => ({
   root: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   control: {
-    padding: theme.spacing(2)
-  }
+    padding: theme.spacing(2),
+  },
 }));
 
 const AllTables = props => {

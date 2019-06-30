@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-const storage = require('electron-json-storage');
+import storage from 'electron-json-storage';
 import { withRouter } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
