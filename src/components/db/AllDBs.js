@@ -4,18 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import storage from 'electron-json-storage';
 import { root } from 'postcss';
-
-const dummyDbs = [
-  { dbName: 'Grace Shopper' },
-  { dbName: 'qlSEtico' },
-  { dbName: 'lelme.' },
-  { dbName: 'Blemmer Shopper' },
-  { dbName: 'qlStico' },
-  { dbName: 'eek.' },
-  { dbName: 'Chees Shopper' },
-  { dbName: 'qlStklfkglico' },
-  { dbName: 'nyscdsm,fene.' },
-];
+import { ipcRenderer } from 'electron';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -37,7 +26,14 @@ const AllDBs = props => {
       setDbs(data);
     });
   }, []);
-  console.log('dbs', dbs);
+
+  const selectDb = async dbname => {
+    await ipcRenderer.send('GET_TABLE_NAMES', dbname);
+    await ipcRenderer.on('GET_TABLE_NAMES_REPLY', (event, arg) => {
+      console.log('GET_TABLE_NAMES_REPLY', arg);
+    });
+  };
+
   return (
     <div>
       <h1>Databases: </h1>
