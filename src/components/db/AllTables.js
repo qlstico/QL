@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { DisplayCard, TableContext } from '../index';
+import React, { useState, useContext } from 'react';
+import { DisplayCard, DbRelatedContext } from '../index';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
-import storage from 'electron-json-storage';
+import { ipcRenderer } from 'electron';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -15,8 +15,19 @@ const useStyles = makeStyles(theme => ({
 
 const AllTables = props => {
   const [spacing, setSpacing] = useState(2);
-  const [tablesContext] = useContext(TableContext);
+  const {
+    tables: tablesContext,
+    selectedDb,
+    setSelectedTableData,
+  } = useContext(DbRelatedContext);
   const classes = useStyles();
+
+  const getTableContents = async (...args) => {
+    await ipcRenderer.send('GET_TABLE_CONTENTS', args);
+    await ipcRenderer.on('GET_TABLE_CONTENTS_REPLY', (event, arg) => {
+      setSelectedTableData(arg);
+    });
+  };
 
   return (
     <div>
@@ -25,7 +36,11 @@ const AllTables = props => {
         <Grid item xs={12}>
           <Grid container justify="center" spacing={spacing}>
             {tablesContext.map(table => (
-              <Grid key={table} item>
+              <Grid
+                key={table}
+                item
+                onClick={() => getTableContents(table, selectedDb)}
+              >
                 <DisplayCard
                   className={classes.control}
                   name={table}

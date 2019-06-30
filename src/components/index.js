@@ -21,5 +21,5 @@ export { default as Header } from './reuse/Header';
 export { default as Footer } from './reuse/Footer';
 export { default as LayoutMain } from './reuse/LayoutMain';
 export { default as DisplayCard } from './reuse/DisplayCard';
-export { TableContext, TablesProvider } from './reuse/TablesContext';
+export { DbRelatedContext, DbRelatedProvider } from './reuse/DbRelatedContext';
 export { default as PrimarySearchAppBar } from './reuse/Header';
