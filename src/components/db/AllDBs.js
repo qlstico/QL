@@ -47,6 +47,7 @@ const AllDBs = props => {
                   name={db}
                   type="db"
                   key={db}
+                  onClick={() => selectDb(db)}
                 />
               </Grid>
             ))}

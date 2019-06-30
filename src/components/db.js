@@ -24,11 +24,9 @@ const getAllDbs = async () => {
     const arrayOfDbNames = response.rows.map(({ datname }) => {
       return datname;
     });
-    pool.close();
     return arrayOfDbNames;
   } catch (error) {
     console.log(error);
-    pool.close();
   }
 };
 
@@ -41,16 +39,17 @@ const getAllTables = async database => {
       WHERE table_type = 'BASE TABLE'
       AND table_schema NOT IN ('pg_catalog', 'information_schema')`
     );
-    console.log(response);
-    pool.close();
-    // return arrayOfDbNames;
+    // console.log(response);
+    return response.rows.map(({ table_name }) => table_name);
   } catch (error) {
     console.log(error);
-    pool.close();
   }
 };
 
 // getAllDbs().then(data => console.log('data', data));
+getAllTables().then(data => console.log(data));
+
+getAllTables();
 
 module.exports = {
   getAllTables,
