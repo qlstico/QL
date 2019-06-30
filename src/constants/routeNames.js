@@ -3,5 +3,6 @@ export const routeNames = {
   allDBs: "/dbs",
   tables: "/tables",
   editDB: "/edit",
-  Connect: "/"
+  Connect: "/",
+  SingleTable: "/single"
 };

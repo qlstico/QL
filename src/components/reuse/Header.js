@@ -194,14 +194,6 @@ function PrimarySearchAppBar(props) {
           >
             QLstico
           </Typography>
-          <Typography
-            className={classes.title}
-            variant='p'
-            noWrap
-            onClick={() => props.history.push("/beta")}
-          >
-            Beta
-          </Typography>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />

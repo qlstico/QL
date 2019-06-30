@@ -2,11 +2,10 @@
 export { default as Login } from "./authentication/Login";
 export { default as SignUp } from "./authentication/SignUp";
 export { default as MainPage } from "./authentication/MainPage";
-export { default as ConnectPage } from "./ConnectPage";
+export { default as ConnectPage } from "./db/ConnectPage";
 
 // DB folder files
 export { default as AllTables } from "./db/AllTables";
-export { default as ConnectDb } from "./db/ConnectDb";
 export { default as CreateSchema } from "./db/CreateSchema";
 export { default as IndivTable } from "./db/IndivTable";
 export { default as QuerySandbox } from "./db/QuerySandbox";
