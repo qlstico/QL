@@ -22,7 +22,7 @@ import storage from 'electron-json-storage';
 const getAllDBNames = async () => {
   await ipcRenderer.send('GET_DB_NAMES');
   await ipcRenderer.on('GET_DB_NAMES_REPLY', (event, arg) => {
-    // console.log('GET_DB_NAMES_REPLY', arg);
+    console.log('GET_DB_NAMES_REPLY', arg);
     storage.set('dbnames', arg, error => {
       if (error) throw error;
     });

@@ -6,23 +6,23 @@ import { root } from 'postcss';
 
 const dummyDbs = [
   { dbName: 'Grace Shopper' },
+  { dbName: 'qlSEtico' },
+  { dbName: 'lelme.' },
+  { dbName: 'Blemmer Shopper' },
   { dbName: 'qlStico' },
-  { dbName: 'nyscene.' },
-  { dbName: 'Grace Shopper' },
-  { dbName: 'qlStico' },
-  { dbName: 'nyscene.' },
-  { dbName: 'Grace Shopper' },
-  { dbName: 'qlStico' },
-  { dbName: 'nyscene.' }
+  { dbName: 'eek.' },
+  { dbName: 'Chees Shopper' },
+  { dbName: 'qlStklfkglico' },
+  { dbName: 'nyscdsm,fene.' },
 ];
 
 const useStyles = makeStyles(theme => ({
   root: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   control: {
-    padding: theme.spacing(2)
-  }
+    padding: theme.spacing(2),
+  },
 }));
 
 const AllDBs = props => {
