@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { DisplayCard } from '../index';
+import React, { useState, useEffect, useContext } from 'react';
+import { DisplayCard, TableContext } from '../index';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import storage from 'electron-json-storage';
@@ -18,6 +18,7 @@ const useStyles = makeStyles(theme => ({
 const AllDBs = props => {
   const [spacing, setSpacing] = useState(2);
   const [dbs, setDbs] = useState([]);
+  const [_, setTablesContext] = useContext(TableContext);
   const classes = useStyles();
 
   useEffect(() => {
@@ -31,7 +32,7 @@ const AllDBs = props => {
     console.log('selectDB funct in ALLDBs', dbname);
     await ipcRenderer.send('GET_TABLE_NAMES', dbname);
     await ipcRenderer.on('GET_TABLE_NAMES_REPLY', (event, arg) => {
-      storage.set('tableNames', arg);
+      setTablesContext(arg);
     });
   };
 

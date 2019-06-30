@@ -5,6 +5,8 @@ export const TableContext = createContext();
 export const TablesProvider = ({ children }) => {
   const [tables, setTables] = useState(['students', 'campuses', 'faculty']);
   return (
-    <TableContext.Provider value={tables}>{children}</TableContext.Provider>
+    <TableContext.Provider value={[tables, setTables]}>
+      {children}
+    </TableContext.Provider>
   );
 };
