@@ -92,8 +92,9 @@ ipcMain.on('GET_DB_NAMES', async event => {
   event.reply('GET_DB_NAMES_REPLY', dbNames);
 });
 
-ipcMain.on('GET_TABLE_NAMES', async event => {
-  const tableNames = await getAllDbs();
+ipcMain.on('GET_TABLE_NAMES', async (event, arg) => {
+  const tableNames = await getAllTables(arg);
+  console.log('tableNames >>>>>', tableNames);
   event.reply('GET_TABLE_NAMES_REPLY', tableNames);
 });
 

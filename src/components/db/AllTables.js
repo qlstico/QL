@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { DisplayCard } from '../index';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
@@ -28,7 +28,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const AllTables = props => {
-  const [spacing, setSpacing] = React.useState(2);
+  const [spacing, setSpacing] = useState(2);
   const classes = useStyles();
 
   return (

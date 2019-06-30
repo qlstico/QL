@@ -47,9 +47,9 @@ const getAllTables = async database => {
 };
 
 // getAllDbs().then(data => console.log('data', data));
-getAllTables().then(data => console.log(data));
+// getAllTables().then(data => console.log(data));
 
-getAllTables();
+// getAllTables();
 
 module.exports = {
   getAllTables,
