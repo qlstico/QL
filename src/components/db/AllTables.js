@@ -4,21 +4,6 @@ import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import storage from 'electron-json-storage';
 
-const dummyTables = [
-  { TableName: 'Users' },
-  { TableName: 'Products' },
-  { TableName: 'Sessions' },
-  { TableName: 'Orders' },
-  { TableName: 'Usersb' },
-  { TableName: 'Productse' },
-  { TableName: 'Sessionsd' },
-  { TableName: 'Ordersv' },
-  { TableName: 'Userse' },
-  { TableName: 'Productfs' },
-  { TableName: 'Sessionse' },
-  { TableName: 'Orderds' },
-];
-
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
