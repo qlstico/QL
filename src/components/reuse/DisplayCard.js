@@ -22,14 +22,13 @@ const useStyles = makeStyles({
 
 function DisplayCard(props) {
   const classes = useStyles();
-  const tablesPath = "/tables";
 
   return (
     <Button
       onClick={() =>
         props.type === "db"
-          ? props.history.push(tablesPath)
-          : props.history.push("/")
+          ? props.history.push("/tables")
+          : props.history.push("/single")
       }
       size='large'
       fullWidth={true}
