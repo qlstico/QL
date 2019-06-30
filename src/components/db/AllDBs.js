@@ -31,7 +31,6 @@ const AllDBs = props => {
     console.log('selectDB funct in ALLDBs', dbname);
     await ipcRenderer.send('GET_TABLE_NAMES', dbname);
     await ipcRenderer.on('GET_TABLE_NAMES_REPLY', (event, arg) => {
-      console.log('GET_TABLE_NAMES_REPLY', arg);
       storage.set('tableNames', arg);
     });
   };

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { DisplayCard } from '../index';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
+import storage from 'electron-json-storage';
 
 const dummyTables = [
   { TableName: 'Users' },
@@ -29,21 +30,27 @@ const useStyles = makeStyles(theme => ({
 
 const AllTables = props => {
   const [spacing, setSpacing] = useState(2);
+  const [tables, setTables] = useState([]);
   const classes = useStyles();
 
+  useEffect(() => {
+    storage.get('tableNames', (error, data) => {
+      if (error) throw error;
+      setTables(data);
+    });
+  }, []);
   return (
     <div>
       <h1>Tables: </h1>
       <Grid container className={classes.root} spacing={3}>
         <Grid item xs={12}>
           <Grid container justify="center" spacing={spacing}>
-            {dummyTables.map(table => (
-              <Grid key={table.TableName} item>
+            {tables.map(table => (
+              <Grid key={table} item>
                 <DisplayCard
                   className={classes.control}
-                  name={table.TableName}
+                  name={table}
                   type="table"
-                  key={table.TableName}
                 />
               </Grid>
             ))}
