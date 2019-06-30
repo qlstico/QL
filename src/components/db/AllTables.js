@@ -1,22 +1,8 @@
-import React from 'react';
-import { DisplayCard } from '../index';
+import React, { useState, useEffect, useContext } from 'react';
+import { DisplayCard, TableContext } from '../index';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
-
-const dummyTables = [
-  { TableName: 'Users' },
-  { TableName: 'Products' },
-  { TableName: 'Sessions' },
-  { TableName: 'Orders' },
-  { TableName: 'Usersb' },
-  { TableName: 'Productse' },
-  { TableName: 'Sessionsd' },
-  { TableName: 'Ordersv' },
-  { TableName: 'Userse' },
-  { TableName: 'Productfs' },
-  { TableName: 'Sessionse' },
-  { TableName: 'Orderds' },
-];
+import storage from 'electron-json-storage';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -28,7 +14,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const AllTables = props => {
-  const [spacing, setSpacing] = React.useState(2);
+  const [spacing, setSpacing] = useState(2);
+  const [tablesContext] = useContext(TableContext);
   const classes = useStyles();
 
   return (
@@ -37,13 +24,12 @@ const AllTables = props => {
       <Grid container className={classes.root} spacing={3}>
         <Grid item xs={12}>
           <Grid container justify="center" spacing={spacing}>
-            {dummyTables.map(table => (
-              <Grid key={table.TableName} item>
+            {tablesContext.map(table => (
+              <Grid key={table} item>
                 <DisplayCard
                   className={classes.control}
-                  name={table.TableName}
+                  name={table}
                   type="table"
-                  key={table.TableName}
                 />
               </Grid>
             ))}

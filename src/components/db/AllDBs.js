@@ -1,21 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { DisplayCard } from '../index';
+import React, { useState, useEffect, useContext } from 'react';
+import { DisplayCard, TableContext } from '../index';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import storage from 'electron-json-storage';
 import { root } from 'postcss';
-
-const dummyDbs = [
-  { dbName: 'Grace Shopper' },
-  { dbName: 'qlSEtico' },
-  { dbName: 'lelme.' },
-  { dbName: 'Blemmer Shopper' },
-  { dbName: 'qlStico' },
-  { dbName: 'eek.' },
-  { dbName: 'Chees Shopper' },
-  { dbName: 'qlStklfkglico' },
-  { dbName: 'nyscdsm,fene.' },
-];
+import { ipcRenderer } from 'electron';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -29,6 +18,7 @@ const useStyles = makeStyles(theme => ({
 const AllDBs = props => {
   const [spacing, setSpacing] = useState(2);
   const [dbs, setDbs] = useState([]);
+  const [_, setTablesContext] = useContext(TableContext);
   const classes = useStyles();
 
   useEffect(() => {
@@ -37,7 +27,15 @@ const AllDBs = props => {
       setDbs(data);
     });
   }, []);
-  console.log('dbs', dbs);
+
+  const selectDb = async dbname => {
+    console.log('selectDB funct in ALLDBs', dbname);
+    await ipcRenderer.send('GET_TABLE_NAMES', dbname);
+    await ipcRenderer.on('GET_TABLE_NAMES_REPLY', (event, arg) => {
+      setTablesContext(arg);
+    });
+  };
+
   return (
     <div>
       <h1>Databases: </h1>
@@ -45,13 +43,8 @@ const AllDBs = props => {
         <Grid item xs={12}>
           <Grid container justify="center" spacing={spacing}>
             {dbs.map(db => (
-              <Grid key={db} item>
-                <DisplayCard
-                  className={classes.control}
-                  name={db}
-                  type="db"
-                  key={db}
-                />
+              <Grid key={db} item onClick={() => selectDb(db)}>
+                <DisplayCard className={classes.control} name={db} type="db" />
               </Grid>
             ))}
           </Grid>

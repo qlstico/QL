@@ -1,15 +1,17 @@
 import '../assets/css/App.css';
 import React, { Component } from 'react';
 import Routes from '../Routes';
-import PrimarySearchAppBar from '../components/reuse/Header';
+import { PrimarySearchAppBar, TablesProvider } from '../components/';
 
 class App extends Component {
   render() {
     return (
-      <div>
-        <PrimarySearchAppBar />
-        <Routes />
-      </div>
+      <TablesProvider>
+        <div>
+          <PrimarySearchAppBar />
+          <Routes />
+        </div>
+      </TablesProvider>
     );
   }
 }
