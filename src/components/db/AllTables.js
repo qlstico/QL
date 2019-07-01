@@ -1,16 +1,16 @@
 import React, { useState, useContext } from 'react';
-import { DisplayCard, DbRelatedContext } from '../index';
+import { DisplayCard, DbRelatedContext, GraphQLDisplayCard } from '../index';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
-import { ipcRenderer } from 'electron';
+import { ipcRenderer, BrowserView, BrowserWindow } from 'electron';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   control: {
-    padding: theme.spacing(2),
-  },
+    padding: theme.spacing(2)
+  }
 }));
 
 const AllTables = props => {
@@ -18,7 +18,7 @@ const AllTables = props => {
   const {
     tables: tablesContext,
     selectedDb,
-    setSelectedTableData,
+    setSelectedTableData
   } = useContext(DbRelatedContext);
   const classes = useStyles();
 
@@ -31,6 +31,7 @@ const AllTables = props => {
 
   return (
     <div>
+      <GraphQLDisplayCard />
       <h1>Tables: </h1>
       <Grid container className={classes.root} spacing={3}>
         <Grid item xs={12}>
@@ -56,12 +57,3 @@ const AllTables = props => {
 };
 
 export default AllTables;
-
-// {
-// 	dummyTables.map(table => (
-// 		<Grid container spacing={3}>
-// 			<Grid item xs={3} sm={6}>
-// 				<DisplayCard
-// 					name={table.TableName}
-// 					type="table"
-// 					key={table.TableName}
