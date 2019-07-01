@@ -10,10 +10,27 @@ const {
   getAllTables,
   getTableData,
 } = require('./src/components/db');
+const express = require('express');
+const { postgraphile } = require('postgraphile');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
+
+const expressApp = express();
+
+function setupExpress(databaseName) {
+  const schema_name = 'public';
+  const database = `postgres://jackdwyer@localhost:5432/${databaseName}`;
+  const pglConfig = {
+    watchPg: true,
+    graphiql: true,
+    enhanceGraphiql: true,
+  };
+  expressApp.use(postgraphile(database, schema_name, pglConfig));
+
+  expressApp.listen(5000);
+}
 
 // Keep a reference for dev mode
 let dev = false;
@@ -97,6 +114,7 @@ ipcMain.on('GET_DB_NAMES', async event => {
 });
 
 ipcMain.on('GET_TABLE_NAMES', async (event, arg) => {
+  setupExpress(arg);
   const tableNames = await getAllTables(arg);
 
   event.reply('GET_TABLE_NAMES_REPLY', tableNames);
