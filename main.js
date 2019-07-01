@@ -12,6 +12,8 @@ const {
 } = require('./src/components/db');
 const express = require('express');
 const { postgraphile } = require('postgraphile');
+// need below for visualizer
+const { express: voyagerMiddleware } = require('graphql-voyager/middleware');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -152,3 +154,6 @@ app.on('activate', () => {
     createWindow();
   }
 });
+
+// route for visualizer - access via http://localhost:5000/voyager
+expressApp.use('/voyager', voyagerMiddleware({ endpointUrl: '/graphql' }));
