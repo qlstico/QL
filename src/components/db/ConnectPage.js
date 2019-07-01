@@ -25,6 +25,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+//note
 const ConnectPage = props => {
   const [spacing] = useState(2);
   const [userConfigs, setUserConfigs] = useState(null);
