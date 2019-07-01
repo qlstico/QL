@@ -1,14 +1,14 @@
-const pg = require('pg');
+const pg = require("pg");
 // const storage = require('electron-json-storage');
 // const {app} = require('electron')
 
 const DB_CONNECTION = {
-  user: '', // env var: PGUSER
-  database: '', // env var: PGDATABASE
-  password: '', // env var: PGPASSWORD
-  host: 'localhost', // Server hosting the postgres database
+  user: "", // env var: PGUSER
+  database: "", // env var: PGDATABASE
+  password: "", // env var: PGPASSWORD
+  host: "localhost", // Server hosting the postgres database
   port: 5432, // env var: PGPORT
-  idleTimeoutMillis: 300, // how long a client is allowed to remain idle before being closed
+  idleTimeoutMillis: 300 // how long a client is allowed to remain idle before being closed
 };
 
 const setDatabase = dbName => {
@@ -19,7 +19,7 @@ const getAllDbs = async () => {
   const pool = new pg.Pool(DB_CONNECTION);
   try {
     const response = await pool.query(
-      'SELECT datname FROM pg_database WHERE datistemplate = false'
+      "SELECT datname FROM pg_database WHERE datistemplate = false"
     );
     const arrayOfDbNames = response.rows.map(({ datname }) => {
       return datname;
@@ -61,5 +61,5 @@ const getTableData = async (table, database) => {
 module.exports = {
   getAllTables,
   getAllDbs,
-  getTableData,
+  getTableData
 };
