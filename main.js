@@ -19,7 +19,7 @@ let mainWindow;
 
 const expressApp = express();
 
-function setupExpress(databaseName, username = 'jackdwyer', password) {
+function setupExpress(databaseName, username = '', password) {
   const schemaName = 'public';
   const database = `postgres://${username}:${
     password ? `${password}` : ''
