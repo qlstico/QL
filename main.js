@@ -19,15 +19,17 @@ let mainWindow;
 
 const expressApp = express();
 
-function setupExpress(databaseName) {
-  const schema_name = 'public';
-  const database = `postgres://jackdwyer@localhost:5432/${databaseName}`;
+function setupExpress(databaseName, username = 'jackdwyer', password) {
+  const schemaName = 'public';
+  const database = `postgres://${username}:${
+    password ? `${password}` : ''
+  }@localhost:5432/${databaseName}`;
   const pglConfig = {
     watchPg: true,
     graphiql: true,
     enhanceGraphiql: true,
   };
-  expressApp.use(postgraphile(database, schema_name, pglConfig));
+  expressApp.use(postgraphile(database, schemaName, pglConfig));
 
   expressApp.listen(5000);
 }
