@@ -11,40 +11,52 @@ const { ipcRenderer } = require('electron');
 const useStyles = makeStyles(theme => ({
   container: {
     display: 'flex',
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
   },
   textField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
-    width: 200
+    width: 200,
   },
   dense: {
-    marginTop: 19
+    marginTop: 19,
   },
   menu: {
-    width: 200
-  }
+    width: 200,
+  },
 }));
 
 const Login = props => {
   const classes = useStyles();
   const [values, setValues] = useState(defaultConnectionSettings);
 
-  const writeToLocalStorage = formData => {
+  const writeToLocalStorage = obj => {
     let lsData;
     storage.get('connectionData', (error, data) => {
       if (error) throw error;
       lsData = data;
-      console.log(lsData)
     });
-    // if there is nothing in lsData, then turn form data into an array and then set it
-    const newArray = Array.isArray(lsData)
-      ? lsData.concat(formData)
-      : [formData];
-    console.log(newArray)
-    storage.set('connectionData', newArray, function(error) {
-      if (error) throw error;
-    });
+    if (Array.isArray(lsData)) {
+      storage.set(
+        'connectionData',
+        lsData.map(conData => {
+          if (
+            conData.databaseName === obj.databaseName &&
+            conData.user === obj.user
+          ) {
+            return obj;
+          }
+          return conData;
+        }),
+        function(error) {
+          if (error) throw error;
+        }
+      );
+    } else {
+      storage.set('connectionData', [obj], function(error) {
+        if (error) throw error;
+      });
+    }
   };
 
   const handleInputChange = e => {
@@ -109,26 +121,3 @@ const Login = props => {
 };
 
 export default withRouter(Login);
-
-// if (Array.isArray(lsData)) {
-//   storage.set(
-//     'connectionData',
-//     lsData.map(conData => {
-//       if (
-//         conData.databaseName === formData.databaseName &&
-//         conData.user === formData.user
-//       ) {
-//         return formData;
-//       }
-//       return conData;
-//     }),
-//     function (error) {
-//       if (error) throw error;
-//     }
-//   );
-// } else {
-//   storage.set('connectionData', [formData], function (error) {
-//     if (error) throw error;
-//   });
-// }
-//   };
