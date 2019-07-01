@@ -25,6 +25,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+//note
 const ConnectPage = props => {
   const [spacing] = React.useState(2);
   const classes = useStyles();
