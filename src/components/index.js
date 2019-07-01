@@ -23,3 +23,4 @@ export { default as LayoutMain } from './reuse/LayoutMain';
 export { default as DisplayCard } from './reuse/DisplayCard';
 export { DbRelatedContext, DbRelatedProvider } from './reuse/DbRelatedContext';
 export { default as PrimarySearchAppBar } from './reuse/Header';
+export { default as GraphQLDisplayCard } from './reuse/GraphiqlCard';
