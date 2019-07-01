@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { DisplayCard } from '../../index';
-import Grid from '@material-ui/core/Grid';
-import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import storage from 'electron-json-storage';
+import React from "react";
+import { DisplayCard } from "../../index";
+import Grid from "@material-ui/core/Grid";
+import { makeStyles } from "@material-ui/core/styles";
+import Card from "@material-ui/core/Card";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -17,6 +16,7 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(2)
   },
   card: {
+    // minWidth: 275
     height: 150,
     width: 1000
   },
@@ -26,63 +26,37 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const ConnectPage = props => {
-  const [spacing] = useState(2);
-  const [userConfigs, setUserConfigs] = useState(null);
-
+  const [spacing] = React.useState(2);
   const classes = useStyles();
-
-  const existingConnections = () => {
-    storage.get('connectionData', (error, data) => {
-      if (error) throw error;
-      setUserConfigs(data);
-    });
-    return userConfigs;
-  };
-
-  useEffect(() => {
-    existingConnections();
-  }, []);
 
   return (
     <div>
       <h1>Connect:</h1>
       <Grid container className={classes.root} spacing={3}>
         <Grid item xs={12}>
-          <Grid container justify="space-between" spacing={spacing}>
-            {userConfigs &&
-              userConfigs.map(connection => (
-                <Card className={classes.card}>
-                  <CardContent>
-                    <Typography
-                      className={classes.pos}
-                      align="left"
-                      color="textSecondary"
-                    >
-                      User: {connection.user}
-                    </Typography>
-                    <Typography
-                      className={classes.pos}
-                      align="left"
-                      color="textSecondary"
-                    >
-                      Host: {connection.server}
-                    </Typography>
-                    <Button
-                      onClick={() => props.history.push('/dbs')}
-                      size="large"
-                    >
-                      Connect
-                    </Button>
-                    <Button
-                      onClick={() => props.history.push('/edit')}
-                      size="large"
-                    >
-                      Edit
-                    </Button>
-                  </CardContent>
-                  <CardActions />
-                </Card>
-              ))}
+          <Grid container justify='space-between' spacing={spacing}>
+            <Card className={classes.card}>
+              <CardContent>
+                <Typography
+                  className={classes.pos}
+                  align='left'
+                  color='textPrimary'
+                >
+                  Localhost
+                </Typography>
+                <Button
+                  onClick={() =>
+                    props.type === "db"
+                      ? props.history.push(tablesPath)
+                      : props.history.push("/edit")
+                  }
+                  size='large'
+                >
+                  Edit
+                </Button>
+              </CardContent>
+              <CardActions />
+            </Card>
           </Grid>
         </Grid>
       </Grid>
