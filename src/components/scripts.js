@@ -1,3 +1,6 @@
+/*
+Do we still need this file? - I suspect we do not
+*/
 const os = require('os');
 const { Client } = require('pg');
 const client = new Client();
