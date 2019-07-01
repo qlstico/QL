@@ -16,6 +16,7 @@ const { postgraphile } = require('postgraphile');
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
+let LOGGEDIN_USER = '';
 
 const expressApp = express();
 
@@ -103,7 +104,9 @@ function createWindow() {
 }
 
 ipcMain.on('login-form-data', (event, arg) => {
-  console.log(arg); // prints values from form
+  // console.log('arg in login-form-data', arg); // prints values from form
+  const { user } = arg; // take value from form
+  LOGGEDIN_USER = user;
   storage.get('connectionData', (err, data) => {
     if (err) console.log(err);
     console.log(data);
@@ -116,6 +119,7 @@ ipcMain.on('GET_DB_NAMES', async event => {
 });
 
 ipcMain.on('GET_TABLE_NAMES', async (event, arg) => {
+  // when it's not just us testing, we should pass in LOGGEDIN_USER
   setupExpress(arg);
   const tableNames = await getAllTables(arg);
 
