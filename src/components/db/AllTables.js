@@ -1,8 +1,13 @@
 import React, { useState, useContext } from 'react';
-import { DisplayCard, DbRelatedContext, GraphQLDisplayCard } from '../index';
+import {
+  DisplayCard,
+  DbRelatedContext,
+  GraphQLDisplayCard,
+  VoyagerDisplayCard
+} from '../index';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
-import { ipcRenderer, BrowserView, BrowserWindow } from 'electron';
+import { ipcRenderer } from 'electron';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -31,7 +36,9 @@ const AllTables = props => {
 
   return (
     <div>
+      <h1>GraphQL Tools: </h1>
       <GraphQLDisplayCard />
+      <VoyagerDisplayCard />
       <h1>Tables: </h1>
       <Grid container className={classes.root} spacing={3}>
         <Grid item xs={12}>
