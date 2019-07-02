@@ -4,7 +4,6 @@ import { withRouter } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import { CommunicationStayPrimaryLandscape } from 'material-ui/svg-icons';
 // const defaultConnectionSettings = require('../../../defaultConnection.json');
 const { ipcRenderer } = require('electron');
 
@@ -44,7 +43,7 @@ const defaultConnectionSettings = {
   databaseName: ''
 };
 
-const Login = props => {
+const Create = props => {
   defaultConnectionSettings.id = generateID();
   const classes = useStyles();
   const [values, setValues] = useState(defaultConnectionSettings);
@@ -131,4 +130,4 @@ const Login = props => {
   );
 };
 
-export default withRouter(Login);
+export default withRouter(Create);

@@ -11,12 +11,12 @@ import { DbRelatedContext } from "../index";
 
 const useStyles = makeStyles(theme => ({
   root: {
-    width: "100%"
+    width: '100%'
   },
   paper: {
     marginTop: theme.spacing(3),
-    width: "100%",
-    overflowX: "auto",
+    width: '100%',
+    overflowX: 'auto',
     marginBottom: theme.spacing(2)
   },
   table: {
@@ -47,7 +47,7 @@ const IndivTable = () => {
   return selectedTableData.length ? (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <Table className={classes.table} size='small'>
+        <Table className={classes.table} size="small">
           <TableHead>
             <TableRow>
               {Object.keys(selectedTableData[0]).map(key => {
@@ -93,7 +93,7 @@ const IndivTable = () => {
         </Button> */}
     </div>
   ) : (
-    ""
+    ''
   );
 };
 
