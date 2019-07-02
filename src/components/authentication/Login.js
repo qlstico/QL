@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import storage from 'electron-json-storage';
 import { withRouter } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
@@ -11,37 +11,41 @@ const { ipcRenderer } = require('electron');
 const useStyles = makeStyles(theme => ({
   container: {
     display: 'flex',
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
   },
   textField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
-    width: 200
+    width: 200,
   },
   dense: {
-    marginTop: 19
+    marginTop: 19,
   },
   menu: {
-    width: 200
-  }
+    width: 200,
+  },
 }));
 
 const Login = props => {
   const classes = useStyles();
   const [values, setValues] = useState(defaultConnectionSettings);
+  const [connectionData, setConnectionData] = useState(null);
 
-  const writeToLocalStorage = formData => {
-    let lsData;
+  useEffect(() => {
     storage.get('connectionData', (error, data) => {
       if (error) throw error;
-      lsData = data;
-      console.log(lsData);
+      setConnectionData(data);
     });
+    // return () => {
+    //   effect
+    // };
+  }, []);
+
+  const writeToLocalStorage = formData => {
     // if there is nothing in lsData, then turn form data into an array and then set it
-    const newArray = Array.isArray(lsData)
-      ? lsData.concat(formData)
+    const newArray = Array.isArray(connectionData)
+      ? connectionData.concat(formData)
       : [formData];
-    console.log(newArray);
     storage.set('connectionData', newArray, function(error) {
       if (error) throw error;
     });
