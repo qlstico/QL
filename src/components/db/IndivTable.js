@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useState, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -24,8 +24,13 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const IndivTable = () => {
+  const [editMode, setEditMode] = useState(false);
   const { selectedTableData } = useContext(DbRelatedContext);
   const classes = useStyles();
+
+  const toggleEditMode = () => {
+    setEditMode(prevEditMode => !prevEditMode);
+  };
 
   return selectedTableData.length ? (
     <div className={classes.root}>
@@ -35,18 +40,29 @@ const IndivTable = () => {
             <TableRow>
               {Object.keys(selectedTableData[0]).map(key => {
                 console.log(key);
-                return <TableCell>{key}</TableCell>;
+                return <TableCell key={key}>{key}</TableCell>;
               })}
             </TableRow>
           </TableHead>
           <TableBody>
             {selectedTableData.map(row => (
               <TableRow key={selectedTableData.indexOf(row)}>
-                {Object.values(row).map(value => (
-                  <TableCell key={value.id} component='th' scope='row'>
-                    {value}
-                  </TableCell>
-                ))}
+                {Object.values(row).map(value =>
+                  editMode ? (
+                    <TableCell key={value.id} component='th' scope='row'>
+                      <input type='text' defaultValue={value} />
+                    </TableCell>
+                  ) : (
+                    <TableCell
+                      key={value.id}
+                      component='th'
+                      scope='row'
+                      onDoubleClick={toggleEditMode}
+                    >
+                      {value}
+                    </TableCell>
+                  )
+                )}
               </TableRow>
             ))}
           </TableBody>

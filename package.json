@@ -34,6 +34,7 @@
     "postpackage": "electron-packager ./ --out=./builds"
   },
   "dependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.4.4",
     "@material-ui/core": "^4.1.3",
     "@material-ui/icons": "^4.2.1",
     "clsx": "^1.0.4",
