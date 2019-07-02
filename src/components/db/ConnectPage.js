@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { DisplayCard } from '../../index';
+import React, { useState, useEffect, useContext } from 'react';
+import { DbRelatedContext } from '../index';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
@@ -11,25 +11,25 @@ import storage from 'electron-json-storage';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   control: {
-    padding: theme.spacing(2),
+    padding: theme.spacing(2)
   },
   card: {
-    // minWidth: 275
     height: 150,
-    width: 1000,
+    width: 1000
   },
   pos: {
-    marginBottom: 0,
-  },
+    marginBottom: 0
+  }
 }));
 
 const ConnectPage = props => {
   const [spacing] = useState(2);
   const [userConfigs, setUserConfigs] = useState(null);
   const classes = useStyles();
+  const { setSelectedUser } = useContext(DbRelatedContext);
 
   const existingConnections = () => {
     storage.get('connectionData', (error, data) => {
@@ -46,7 +46,16 @@ const ConnectPage = props => {
   console.log(`userConfigs`, userConfigs);
   return (
     <div>
-      <h1>Connect:</h1>
+      <h1>
+        Connect:{' '}
+        <Button
+          onClick={() => props.history.push('/create')}
+          size="large"
+          align-self="right"
+        >
+          Create Connection
+        </Button>
+      </h1>
       <Grid container className={classes.root} spacing={3}>
         <Grid item xs={12}>
           <Grid container justify="space-between" spacing={spacing}>
@@ -78,7 +87,10 @@ const ConnectPage = props => {
                       Connect
                     </Button>
                     <Button
-                      onClick={() => props.history.push('/edit')}
+                      onClick={() => {
+                        setSelectedUser(connection);
+                        props.history.push('/edit');
+                      }}
                       size="large"
                     >
                       Edit
