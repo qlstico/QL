@@ -11,19 +11,19 @@ import storage from 'electron-json-storage';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   control: {
-    padding: theme.spacing(2)
+    padding: theme.spacing(2),
   },
   card: {
     // minWidth: 275
     height: 150,
-    width: 1000
+    width: 1000,
   },
   pos: {
-    marginBottom: 0
-  }
+    marginBottom: 0,
+  },
 }));
 
 const ConnectPage = props => {
@@ -43,6 +43,7 @@ const ConnectPage = props => {
     existingConnections();
   }, []);
 
+  console.log(`userConfigs`, userConfigs);
   return (
     <div>
       <h1>Connect:</h1>
@@ -51,7 +52,10 @@ const ConnectPage = props => {
           <Grid container justify="space-between" spacing={spacing}>
             {userConfigs &&
               userConfigs.map(connection => (
-                <Card className={classes.card}>
+                <Card
+                  className={classes.card}
+                  key={`${connection.name}-${connection.password}`}
+                >
                   <CardContent>
                     <Typography
                       className={classes.pos}
