@@ -14,6 +14,7 @@ const express = require('express');
 const { postgraphile } = require('postgraphile');
 // need below for visualizer
 const { express: voyagerMiddleware } = require('graphql-voyager/middleware');
+const {closeServer} = require('./src/server/util');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -21,8 +22,10 @@ let mainWindow;
 let LOGGEDIN_USER = '';
 
 const expressApp = express();
+let expressServer;
 
-function setupExpress(databaseName, username = '', password) {
+
+function setupExpress (databaseName, username = '', password) {
   const schemaName = 'public';
   const database = `postgres://${username}:${
     password ? `${password}` : ''
@@ -32,11 +35,16 @@ function setupExpress(databaseName, username = '', password) {
     graphiql: true,
     enhanceGraphiql: true
   };
-  expressApp.use(postgraphile(database, schemaName, pglConfig));
+  console.log(database)
+   expressApp.use(postgraphile(database, schemaName, pglConfig));
   // route for visualizer - access via http://localhost:5000/voyager
-  expressApp.use('/voyager', voyagerMiddleware({ endpointUrl: '/graphql' }));
+   expressApp.use('/voyager', voyagerMiddleware({ endpointUrl: '/graphql' }));
 
-  expressApp.listen(5000);
+   expressServer = expressApp.listen(5000, function(){
+    console.log('Listening :)');
+    // expressServer.close()
+  })
+  // expressApp.listen(5000);
 }
 
 // Keep a reference for dev mode
@@ -134,6 +142,10 @@ ipcMain.on('GET_TABLE_CONTENTS', async (event, args) => {
   const tableData = await getTableData(...args);
   event.reply('GET_TABLE_CONTENTS_REPLY', tableData);
 });
+
+ipcMain.on('CLOSE_SERVER', async (event,args) => {
+  closeServer(expressServer,'closeserver*****')
+})
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
