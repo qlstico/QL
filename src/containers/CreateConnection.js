@@ -6,6 +6,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 // const defaultConnectionSettings = require('../../../defaultConnection.json');
 const { ipcRenderer } = require('electron');
+import { username } from '../components/scripts/scripts';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -36,8 +37,8 @@ const generateID = () => {
 
 const defaultConnectionSettings = {
   id: '',
-  user: 'johndoe',
-  password: '****',
+  user: username,
+  password: '',
   server: 'localhost',
   dbTypePassword: '',
   databaseName: ''
@@ -54,9 +55,6 @@ const Create = props => {
       if (error) throw error;
       setConnectionData(data);
     });
-    // return () => {
-    //   effect
-    // };
   }, []);
 
   const writeToLocalStorage = formData => {
