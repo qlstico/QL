@@ -118,8 +118,7 @@ function PrimarySearchAppBar(props) {
 
   async function sendHome(){
     props.history.push('/')
-    await ipcRenderer.send('CLOSE_SERVER');
-
+    ipcRenderer.send('CLOSE_SERVER');
   }
 
   const menuId = 'primary-search-account-menu';
