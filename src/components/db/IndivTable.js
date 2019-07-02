@@ -1,3 +1,4 @@
+/* eslint-disable no-confusing-arrow */
 import React, { useState, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -27,10 +28,21 @@ const IndivTable = () => {
   const [editMode, setEditMode] = useState(false);
   const { selectedTableData } = useContext(DbRelatedContext);
   const classes = useStyles();
+  const [values, setValues] = useState({});
+  console.log(selectedTableData);
 
   const toggleEditMode = () => {
     setEditMode(prevEditMode => !prevEditMode);
   };
+
+  // const handleInputChange = e => {
+  //   const { name, value } = e.target;
+  //   setValues({ ...values, [name]: value });
+  // };
+
+  // const updateComponentValue = () => {
+
+  // }
 
   return selectedTableData.length ? (
     <div className={classes.root}>
@@ -40,21 +52,29 @@ const IndivTable = () => {
             <TableRow>
               {Object.keys(selectedTableData[0]).map(key => {
                 console.log(key);
-                return <TableCell key={key}>{key}</TableCell>;
+                return (
+                  <TableCell key={key} style={{ width: "10px" }}>
+                    {key}
+                  </TableCell>
+                );
               })}
             </TableRow>
           </TableHead>
           <TableBody>
-            {selectedTableData.map(row => (
-              <TableRow key={selectedTableData.indexOf(row)}>
-                {Object.values(row).map(value =>
+            {selectedTableData.map((row, rowIdx) => (
+              <TableRow key={rowIdx}>
+                {Object.values(row).map((value, colIdx) =>
                   editMode ? (
-                    <TableCell key={value.id} component='th' scope='row'>
+                    <TableCell
+                      key={`${rowIdx}-${colIdx}`}
+                      component='th'
+                      scope='row'
+                    >
                       <input type='text' defaultValue={value} />
                     </TableCell>
                   ) : (
                     <TableCell
-                      key={value.id}
+                      key={`${rowIdx}-${colIdx}`}
                       component='th'
                       scope='row'
                       onDoubleClick={toggleEditMode}
@@ -68,6 +88,9 @@ const IndivTable = () => {
           </TableBody>
         </Table>
       </Paper>
+      {/* <Button variant="contained" type="submit" onClick={}>
+          Save
+        </Button> */}
     </div>
   ) : (
     ""
