@@ -63,7 +63,9 @@ const ConnectPage = props => {
               userConfigs.map(connection => (
                 <Card
                   className={classes.card}
-                  key={`${connection.name}-${connection.password}`}
+                  key={`${connection.user}-${connection.name}-${
+                    connection.password
+                  }`}
                 >
                   <CardContent>
                     <Typography
