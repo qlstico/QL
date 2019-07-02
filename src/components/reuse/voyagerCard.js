@@ -5,13 +5,10 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import dbImage from '../../assets/images/db-icon.png';
-import tableImage from '../../assets/images/table-icon.png';
-import { withRouter } from 'react-router-dom';
+import SchemaLogo from '../../assets/images/schema.png';
 
 const useStyles = makeStyles({
   card: {
-    // minWidth: 275
     height: 150,
     width: 150
   },
@@ -20,33 +17,25 @@ const useStyles = makeStyles({
   }
 });
 
-function DisplayCard(props) {
+const openVoyager = () => {
+  window.open('http://localhost:5000/voyager', '_blank', 'nodeIntegration=no');
+};
+
+function VoyagerDisplayCard() {
   const classes = useStyles();
 
   return (
-    <Button
-      onClick={() =>
-        props.type === 'db'
-          ? props.history.push('/tables')
-          : props.history.push('/single')
-      }
-      size="large"
-      fullWidth={true}
-    >
+    <Button onClick={() => openVoyager()} size="large" align="center">
       <Card className={classes.card}>
         <CardContent>
-          <img
-            src={props.type === 'db' ? dbImage : tableImage}
-            height="60%"
-            width="60%"
-          />
+          <img src={SchemaLogo} height="60%" width="60%" />
 
           <Typography
             className={classes.pos}
             align="center"
             color="textSecondary"
           >
-            {props.name}
+            *Visualize Schema
           </Typography>
         </CardContent>
         <CardActions />
@@ -55,4 +44,4 @@ function DisplayCard(props) {
   );
 }
 
-export default withRouter(DisplayCard);
+export default VoyagerDisplayCard;

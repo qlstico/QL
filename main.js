@@ -8,7 +8,7 @@ const url = require('url');
 const {
   getAllDbs,
   getAllTables,
-  getTableData,
+  getTableData
 } = require('./src/components/db');
 const express = require('express');
 const { postgraphile } = require('postgraphile');
@@ -30,9 +30,11 @@ function setupExpress(databaseName, username = '', password) {
   const pglConfig = {
     watchPg: true,
     graphiql: true,
-    enhanceGraphiql: true,
+    enhanceGraphiql: true
   };
   expressApp.use(postgraphile(database, schemaName, pglConfig));
+  // route for visualizer - access via http://localhost:5000/voyager
+  expressApp.use('/voyager', voyagerMiddleware({ endpointUrl: '/graphql' }));
 
   expressApp.listen(5000);
 }
@@ -62,8 +64,8 @@ function createWindow() {
     height: 768,
     show: false,
     webPreferences: {
-      nodeIntegration: true,
-    },
+      nodeIntegration: true
+    }
   });
 
   // and load the index.html of the app.
@@ -74,13 +76,13 @@ function createWindow() {
       protocol: 'http:',
       host: 'localhost:8080',
       pathname: 'index.html',
-      slashes: true,
+      slashes: true
     });
   } else {
     indexPath = url.format({
       protocol: 'file:',
       pathname: path.join(__dirname, 'dist', 'index.html'),
-      slashes: true,
+      slashes: true
     });
   }
 
@@ -154,6 +156,3 @@ app.on('activate', () => {
     createWindow();
   }
 });
-
-// route for visualizer - access via http://localhost:5000/voyager
-expressApp.use('/voyager', voyagerMiddleware({ endpointUrl: '/graphql' }));
