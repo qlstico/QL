@@ -1,14 +1,15 @@
-import React, { Component } from "react";
-import { Switch, Route } from "react-router";
-import { routeNames } from "./constants/routeNames";
+import React, { Component } from 'react';
+import { Switch, Route } from 'react-router';
+import { routeNames } from './constants/routeNames';
 import {
-  Login,
+  Create,
   AllDBs,
   AllTables,
   MainPage,
   ConnectPage,
-  IndivTable
-} from "./components";
+  IndivTable,
+  Edit
+} from './components';
 
 class Routes extends Component {
   render() {
@@ -16,7 +17,8 @@ class Routes extends Component {
       <Switch>
         <Route exact path={routeNames.Connect} component={ConnectPage} />
         <Route exact path={routeNames.pickDB} component={MainPage} />
-        <Route exact path={routeNames.editDB} component={Login} />
+        <Route exact path={routeNames.editDB} component={Edit} />
+        <Route exact path={routeNames.create} component={Create} />
         <Route exact path={routeNames.allDBs} component={AllDBs} />
         <Route exact path={routeNames.tables} component={AllTables} />
         <Route exact path={routeNames.IndivTable} component={IndivTable} />

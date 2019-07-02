@@ -1,21 +1,21 @@
-import React, { useContext } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
-import { DbRelatedContext } from "../index";
+import React, { useContext } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+import { DbRelatedContext } from '../index';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    width: "100%"
+    width: '100%'
   },
   paper: {
     marginTop: theme.spacing(3),
-    width: "100%",
-    overflowX: "auto",
+    width: '100%',
+    overflowX: 'auto',
     marginBottom: theme.spacing(2)
   },
   table: {
@@ -30,7 +30,7 @@ const IndivTable = () => {
   return selectedTableData.length ? (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <Table className={classes.table} size='small'>
+        <Table className={classes.table} size="small">
           <TableHead>
             <TableRow>
               {Object.keys(selectedTableData[0]).map(key => {
@@ -43,7 +43,7 @@ const IndivTable = () => {
             {selectedTableData.map(row => (
               <TableRow key={selectedTableData.indexOf(row)}>
                 {Object.values(row).map(value => (
-                  <TableCell key={value.id} component='th' scope='row'>
+                  <TableCell key={value.id} component="th" scope="row">
                     {value}
                   </TableCell>
                 ))}
@@ -54,7 +54,7 @@ const IndivTable = () => {
       </Paper>
     </div>
   ) : (
-    ""
+    ''
   );
 };
 
