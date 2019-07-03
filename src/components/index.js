@@ -1,17 +1,10 @@
 // Authentication folder files
 export { default as Login } from './authentication/Login';
-export { default as SignUp } from './authentication/SignUp';
-export { default as MainPage } from './authentication/MainPage';
-export { default as ConnectPage } from './db/ConnectPage';
 
 // DB folder files
+export { default as ConnectPage } from './db/ConnectPage';
 export { default as AllTables } from './db/AllTables';
-export { default as CreateSchema } from './db/CreateSchema';
 export { default as IndivTable } from './db/IndivTable';
-export { default as QuerySandbox } from './db/QuerySandbox';
-export { default as TableContent } from './db/TableContent';
-export { default as TableStructure } from './db/TableStructure';
-export { default as UpdateSchema } from './db/UpdateSchema';
 export { default as AllDBs } from './db/AllDBs';
 
 // Reuse folder files
