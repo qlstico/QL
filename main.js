@@ -8,13 +8,13 @@ const url = require('url');
 const {
   getAllDbs,
   getAllTables,
-  getTableData
+  getTableData,
 } = require('./src/components/db');
 const express = require('express');
 const { postgraphile } = require('postgraphile');
 // need below for visualizer
 const { express: voyagerMiddleware } = require('graphql-voyager/middleware');
-const {closeServer} = require('./src/server/util');
+const { closeServer } = require('./src/server/util');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -24,8 +24,9 @@ let LOGGEDIN_USER = '';
 const expressApp = express();
 let expressServer;
 
-
-function setupExpress (databaseName, username = '', password) {
+/* Setup express server when user clicks a db in the front end */
+function setupExpress(databaseName, username = '', password) {
+  // config to connect middleware to database
   const schemaName = 'public';
   const database = `postgres://${username}:${
     password ? `${password}` : ''
@@ -33,17 +34,19 @@ function setupExpress (databaseName, username = '', password) {
   const pglConfig = {
     watchPg: true,
     graphiql: true,
-    enhanceGraphiql: true
+    enhanceGraphiql: true,
   };
-  console.log(database)
-   expressApp.use(postgraphile(database, schemaName, pglConfig));
+  console.log(database);
+  // setup middleware for creating our graphql api
+  expressApp.use(postgraphile(database, schemaName, pglConfig));
   // route for visualizer - access via http://localhost:5000/voyager
-   expressApp.use('/voyager', voyagerMiddleware({ endpointUrl: '/graphql' }));
+  expressApp.use('/voyager', voyagerMiddleware({ endpointUrl: '/graphql' }));
 
-   expressServer = expressApp.listen(5000, function(){
+  // assign global var our express server so we can close it later
+  expressServer = expressApp.listen(5000, function() {
     console.log('Listening :)');
     // expressServer.close()
-  })
+  });
   // expressApp.listen(5000);
 }
 
@@ -72,8 +75,8 @@ function createWindow() {
     height: 768,
     show: false,
     webPreferences: {
-      nodeIntegration: true
-    }
+      nodeIntegration: true,
+    },
   });
 
   // and load the index.html of the app.
@@ -84,13 +87,13 @@ function createWindow() {
       protocol: 'http:',
       host: 'localhost:8080',
       pathname: 'index.html',
-      slashes: true
+      slashes: true,
     });
   } else {
     indexPath = url.format({
       protocol: 'file:',
       pathname: path.join(__dirname, 'dist', 'index.html'),
-      slashes: true
+      slashes: true,
     });
   }
 
@@ -114,6 +117,11 @@ function createWindow() {
     mainWindow = null;
   });
 }
+
+/*
+ * ipcMain
+ * allows us to safely listen for and send communications to front end
+ */
 
 ipcMain.on('login-form-data', (event, arg) => {
   // console.log('arg in login-form-data', arg); // prints values from form
@@ -143,9 +151,9 @@ ipcMain.on('GET_TABLE_CONTENTS', async (event, args) => {
   event.reply('GET_TABLE_CONTENTS_REPLY', tableData);
 });
 
-ipcMain.on('CLOSE_SERVER', async (event,args) => {
-  closeServer(expressServer,'closeserver*****')
-})
+ipcMain.on('CLOSE_SERVER', async (event, args) => {
+  closeServer(expressServer, 'closeserver*****');
+});
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
