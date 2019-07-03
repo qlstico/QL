@@ -156,15 +156,26 @@ ipcMain.on('GET_TABLE_NAMES', async (event, dbname) => {
   // when it's not just us testing, we should pass in LOGGEDIN_USER
   setupExpress(dbname);
   const tableNames = await getAllTables(dbname);
-
   event.reply('GET_TABLE_NAMES_REPLY', tableNames);
 });
 
+/**
+ * called from ./components/db/AllTables.js
+ * when user clicks specific table, we recieve call
+ * get all the table data and replies with the table data
+ */
 ipcMain.on('GET_TABLE_CONTENTS', async (event, args) => {
+  // args === (table, selectedDb)
   const tableData = await getTableData(...args);
   event.reply('GET_TABLE_CONTENTS_REPLY', tableData);
 });
 
+/**
+ * called from ./components/reuse/Header.js
+ * when user qlStico icon, header sends message to trigger stopping the server
+ * from rec new connections
+ * call to get all the db names and replies with the database names
+ */
 ipcMain.on('CLOSE_SERVER', async (event, args) => {
   closeServer(expressServer, 'closeserver*****');
 });
