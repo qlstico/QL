@@ -8,6 +8,10 @@ import {
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import { ipcRenderer } from 'electron';
+const {
+  GET_TABLE_CONTENTS,
+  GET_TABLE_CONTENTS_REPLY,
+} = require('../../constants/ipcNames');
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -18,8 +22,8 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const AllTables = props => {
-  const [spacing, setSpacing] = useState(2);
+const AllTables = () => {
+  const [spacing] = useState(2);
   const {
     tables: tablesContext,
     selectedDb,
@@ -29,8 +33,8 @@ const AllTables = props => {
 
   // args === (table, selectedDb)
   const getTableContents = async (...args) => {
-    await ipcRenderer.send('GET_TABLE_CONTENTS', args);
-    await ipcRenderer.on('GET_TABLE_CONTENTS_REPLY', (event, arg) => {
+    await ipcRenderer.send(GET_TABLE_CONTENTS, args);
+    await ipcRenderer.on(GET_TABLE_CONTENTS_REPLY, (event, arg) => {
       setSelectedTableData(arg);
     });
   };
