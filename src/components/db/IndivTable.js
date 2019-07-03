@@ -7,7 +7,9 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
 import { DbRelatedContext } from '../index';
+import TextField from '@material-ui/core/TextField';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -40,8 +42,12 @@ const IndivTable = () => {
   }, [selectedTableData]);
 
   const handleInputChange = e => {
-    const { id, value } = e.target;
-    console.log('ID: ', id, '...', 'VALUE: ', value);
+    const { name, value } = e.target;
+    const [rowIdx, colIdx] = name.split('-');
+    setTableMatrix(prevMatrix => {
+      prevMatrix[rowIdx][colIdx] = value;
+      return prevMatrix;
+    });
   };
 
   const toggleEditMode = () => {
@@ -56,7 +62,6 @@ const IndivTable = () => {
             <TableRow>
               {/* Column Headers */}
               {Object.keys(selectedTableData[0]).map(key => {
-                // console.log(key);
                 return (
                   <TableCell key={key} style={{ width: '10px' }}>
                     {key}
@@ -73,14 +78,13 @@ const IndivTable = () => {
                   editMode ? (
                     <TableCell
                       key={`${rowIdx}-${colIdx}`}
-                      id={`${rowIdx}-${colIdx}`}
                       component="th"
                       scope="row"
                     >
-                      <input
+                      <TextField
                         type="text"
                         defaultValue={value}
-                        id={`${rowIdx}-${colIdx}`}
+                        name={`${rowIdx}-${colIdx}`}
                         onChange={handleInputChange}
                       />
                     </TableCell>
@@ -90,9 +94,9 @@ const IndivTable = () => {
                       component="th"
                       scope="row"
                       onDoubleClick={toggleEditMode}
-                      id={`${rowIdx}-${colIdx}`}
+                      name={`${rowIdx}-${colIdx}`}
                     >
-                      {value}
+                      {`${value}`}
                     </TableCell>
                   )
                 )}
@@ -101,9 +105,13 @@ const IndivTable = () => {
           </TableBody>
         </Table>
       </Paper>
-      {/* <Button variant="contained" type="submit" onClick={}>
-          Save
-        </Button> */}
+      <Button
+        variant="contained"
+        type="button"
+        onClick={() => console.table(tableMatrix)}
+      >
+        Submit
+      </Button>
     </div>
   ) : (
     ''
