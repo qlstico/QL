@@ -147,6 +147,11 @@ ipcMain.on('GET_DB_NAMES', async event => {
   event.reply('GET_DB_NAMES_REPLY', dbNames);
 });
 
+/**
+ * called from ./components/db/AllDBs.js
+ * when user clicks database, sends message to trigger getting the table data
+ * call to get all the table names and replies with the tableNames
+ */
 ipcMain.on('GET_TABLE_NAMES', async (event, dbname) => {
   // when it's not just us testing, we should pass in LOGGEDIN_USER
   setupExpress(dbname);

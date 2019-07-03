@@ -31,6 +31,8 @@ const AllDBs = props => {
     });
   }, []);
 
+  // when user clicks database, sends message to trigger getting the table data
+  // set context with table names
   const selectDb = async dbname => {
     setSelectedDb(dbname); // set db name in context
     await ipcRenderer.send('GET_TABLE_NAMES', dbname); // message to get all table names
