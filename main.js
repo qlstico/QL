@@ -2,7 +2,6 @@
 
 // Import parts of electron to use
 const { app, BrowserWindow, ipcMain } = require('electron');
-const storage = require('electron-json-storage');
 const path = require('path');
 const url = require('url');
 const { getAllDbs, getAllTables, getTableData } = require('./src/db/db');

@@ -3,7 +3,6 @@ import { DisplayCard, DbRelatedContext } from '../index';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import storage from 'electron-json-storage';
-import { root } from 'postcss';
 import { ipcRenderer } from 'electron';
 const {
   GET_TABLE_NAMES,
@@ -19,8 +18,8 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const AllDBs = props => {
-  const [spacing, setSpacing] = useState(2);
+const AllDBs = () => {
+  const [spacing] = useState(2);
   const [dbs, setDbs] = useState([]);
   const { setTables: setTablesContext, setSelectedDb } = useContext(
     DbRelatedContext
