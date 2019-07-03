@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import storage from 'electron-json-storage';
 import { withRouter } from 'react-router-dom';
 const { ipcRenderer } = require('electron');
-import { username } from '../components/scripts/scripts';
 import { Login } from '../components/index';
 
 const generateID = () => {
@@ -16,7 +15,7 @@ const generateID = () => {
 
 const defaultConnectionSettings = {
   id: '',
-  user: username,
+  user: '',
   password: '',
   server: 'localhost',
   dbTypePassword: '',
