@@ -31,7 +31,7 @@ const IndivTable = () => {
   const { selectedTableData } = useContext(DbRelatedContext);
 
   useEffect(() => {
-    // using this as component did update b/c the provider data from
+    // using this as componentDidUpdate b/c the provider data from
     // context does not make it in time for the initial mounting
     const matrix = selectedTableData.map(row =>
       Object.values(row).map(value => value)
