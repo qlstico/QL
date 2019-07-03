@@ -5,7 +5,6 @@ import {
   Create,
   AllDBs,
   AllTables,
-  MainPage,
   ConnectPage,
   IndivTable,
   Edit
@@ -16,7 +15,6 @@ class Routes extends Component {
     return (
       <Switch>
         <Route exact path={routeNames.Connect} component={ConnectPage} />
-        <Route exact path={routeNames.pickDB} component={MainPage} />
         <Route exact path={routeNames.editDB} component={Edit} />
         <Route exact path={routeNames.create} component={Create} />
         <Route exact path={routeNames.allDBs} component={AllDBs} />
