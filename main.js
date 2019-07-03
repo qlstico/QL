@@ -123,14 +123,16 @@ function createWindow() {
  * allows us to safely listen for and send communications to front end
  */
 
-ipcMain.on('login-form-data', (event, arg) => {
+/*
+ * called from below components to send connection data from connection forms
+ * ./components/authentication/Login.js
+ * ./containers/EditExistingConnection.js
+ * ./containers/CreateConnection.js
+ */
+ipcMain.on('LOGIN_FORM_DATA', (event, arg) => {
   // console.log('arg in login-form-data', arg); // prints values from form
   const { user } = arg; // take value from form
   LOGGEDIN_USER = user;
-  storage.get('connectionData', (err, data) => {
-    if (err) console.log(err);
-    console.log(data);
-  });
 });
 
 ipcMain.on('GET_DB_NAMES', async event => {
