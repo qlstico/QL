@@ -33,30 +33,37 @@ const useStyles = makeStyles(theme => ({
 
 const IndivTable = () => {
   const classes = useStyles();
-  const [editMode, setEditMode] = useState(false);
+  const [editRow, setEditRow] = useState(false);
   const [tableMatrix, setTableMatrix] = useState([]);
   const { selectedTableData } = useContext(DbRelatedContext);
 
-  useEffect(() => {
-    // using this as componentDidUpdate b/c the provider data from
-    // context does not make it in time for the initial mounting
-    const matrix = selectedTableData.map(row =>
-      Object.values(row).map(value => value)
-    );
-    setTableMatrix(matrix);
-  }, [selectedTableData]);
-
-  const handleInputChange = e => {
+  const handleInputChange = (e, matrixRowIdx, dbEntryId) => {
     const { name, value } = e.target;
     const [rowIdx, colIdx] = name.split('-');
+
     setTableMatrix(prevMatrix => {
-      prevMatrix[rowIdx][colIdx] = value;
+      prevMatrix[rowIdx][colIdx].value = value;
       return prevMatrix;
     });
   };
 
-  const toggleEditMode = () => {
-    setEditMode(prevEditMode => !prevEditMode);
+  useEffect(() => {
+    // using this as componentDidUpdate b/c the provider data from
+    // context does not make it in time for the initial mounting
+    // const tableDataToUse = tableMatrix.length ? tableMatrix : selectedTableData;
+    const matrix = selectedTableData.map(row =>
+      // Passing in row id and val as obj to reference inside of handleInputChange and to reference as an attribute inside component
+      Object.values(row).map(value => ({ value, id: row.id }))
+    );
+    setTableMatrix(matrix);
+  }, [selectedTableData]);
+
+  const enableEditRow = rowIdx => {
+    setEditRow(rowIdx);
+  };
+
+  const removeEditRow = () => {
+    setEditRow(false);
   };
 
   return tableMatrix.length ? (
@@ -79,8 +86,8 @@ const IndivTable = () => {
             {/* Table Data */}
             {tableMatrix.map((row, rowIdx) => (
               <TableRow key={rowIdx}>
-                {Object.values(row).map((value, colIdx) =>
-                  editMode ? (
+                {row.map(({ value, id }, colIdx) =>
+                  editRow === rowIdx ? (
                     <TableCell
                       key={`${rowIdx}-${colIdx}`}
                       component="th"
@@ -91,7 +98,7 @@ const IndivTable = () => {
                         type="text"
                         defaultValue={value}
                         name={`${rowIdx}-${colIdx}`}
-                        onChange={handleInputChange}
+                        onChange={e => handleInputChange(e, rowIdx, id)}
                       />
                     </TableCell>
                   ) : (
@@ -99,7 +106,8 @@ const IndivTable = () => {
                       key={`${rowIdx}-${colIdx}`}
                       component="th"
                       scope="row"
-                      onDoubleClick={toggleEditMode}
+                      onDoubleClick={() => enableEditRow(rowIdx)}
+                      onClick={() => removeEditRow()}
                       name={`${rowIdx}-${colIdx}`}
                     >
                       {`${value}`}
