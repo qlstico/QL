@@ -23,6 +23,11 @@ const useStyles = makeStyles(theme => ({
   },
   table: {
     minWidth: 650
+  },
+  textField: {
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    width: 200
   }
 }));
 
@@ -82,6 +87,7 @@ const IndivTable = () => {
                       scope="row"
                     >
                       <TextField
+                        className={classes.textField}
                         type="text"
                         defaultValue={value}
                         name={`${rowIdx}-${colIdx}`}
