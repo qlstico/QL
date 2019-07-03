@@ -129,14 +129,21 @@ function createWindow() {
  * ./containers/EditExistingConnection.js
  * ./containers/CreateConnection.js
  */
-ipcMain.on('LOGIN_FORM_DATA', (event, arg) => {
+ipcMain.on('LOGIN_FORM_DATA', (_, formData) => {
   // console.log('arg in login-form-data', arg); // prints values from form
-  const { user } = arg; // take value from form
+  const { user } = formData; // take value from form
+  // added to global var so we can use for db connection
   LOGGEDIN_USER = user;
 });
 
+/**
+ * called from ./components/reuse/Header.js
+ * when user clicks refresh icon, header sends message to trigger
+ * call to get all the db names and replies with the database names
+ */
 ipcMain.on('GET_DB_NAMES', async event => {
   const dbNames = await getAllDbs();
+  // reply with database names from query
   event.reply('GET_DB_NAMES_REPLY', dbNames);
 });
 
