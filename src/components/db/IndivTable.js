@@ -37,7 +37,7 @@ const IndivTable = () => {
     const [rowIdx, colIdx] = name.split('-');
 
     setTableMatrix(prevMatrix => {
-      prevMatrix[rowIdx][colIdx] = value;
+      prevMatrix[rowIdx][colIdx].value = value;
       return prevMatrix;
     });
   };
