@@ -147,10 +147,10 @@ ipcMain.on('GET_DB_NAMES', async event => {
   event.reply('GET_DB_NAMES_REPLY', dbNames);
 });
 
-ipcMain.on('GET_TABLE_NAMES', async (event, arg) => {
+ipcMain.on('GET_TABLE_NAMES', async (event, dbname) => {
   // when it's not just us testing, we should pass in LOGGEDIN_USER
-  setupExpress(arg);
-  const tableNames = await getAllTables(arg);
+  setupExpress(dbname);
+  const tableNames = await getAllTables(dbname);
 
   event.reply('GET_TABLE_NAMES_REPLY', tableNames);
 });
