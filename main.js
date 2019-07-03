@@ -8,13 +8,13 @@ const url = require('url');
 const {
   getAllDbs,
   getAllTables,
-  getTableData
+  getTableData,
 } = require('./src/components/db');
 const express = require('express');
 const { postgraphile } = require('postgraphile');
 // need below for visualizer
 const { express: voyagerMiddleware } = require('graphql-voyager/middleware');
-const {closeServer} = require('./src/server/util');
+const { closeServer } = require('./src/server/util');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -24,8 +24,9 @@ let LOGGEDIN_USER = '';
 const expressApp = express();
 let expressServer;
 
-
-function setupExpress (databaseName, username = '', password) {
+/* Setup express server when user clicks a db in the front end */
+function setupExpress(databaseName, username = '', password) {
+  // config to connect middleware to database
   const schemaName = 'public';
   const database = `postgres://${username}:${
     password ? `${password}` : ''
@@ -33,17 +34,19 @@ function setupExpress (databaseName, username = '', password) {
   const pglConfig = {
     watchPg: true,
     graphiql: true,
-    enhanceGraphiql: true
+    enhanceGraphiql: true,
   };
-  console.log(database)
-   expressApp.use(postgraphile(database, schemaName, pglConfig));
+  console.log(database);
+  // setup middleware for creating our graphql api
+  expressApp.use(postgraphile(database, schemaName, pglConfig));
   // route for visualizer - access via http://localhost:5000/voyager
-   expressApp.use('/voyager', voyagerMiddleware({ endpointUrl: '/graphql' }));
+  expressApp.use('/voyager', voyagerMiddleware({ endpointUrl: '/graphql' }));
 
-   expressServer = expressApp.listen(5000, function(){
+  // assign global var our express server so we can close it later
+  expressServer = expressApp.listen(5000, function() {
     console.log('Listening :)');
     // expressServer.close()
-  })
+  });
   // expressApp.listen(5000);
 }
 
@@ -72,8 +75,8 @@ function createWindow() {
     height: 768,
     show: false,
     webPreferences: {
-      nodeIntegration: true
-    }
+      nodeIntegration: true,
+    },
   });
 
   // and load the index.html of the app.
@@ -84,13 +87,13 @@ function createWindow() {
       protocol: 'http:',
       host: 'localhost:8080',
       pathname: 'index.html',
-      slashes: true
+      slashes: true,
     });
   } else {
     indexPath = url.format({
       protocol: 'file:',
       pathname: path.join(__dirname, 'dist', 'index.html'),
-      slashes: true
+      slashes: true,
     });
   }
 
@@ -115,37 +118,67 @@ function createWindow() {
   });
 }
 
-ipcMain.on('login-form-data', (event, arg) => {
+/*
+ * ipcMain
+ * allows us to safely listen for and send communications to front end
+ */
+
+/*
+ * called from below components to send connection data from connection forms
+ * ./components/authentication/Login.js
+ * ./containers/EditExistingConnection.js
+ * ./containers/CreateConnection.js
+ */
+ipcMain.on('LOGIN_FORM_DATA', (_, formData) => {
   // console.log('arg in login-form-data', arg); // prints values from form
-  const { user } = arg; // take value from form
+  const { user } = formData; // take value from form
+  // added to global var so we can use for db connection
   LOGGEDIN_USER = user;
-  storage.get('connectionData', (err, data) => {
-    if (err) console.log(err);
-    console.log(data);
-  });
 });
 
+/**
+ * called from ./components/reuse/Header.js
+ * when user clicks refresh icon, header sends message to trigger
+ * call to get all the db names and replies with the database names
+ */
 ipcMain.on('GET_DB_NAMES', async event => {
   const dbNames = await getAllDbs();
+  // reply with database names from query
   event.reply('GET_DB_NAMES_REPLY', dbNames);
 });
 
-ipcMain.on('GET_TABLE_NAMES', async (event, arg) => {
+/**
+ * called from ./components/db/AllDBs.js
+ * when user clicks database, sends message to trigger getting the table data
+ * call to get all the table names and replies with the tableNames
+ */
+ipcMain.on('GET_TABLE_NAMES', async (event, dbname) => {
   // when it's not just us testing, we should pass in LOGGEDIN_USER
-  setupExpress(arg);
-  const tableNames = await getAllTables(arg);
-
+  setupExpress(dbname);
+  const tableNames = await getAllTables(dbname);
   event.reply('GET_TABLE_NAMES_REPLY', tableNames);
 });
 
+/**
+ * called from ./components/db/AllTables.js
+ * when user clicks specific table, we recieve call
+ * get all the table data and replies with the table data
+ */
 ipcMain.on('GET_TABLE_CONTENTS', async (event, args) => {
+  // args === (table, selectedDb)
   const tableData = await getTableData(...args);
   event.reply('GET_TABLE_CONTENTS_REPLY', tableData);
 });
 
-ipcMain.on('CLOSE_SERVER', async (event,args) => {
-  closeServer(expressServer,'closeserver*****')
-})
+/**
+ * called from ./components/reuse/Header.js
+ * when user qlStico icon, header sends message to trigger stopping the server
+ * from rec new connections
+ * call to get all the db names and replies with the database names
+ */
+ipcMain.on('CLOSE_SERVER', async (event, args) => {
+  closeServer(expressServer, 'closeserver*****');
+});
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.

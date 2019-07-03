@@ -5,82 +5,27 @@ import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { CommunicationStayPrimaryLandscape } from 'material-ui/svg-icons';
-// const defaultConnectionSettings = require('../../../defaultConnection.json');
-const { ipcRenderer } = require('electron');
 
 const useStyles = makeStyles(theme => ({
   container: {
     display: 'flex',
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
   },
   textField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
-    width: 200
+    width: 200,
   },
   dense: {
-    marginTop: 19
+    marginTop: 19,
   },
   menu: {
-    width: 200
-  }
+    width: 200,
+  },
 }));
 
-const generateID = () => {
-  return (
-    '_' +
-    Math.random()
-      .toString(36)
-      .substr(2, 9)
-  );
-};
-
-const defaultConnectionSettings = {
-  id: '',
-  user: 'johndoe',
-  password: '****',
-  server: 'localhost',
-  dbTypePassword: '',
-  databaseName: ''
-};
-
-const Login = props => {
-  defaultConnectionSettings.id = generateID();
+const Login = ({ handleSubmit, handleInputChange, values }) => {
   const classes = useStyles();
-  const [values, setValues] = useState(defaultConnectionSettings);
-  const [connectionData, setConnectionData] = useState(null);
-
-  useEffect(() => {
-    storage.get('connectionData', (error, data) => {
-      if (error) throw error;
-      setConnectionData(data);
-    });
-    // return () => {
-    //   effect
-    // };
-  }, []);
-
-  const writeToLocalStorage = formData => {
-    // if there is nothing in lsData, then turn form data into an array and then set it
-    const newArray = Array.isArray(connectionData)
-      ? connectionData.concat(formData)
-      : [formData];
-    storage.set('connectionData', newArray, function(error) {
-      if (error) throw error;
-    });
-  };
-
-  const handleInputChange = e => {
-    const { name, value } = e.target;
-    setValues({ ...values, [name]: value });
-  };
-
-  const handleSubmit = e => {
-    e.preventDefault();
-    writeToLocalStorage(values);
-    ipcRenderer.send('login-form-data', values);
-    props.history.push('/');
-  };
 
   return (
     <div>
