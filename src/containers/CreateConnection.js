@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import storage from 'electron-json-storage';
 import { withRouter } from 'react-router-dom';
 const { ipcRenderer } = require('electron');
+const { LOGIN_FORM_DATA } = require('../constants/ipcNames');
 import { Login } from '../components/index';
 
 const generateID = () => {
@@ -52,7 +53,7 @@ const Create = props => {
   const handleSubmit = e => {
     e.preventDefault();
     writeToLocalStorage(values);
-    ipcRenderer.send('LOGIN_FORM_DATA', values);
+    ipcRenderer.send(LOGIN_FORM_DATA, values);
     props.history.push('/');
   };
 

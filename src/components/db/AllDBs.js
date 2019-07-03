@@ -5,6 +5,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import storage from 'electron-json-storage';
 import { root } from 'postcss';
 import { ipcRenderer } from 'electron';
+const {
+  GET_TABLE_NAMES,
+  GET_TABLE_NAMES_REPLY,
+} = require('../../constants/ipcNames');
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -35,8 +39,8 @@ const AllDBs = props => {
   // set context with table names
   const selectDb = async dbname => {
     setSelectedDb(dbname); // set db name in context
-    await ipcRenderer.send('GET_TABLE_NAMES', dbname); // message to get all table names
-    await ipcRenderer.on('GET_TABLE_NAMES_REPLY', (_, tableNames) => {
+    await ipcRenderer.send(GET_TABLE_NAMES, dbname); // message to get all table names
+    await ipcRenderer.on(GET_TABLE_NAMES_REPLY, (_, tableNames) => {
       setTablesContext(tableNames);
     });
   };

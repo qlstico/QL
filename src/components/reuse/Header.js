@@ -1,24 +1,28 @@
-import React from "react";
-import { fade, makeStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
-import Typography from "@material-ui/core/Typography";
-import InputBase from "@material-ui/core/InputBase";
-import MenuItem from "@material-ui/core/MenuItem";
-import Menu from "@material-ui/core/Menu";
-import SearchIcon from "@material-ui/icons/Search";
-import AccountCircle from "@material-ui/icons/AccountCircle";
-import { withRouter } from "react-router-dom";
-import ThreeSixtyIcon from "@material-ui/icons/ThreeSixty";
-import { ipcRenderer } from "electron";
-import storage from "electron-json-storage";
+import React from 'react';
+import { fade, makeStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
+import InputBase from '@material-ui/core/InputBase';
+import MenuItem from '@material-ui/core/MenuItem';
+import Menu from '@material-ui/core/Menu';
+import SearchIcon from '@material-ui/icons/Search';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import { withRouter } from 'react-router-dom';
+import ThreeSixtyIcon from '@material-ui/icons/ThreeSixty';
+import { ipcRenderer } from 'electron';
+import storage from 'electron-json-storage';
+const {
+  GET_DB_NAMES,
+  GET_DB_NAMES_REPLY,
+  CLOSE_SERVER,
+} = require('../../constants/ipcNames');
 
 const getAllDBNames = async () => {
-  await ipcRenderer.send("GET_DB_NAMES");
-  await ipcRenderer.on("GET_DB_NAMES_REPLY", (_, databaseNames) => {
-    console.log("GET_DB_NAMES_REPLY", databaseNames);
-    storage.set("dbnames", databaseNames, error => {
+  await ipcRenderer.send(GET_DB_NAMES);
+  await ipcRenderer.on(GET_DB_NAMES_REPLY, (_, databaseNames) => {
+    storage.set('dbnames', databaseNames, error => {
       if (error) throw error;
     });
   });
@@ -95,8 +99,8 @@ function PrimarySearchAppBar(props) {
   }
 
   async function sendHome() {
-    props.history.push("/");
-    await ipcRenderer.send("CLOSE_SERVER");
+    props.history.push('/');
+    await ipcRenderer.send(CLOSE_SERVER);
   }
 
   const menuId = "primary-search-account-menu";
