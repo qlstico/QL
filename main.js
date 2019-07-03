@@ -135,7 +135,6 @@ function createWindow() {
 
 /*
  * called from below components to send connection data from connection forms
- * ./components/authentication/Login.js
  * ./containers/EditExistingConnection.js
  * ./containers/CreateConnection.js
  */

@@ -3,6 +3,7 @@ import { DbRelatedContext, Login } from '../components/index';
 import storage from 'electron-json-storage';
 import { withRouter } from 'react-router-dom';
 import { ipcRenderer } from 'electron';
+const { LOGIN_FORM_DATA } = require('../constants/ipcNames');
 
 const Edit = props => {
   const [thisUser, setThisUser] = useState(null);
@@ -36,7 +37,7 @@ const Edit = props => {
   const handleSubmit = e => {
     e.preventDefault();
     writeToLocalStorage();
-    ipcRenderer.send('LOGIN_FORM_DATA', thisUser);
+    ipcRenderer.send(LOGIN_FORM_DATA, thisUser);
     props.history.push('/');
   };
 

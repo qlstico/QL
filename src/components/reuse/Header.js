@@ -13,11 +13,14 @@ import { withRouter } from 'react-router-dom';
 import ThreeSixtyIcon from '@material-ui/icons/ThreeSixty';
 import { ipcRenderer } from 'electron';
 import storage from 'electron-json-storage';
+const {
+  GET_DB_NAMES,
+  GET_DB_NAMES_REPLY,
+} = require('../../constants/ipcNames');
 
 const getAllDBNames = async () => {
-  await ipcRenderer.send('GET_DB_NAMES');
-  await ipcRenderer.on('GET_DB_NAMES_REPLY', (_, databaseNames) => {
-    console.log('GET_DB_NAMES_REPLY', databaseNames);
+  await ipcRenderer.send(GET_DB_NAMES);
+  await ipcRenderer.on(GET_DB_NAMES_REPLY, (_, databaseNames) => {
     storage.set('dbnames', databaseNames, error => {
       if (error) throw error;
     });
