@@ -5,11 +5,7 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 const storage = require('electron-json-storage');
 const path = require('path');
 const url = require('url');
-const {
-  getAllDbs,
-  getAllTables,
-  getTableData,
-} = require('./src/components/db');
+const { getAllDbs, getAllTables, getTableData } = require('./src/db/db');
 const express = require('express');
 const { postgraphile } = require('postgraphile');
 // need below for visualizer
