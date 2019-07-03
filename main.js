@@ -15,6 +15,16 @@ const { postgraphile } = require('postgraphile');
 // need below for visualizer
 const { express: voyagerMiddleware } = require('graphql-voyager/middleware');
 const { closeServer } = require('./src/server/util');
+const {
+  LOGIN_FORM_DATA,
+  GET_DB_NAMES,
+  GET_DB_NAMES_REPLY,
+  GET_TABLE_NAMES,
+  GET_TABLE_NAMES_REPLY,
+  GET_TABLE_CONTENTS,
+  GET_TABLE_CONTENTS_REPLY,
+  CLOSE_SERVER,
+} = require('./src/constants/ipcNames');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -129,7 +139,7 @@ function createWindow() {
  * ./containers/EditExistingConnection.js
  * ./containers/CreateConnection.js
  */
-ipcMain.on('LOGIN_FORM_DATA', (_, formData) => {
+ipcMain.on(LOGIN_FORM_DATA, (_, formData) => {
   // console.log('arg in login-form-data', arg); // prints values from form
   const { user } = formData; // take value from form
   // added to global var so we can use for db connection
@@ -141,10 +151,10 @@ ipcMain.on('LOGIN_FORM_DATA', (_, formData) => {
  * when user clicks refresh icon, header sends message to trigger
  * call to get all the db names and replies with the database names
  */
-ipcMain.on('GET_DB_NAMES', async event => {
+ipcMain.on(GET_DB_NAMES, async event => {
   const dbNames = await getAllDbs();
   // reply with database names from query
-  event.reply('GET_DB_NAMES_REPLY', dbNames);
+  event.reply(GET_DB_NAMES_REPLY, dbNames);
 });
 
 /**
@@ -152,11 +162,11 @@ ipcMain.on('GET_DB_NAMES', async event => {
  * when user clicks database, sends message to trigger getting the table data
  * call to get all the table names and replies with the tableNames
  */
-ipcMain.on('GET_TABLE_NAMES', async (event, dbname) => {
+ipcMain.on(GET_TABLE_NAMES, async (event, dbname) => {
   // when it's not just us testing, we should pass in LOGGEDIN_USER
   setupExpress(dbname);
   const tableNames = await getAllTables(dbname);
-  event.reply('GET_TABLE_NAMES_REPLY', tableNames);
+  event.reply(GET_TABLE_NAMES_REPLY, tableNames);
 });
 
 /**
@@ -164,10 +174,10 @@ ipcMain.on('GET_TABLE_NAMES', async (event, dbname) => {
  * when user clicks specific table, we recieve call
  * get all the table data and replies with the table data
  */
-ipcMain.on('GET_TABLE_CONTENTS', async (event, args) => {
+ipcMain.on(GET_TABLE_CONTENTS, async (event, args) => {
   // args === (table, selectedDb)
   const tableData = await getTableData(...args);
-  event.reply('GET_TABLE_CONTENTS_REPLY', tableData);
+  event.reply(GET_TABLE_CONTENTS_REPLY, tableData);
 });
 
 /**
@@ -176,7 +186,7 @@ ipcMain.on('GET_TABLE_CONTENTS', async (event, args) => {
  * from rec new connections
  * call to get all the db names and replies with the database names
  */
-ipcMain.on('CLOSE_SERVER', async (event, args) => {
+ipcMain.on(CLOSE_SERVER, async (event, args) => {
   closeServer(expressServer, 'closeserver*****');
 });
 

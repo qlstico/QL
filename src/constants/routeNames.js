@@ -5,5 +5,5 @@ export const routeNames = {
   editDB: '/edit',
   Connect: '/',
   SingleTable: '/single',
-  create: '/create'
+  create: '/create',
 };
