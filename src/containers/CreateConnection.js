@@ -11,19 +11,19 @@ import { username } from '../components/scripts/scripts';
 const useStyles = makeStyles(theme => ({
   container: {
     display: 'flex',
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
   },
   textField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
-    width: 200
+    width: 200,
   },
   dense: {
-    marginTop: 19
+    marginTop: 19,
   },
   menu: {
-    width: 200
-  }
+    width: 200,
+  },
 }));
 
 const generateID = () => {
@@ -41,7 +41,7 @@ const defaultConnectionSettings = {
   password: '',
   server: 'localhost',
   dbTypePassword: '',
-  databaseName: ''
+  databaseName: '',
 };
 
 const Create = props => {
@@ -75,7 +75,7 @@ const Create = props => {
   const handleSubmit = e => {
     e.preventDefault();
     writeToLocalStorage(values);
-    ipcRenderer.send('login-form-data', values);
+    ipcRenderer.send('LOGIN_FORM_DATA', values);
     props.history.push('/');
   };
 

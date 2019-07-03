@@ -10,19 +10,19 @@ const { ipcRenderer } = require('electron');
 const useStyles = makeStyles(theme => ({
   container: {
     display: 'flex',
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
   },
   textField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
-    width: 200
+    width: 200,
   },
   dense: {
-    marginTop: 19
+    marginTop: 19,
   },
   menu: {
-    width: 200
-  }
+    width: 200,
+  },
 }));
 
 const Edit = props => {
@@ -58,7 +58,7 @@ const Edit = props => {
   const handleSubmit = e => {
     e.preventDefault();
     writeToLocalStorage();
-    ipcRenderer.send('login-form-data', thisUser);
+    ipcRenderer.send('LOGIN_FORM_DATA', thisUser);
     props.history.push('/');
   };
 
