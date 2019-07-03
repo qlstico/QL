@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { DbRelatedContext, Login } from '../components/index';
 import storage from 'electron-json-storage';
 import { withRouter } from 'react-router-dom';
-const { ipcRenderer } = require('electron');
+import { ipcRenderer } from 'electron';
 
 const Edit = props => {
   const [thisUser, setThisUser] = useState(null);
