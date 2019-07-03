@@ -51,21 +51,21 @@ const Login = props => {
   const [connectionData, setConnectionData] = useState(null);
 
   useEffect(() => {
+    // get initial connection data from ls
     storage.get('connectionData', (error, data) => {
       if (error) throw error;
       setConnectionData(data);
     });
-    // return () => {
-    //   effect
-    // };
   }, []);
 
+  // onSubmit write formData to ls
   const writeToLocalStorage = formData => {
     // if there is nothing in lsData, then turn form data into an array and then set it
-    const newArray = Array.isArray(connectionData)
+    const connectionsArray = Array.isArray(connectionData)
       ? connectionData.concat(formData)
       : [formData];
-    storage.set('connectionData', newArray, function(error) {
+    // set data in ls
+    storage.set('connectionData', connectionsArray, function(error) {
       if (error) throw error;
     });
   };
