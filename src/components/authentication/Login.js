@@ -22,6 +22,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+// Used in CreateConnection and EditExistingConnection
 const Login = ({ handleSubmit, handleInputChange, values }) => {
   const classes = useStyles();
 
