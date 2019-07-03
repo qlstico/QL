@@ -1,12 +1,11 @@
 import React from "react";
-import { Header, Footer } from "..";
+import { PrimarySearchAppBar, Footer } from "..";
 
 const LayoutMain = ({ children }) => {
   return (
     <>
       <PrimarySearchAppBar />
       {children}
-      <Footer />
     </>
   );
 };

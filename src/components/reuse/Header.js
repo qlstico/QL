@@ -13,6 +13,7 @@ import { withRouter } from "react-router-dom";
 import ThreeSixtyIcon from "@material-ui/icons/ThreeSixty";
 import { ipcRenderer } from "electron";
 import storage from "electron-json-storage";
+import SucioBreadcrumbs from "./Breadcrumbs";
 
 const getAllDBNames = async () => {
   await ipcRenderer.send("GET_DB_NAMES");
@@ -36,30 +37,6 @@ const useStyles = makeStyles(theme => ({
     [theme.breakpoints.up("sm")]: {
       display: "block"
     }
-  },
-  search: {
-    position: "relative",
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
-    "&:hover": {
-      backgroundColor: fade(theme.palette.common.white, 0.25)
-    },
-    marginRight: theme.spacing(2),
-    marginLeft: 0,
-    width: "100%",
-    [theme.breakpoints.up("sm")]: {
-      marginLeft: theme.spacing(3),
-      width: "auto"
-    }
-  },
-  searchIcon: {
-    width: theme.spacing(7),
-    height: "100%",
-    position: "absolute",
-    pointerEvents: "none",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center"
   },
   inputRoot: {
     color: "inherit"
@@ -127,9 +104,7 @@ function PrimarySearchAppBar(props) {
           >
             qlStico
           </Typography>
-          <div className={classes.search}>
-            <div className={classes.searchIcon} />
-          </div>
+          <SucioBreadcrumbs />
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
             <IconButton
