@@ -16,6 +16,7 @@ import storage from 'electron-json-storage';
 const {
   GET_DB_NAMES,
   GET_DB_NAMES_REPLY,
+  CLOSE_SERVER,
 } = require('../../constants/ipcNames');
 
 const getAllDBNames = async () => {
@@ -99,7 +100,7 @@ function PrimarySearchAppBar(props) {
 
   async function sendHome() {
     props.history.push('/');
-    await ipcRenderer.send('CLOSE_SERVER');
+    await ipcRenderer.send(CLOSE_SERVER);
   }
 
   const menuId = 'primary-search-account-menu';
