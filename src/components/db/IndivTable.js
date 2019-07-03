@@ -1,5 +1,5 @@
 /* eslint-disable no-confusing-arrow */
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -25,24 +25,38 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const IndivTable = () => {
-  const [editMode, setEditMode] = useState(false);
-  const { selectedTableData } = useContext(DbRelatedContext);
   const classes = useStyles();
-  const [values, setValues] = useState({});
-  console.log(selectedTableData);
+  const [editMode, setEditMode] = useState(false);
+  const [tableMatrix, setTableMatrix] = useState([]);
+  const { selectedTableData } = useContext(DbRelatedContext);
+
+  useEffect(() => {
+    // using this as component did update b/c the provider data from
+    // context does not make it in time for the initial mounting
+    const matrix = selectedTableData.map(row =>
+      Object.values(row).map(value => value)
+    );
+    setTableMatrix(matrix);
+  }, [selectedTableData]);
+
+  const handleInputChange = e => {
+    const { id, value } = e.target;
+    console.log('ID: ', id, '...', 'VALUE: ', value);
+  };
 
   const toggleEditMode = () => {
     setEditMode(prevEditMode => !prevEditMode);
   };
 
-  return selectedTableData.length ? (
+  return tableMatrix.length ? (
     <div className={classes.root}>
       <Paper className={classes.paper}>
         <Table className={classes.table} size="small">
           <TableHead>
             <TableRow>
+              {/* Column Headers */}
               {Object.keys(selectedTableData[0]).map(key => {
-                console.log(key);
+                // console.log(key);
                 return (
                   <TableCell key={key} style={{ width: '10px' }}>
                     {key}
@@ -52,16 +66,23 @@ const IndivTable = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {selectedTableData.map((row, rowIdx) => (
+            {/* Table Data */}
+            {tableMatrix.map((row, rowIdx) => (
               <TableRow key={rowIdx}>
                 {Object.values(row).map((value, colIdx) =>
                   editMode ? (
                     <TableCell
                       key={`${rowIdx}-${colIdx}`}
+                      id={`${rowIdx}-${colIdx}`}
                       component="th"
                       scope="row"
                     >
-                      <input type="text" defaultValue={value} />
+                      <input
+                        type="text"
+                        defaultValue={value}
+                        id={`${rowIdx}-${colIdx}`}
+                        onChange={handleInputChange}
+                      />
                     </TableCell>
                   ) : (
                     <TableCell
@@ -69,6 +90,7 @@ const IndivTable = () => {
                       component="th"
                       scope="row"
                       onDoubleClick={toggleEditMode}
+                      id={`${rowIdx}-${colIdx}`}
                     >
                       {value}
                     </TableCell>
