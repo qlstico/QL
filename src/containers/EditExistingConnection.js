@@ -8,7 +8,7 @@ const { LOGIN_FORM_DATA } = require('../constants/ipcNames');
 const Edit = props => {
   const [thisUser, setThisUser] = useState(null);
   const [connectionsArray, setConnectionsArray] = useState(null);
-  const { selectedUser, setSelectedUser } = useContext(DbRelatedContext);
+  const { selectedUser } = useContext(DbRelatedContext);
 
   useEffect(() => {
     storage.get('connectionData', (error, data) => {

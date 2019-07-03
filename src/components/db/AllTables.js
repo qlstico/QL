@@ -22,8 +22,8 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const AllTables = props => {
-  const [spacing, setSpacing] = useState(2);
+const AllTables = () => {
+  const [spacing] = useState(2);
   const {
     tables: tablesContext,
     selectedDb,

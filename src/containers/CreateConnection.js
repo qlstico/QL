@@ -29,6 +29,7 @@ const Create = props => {
   const [connectionData, setConnectionData] = useState(null);
 
   useEffect(() => {
+    // componentDidMount -> get connection data from ls
     storage.get('connectionData', (error, data) => {
       if (error) throw error;
       setConnectionData(data);
