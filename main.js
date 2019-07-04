@@ -20,17 +20,22 @@ const {
   GET_TABLE_CONTENTS_REPLY,
   CLOSE_SERVER,
 } = require('./src/constants/ipcNames');
+const enableDestroy = require('server-destroy');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 let LOGGEDIN_USER = '';
 
-const expressApp = express();
+let expressApp;
 let expressServer;
+let PORT_INCREMENT = 0;
 
 /* Setup express server when user clicks a db in the front end */
 function setupExpress(databaseName, username = '', password) {
+  /* Major key is just overwriting existing express app.
+  This was the solution */
+  expressApp = express();
   // config to connect middleware to database
   const schemaName = 'public';
   const database = `postgres://${username}:${
@@ -41,7 +46,7 @@ function setupExpress(databaseName, username = '', password) {
     graphiql: true,
     enhanceGraphiql: true,
   };
-  console.log(database);
+  // console.log(database);
   // setup middleware for creating our graphql api
   expressApp.use(postgraphile(database, schemaName, pglConfig));
   // route for visualizer - access via http://localhost:5000/voyager
@@ -52,6 +57,10 @@ function setupExpress(databaseName, username = '', password) {
     console.log('Listening :)');
     // expressServer.close()
   });
+
+  // enhance with a 'destroy' function
+  enableDestroy(expressServer);
+
   // expressApp.listen(5000);
 }
 
