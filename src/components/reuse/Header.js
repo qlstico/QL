@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -11,14 +10,15 @@ import Menu from '@material-ui/core/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import { withRouter } from 'react-router-dom';
-import ThreeSixtyIcon from '@material-ui/icons/ThreeSixty';
 import { ipcRenderer } from 'electron';
 import storage from 'electron-json-storage';
-import SucioBreadcrumbs from "./Breadcrumbs";
+import SucioBreadcrumbs from './Breadcrumbs';
+import ArrowBack from '@material-ui/icons/ArrowBack';
+import ArrowForward from '@material-ui/icons/ArrowForward';
 const {
   GET_DB_NAMES,
   GET_DB_NAMES_REPLY,
-  CLOSE_SERVER,
+  CLOSE_SERVER
 } = require('../../constants/ipcNames');
 
 const getAllDBNames = async () => {
@@ -38,26 +38,26 @@ const useStyles = makeStyles(theme => ({
     marginRight: theme.spacing(2)
   },
   title: {
-    display: "none",
-    [theme.breakpoints.up("sm")]: {
-      display: "block"
+    display: 'none',
+    [theme.breakpoints.up('sm')]: {
+      display: 'block'
     }
   },
   inputRoot: {
-    color: "inherit"
+    color: 'inherit'
   },
   inputInput: {
     padding: theme.spacing(1, 1, 1, 7),
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("md")]: {
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('md')]: {
       width: 200
     }
   },
   sectionDesktop: {
-    display: "none",
-    [theme.breakpoints.up("md")]: {
-      display: "flex"
+    display: 'none',
+    [theme.breakpoints.up('md')]: {
+      display: 'flex'
     }
   }
 }));
@@ -81,14 +81,14 @@ function PrimarySearchAppBar(props) {
     await ipcRenderer.send(CLOSE_SERVER);
   }
 
-  const menuId = "primary-search-account-menu";
+  const menuId = 'primary-search-account-menu';
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
-      anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       id={menuId}
       keepMounted
-      transformOrigin={{ vertical: "top", horizontal: "right" }}
+      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
@@ -99,11 +99,11 @@ function PrimarySearchAppBar(props) {
 
   return (
     <div className={classes.grow}>
-      <AppBar position='static'>
+      <AppBar position="static">
         <Toolbar>
           <Typography
             className={classes.title}
-            variant='h6'
+            variant="h6"
             noWrap
             onClick={sendHome}
           >
@@ -113,19 +113,26 @@ function PrimarySearchAppBar(props) {
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
             <IconButton
-              aria-label='autorenew'
-              color='inherit'
-              onClick={getAllDBNames}
+              aria-label="autorenew"
+              color="inherit"
+              onClick={() => props.history.goBack()}
             >
-              <ThreeSixtyIcon />
+              <ArrowBack />
             </IconButton>
             <IconButton
-              edge='end'
-              aria-label='Account of current user'
+              aria-label="autorenew"
+              color="inherit"
+              onClick={() => props.history.goForward()}
+            >
+              <ArrowForward />
+            </IconButton>
+            <IconButton
+              edge="end"
+              aria-label="Account of current user"
               aria-controls={menuId}
-              aria-haspopup='true'
+              aria-haspopup="true"
               onClick={handleProfileMenuOpen}
-              color='inherit'
+              color="inherit"
             >
               <AccountCircle />
             </IconButton>
