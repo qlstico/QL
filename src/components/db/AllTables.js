@@ -1,25 +1,25 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import {
   DisplayCard,
   DbRelatedContext,
   GraphQLDisplayCard,
-  VoyagerDisplayCard,
+  VoyagerDisplayCard
 } from '../index';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import { ipcRenderer } from 'electron';
 const {
   GET_TABLE_CONTENTS,
-  GET_TABLE_CONTENTS_REPLY,
+  GET_TABLE_CONTENTS_REPLY
 } = require('../../constants/ipcNames');
 
 const useStyles = makeStyles(theme => ({
   root: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   control: {
-    padding: theme.spacing(2),
-  },
+    padding: theme.spacing(2)
+  }
 }));
 
 const AllTables = () => {
@@ -28,6 +28,8 @@ const AllTables = () => {
     tables: tablesContext,
     selectedDb,
     setSelectedTableData,
+    serverStatus,
+    setServerStatus
   } = useContext(DbRelatedContext);
   const classes = useStyles();
 
@@ -38,6 +40,11 @@ const AllTables = () => {
       setSelectedTableData(arg);
     });
   };
+
+  useEffect(() => {
+    setServerStatus(true);
+  }, []);
+  console.log({ serverStatus });
 
   return (
     <div>
