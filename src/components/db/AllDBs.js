@@ -7,23 +7,27 @@ import { ipcRenderer } from 'electron';
 const {
   GET_TABLE_NAMES,
   GET_TABLE_NAMES_REPLY,
+  CLOSE_SERVER
 } = require('../../constants/ipcNames');
 
 const useStyles = makeStyles(theme => ({
   root: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   control: {
-    padding: theme.spacing(2),
-  },
+    padding: theme.spacing(2)
+  }
 }));
 
 const AllDBs = () => {
   const [spacing] = useState(2);
   const [dbs, setDbs] = useState([]);
-  const { setTables: setTablesContext, setSelectedDb } = useContext(
-    DbRelatedContext
-  );
+  const {
+    setTables: setTablesContext,
+    setSelectedDb,
+    serverStatus,
+    setServerStatus
+  } = useContext(DbRelatedContext);
   const classes = useStyles();
 
   useEffect(() => {
@@ -32,7 +36,11 @@ const AllDBs = () => {
       if (error) throw error;
       setDbs(data);
     });
-  }, []);
+    if (serverStatus) {
+      ipcRenderer.send(CLOSE_SERVER);
+      setServerStatus(false);
+    }
+  }, [serverStatus]);
 
   // when user clicks database, sends message to trigger getting the table data
   // set context with table names
@@ -43,7 +51,7 @@ const AllDBs = () => {
       setTablesContext(tableNames);
     });
   };
-  console.log(classes.control);
+  console.log('IN ALLDBs COMPONENT: ', { serverStatus });
   return (
     <div>
       <h1>Databases: </h1>
