@@ -29,6 +29,10 @@ const BreadcrumbsElem = props => {
     await ipcRenderer.send(CLOSE_SERVER);
   }
 
+  const maybeClose = async () => {
+    if (!CLOSE_SERVER) await ipcRenderer.send(CLOSE_SERVER);
+  };
+
   return (
     <div className={classes.root}>
       <Breadcrumbs separator='/' aria-label='Breadcrumb'>
@@ -38,9 +42,7 @@ const BreadcrumbsElem = props => {
         {props.location !== "/" ? (
           <Link
             id='breadboi'
-            onClick={() =>
-              props.history.push("/dbs") && ipcRenderer.send(CLOSE_SERVER)
-            }
+            onClick={() => props.history.push("/dbs") && maybeClose()}
           >
             Databases
           </Link>
@@ -48,12 +50,7 @@ const BreadcrumbsElem = props => {
           ""
         )}
         {props.location === "/tables" ? (
-          <Link
-            id='breadboi'
-            onClick={() =>
-              props.history.push("/tables") && ipcRenderer.send(CLOSE_SERVER)
-            }
-          >
+          <Link id='breadboi' onClick={() => props.history.push("/tables")}>
             Tables
           </Link>
         ) : (
@@ -61,21 +58,11 @@ const BreadcrumbsElem = props => {
         )}
         {props.location === "/single" ? (
           <div>
-            <Link
-              id='breadboi'
-              onClick={() =>
-                props.history.push("/tables") && ipcRenderer.send(CLOSE_SERVER)
-              }
-            >
+            <Link id='breadboi' onClick={() => props.history.push("/tables")}>
               Tables
             </Link>
             {"  /  "}
-            <Link
-              id='breadboi'
-              onClick={() =>
-                props.history.push("/single") && ipcRenderer.send(CLOSE_SERVER)
-              }
-            >
+            <Link id='breadboi' onClick={() => props.history.push("/single")}>
               Table Contents
             </Link>
           </div>
