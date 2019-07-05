@@ -4,6 +4,8 @@ import { withRouter } from 'react-router-dom';
 const { ipcRenderer } = require('electron');
 const { LOGIN_FORM_DATA } = require('../constants/ipcNames');
 import { Login } from '../components/index';
+const { encryptPass } = require('../server/util');
+
 
 const generateID = () => {
   return (
@@ -52,6 +54,8 @@ const Create = props => {
   };
 
   const handleSubmit = e => {
+    let newpass = encryptPass(values.password)
+    values.password = newpass
     e.preventDefault();
     writeToLocalStorage(values);
     ipcRenderer.send(LOGIN_FORM_DATA, values);
