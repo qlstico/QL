@@ -28,7 +28,7 @@ const BreadcrumbsElem = props => {
     props.history.push("/");
     await ipcRenderer.send(CLOSE_SERVER);
   }
-  //pretty sure this does nothing but it makes sense to me
+  //pretty sure this does nothing
   const maybeClose = async () => {
     if (!CLOSE_SERVER) await ipcRenderer.send(CLOSE_SERVER);
   };
