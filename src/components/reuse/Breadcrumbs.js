@@ -5,6 +5,8 @@ import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import Typography from "@material-ui/core/Typography";
 import Link from "@material-ui/core/Link";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
+import ConnectPage from "../db/ConnectPage";
+import { ipcRenderer } from "electron";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -26,24 +28,51 @@ function handleClick(event) {
   alert("You clicked a breadcrumb.");
 }
 
-export default function SucioBreadcrumbs() {
+const BreadcrumbsElem = props => {
   const classes = useStyles();
+  console.log("CRUMBPROPSSSS", props);
+
+  async function sendHome() {
+    props.history.push("/");
+    await ipcRenderer.send(CLOSE_SERVER);
+  }
 
   return (
     <div className={classes.root}>
       <Breadcrumbs separator='/' aria-label='Breadcrumb'>
-        <Link color='inherit' href='/' onClick={handleClick}>
-          Material-UI
+        <Link id='breadboi' onClick={sendHome}>
+          Connect
         </Link>
-        <Link
-          color='inherit'
-          href='/getting-started/installation/'
-          onClick={handleClick}
-        >
-          Core
-        </Link>
-        <Typography color='textPrimary'>Breadcrumb</Typography>
+        {props.location !== "/" ? (
+          <Link id='breadboi' onClick={() => props.history.push("/dbs")}>
+            Databases
+          </Link>
+        ) : (
+          ""
+        )}
+        {props.location === "/tables" ? (
+          <Link id='breadboi' onClick={() => props.history.push("/tables")}>
+            Tables
+          </Link>
+        ) : (
+          ""
+        )}
+        {props.location === "/single" ? (
+          <div>
+            <Link id='breadboi' onClick={() => props.history.push("/tables")}>
+              Tables
+            </Link>
+            {"  /  "}
+            <Link id='breadboi' onClick={() => props.history.push("/single")}>
+              Table Contents
+            </Link>
+          </div>
+        ) : (
+          ""
+        )}
       </Breadcrumbs>
     </div>
   );
-}
+};
+
+export default BreadcrumbsElem;
