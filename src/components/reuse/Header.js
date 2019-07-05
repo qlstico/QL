@@ -66,7 +66,6 @@ const useStyles = makeStyles(theme => ({
 function PrimarySearchAppBar(props) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
-  console.log("PROOOOOPPPSSSS", props);
 
   const isMenuOpen = Boolean(anchorEl);
 

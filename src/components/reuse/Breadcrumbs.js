@@ -1,12 +1,10 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
-import Typography from "@material-ui/core/Typography";
 import Link from "@material-ui/core/Link";
-import NavigateNextIcon from "@material-ui/icons/NavigateNext";
-import ConnectPage from "../db/ConnectPage";
 import { ipcRenderer } from "electron";
+
+const { CLOSE_SERVER } = require("../../constants/ipcNames");
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -23,19 +21,14 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function handleClick(event) {
-  event.preventDefault();
-  alert("You clicked a breadcrumb.");
-}
-
 const BreadcrumbsElem = props => {
   const classes = useStyles();
-  console.log("CRUMBPROPSSSS", props);
 
   async function sendHome() {
     props.history.push("/");
     await ipcRenderer.send(CLOSE_SERVER);
   }
+  //pretty sure this does nothing
 
   return (
     <div className={classes.root}>
