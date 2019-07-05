@@ -203,8 +203,8 @@ ipcMain.on(CLOSE_SERVER, async (event, args) => {
  * called from ./components/db/IndivTable.js
  * when the user submits the changes to the table
  */
-ipcMain.on(UPDATE_TABLE_DATA, async (_, args) => {
-  console.log('UPDATE_TABLE_DATA');
+ipcMain.on(UPDATE_TABLE_DATA, async (_, arg) => {
+  console.log('UPDATE_TABLE_DATA', arg);
   const response = await updateTableData();
 });
 

@@ -51,7 +51,6 @@ const getTableData = async (table, database) => {
   const pool = new pg.Pool(DB_CONNECTION);
   try {
     const response = await pool.query(`SELECT * from ${table}`);
-    console.log(response);
     return response.rows;
   } catch (error) {
     console.log(error);
