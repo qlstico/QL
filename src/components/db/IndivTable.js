@@ -1,4 +1,4 @@
-/* eslint-disable no-confusing-arrow */
+
 import React, { useState, useContext, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -13,14 +13,15 @@ import TextField from '@material-ui/core/TextField';
 import { ipcRenderer } from 'electron';
 const { UPDATE_TABLE_DATA } = require('../../constants/ipcNames');
 
+
 const useStyles = makeStyles(theme => ({
   root: {
-    width: '100%'
+    width: "100%"
   },
   paper: {
     marginTop: theme.spacing(3),
-    width: '100%',
-    overflowX: 'auto',
+    width: "100%",
+    overflowX: "auto",
     marginBottom: theme.spacing(2)
   },
   table: {
@@ -78,7 +79,7 @@ const IndivTable = () => {
     // Destructures the 'name' and value of the event target for ease of access to them
     const { name, value } = e.target;
     // Destructures the rowIdx and colIdx from the string returned by the event.target.name
-    const [rowIdx, colIdx] = name.split('-');
+    const [rowIdx, colIdx] = name.split("-");
 
     // Makes the changes in state's matrix using the rowIdx and
     //colIdx to locate it's position and rewritting it's value
@@ -115,13 +116,13 @@ const IndivTable = () => {
   return tableMatrix.length ? (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <Table className={classes.table} size="small">
+        <Table className={classes.table} size='small'>
           <TableHead>
             <TableRow>
               {/* Column Headers */}
               {Object.keys(selectedTableData[0]).map(key => {
                 return (
-                  <TableCell key={key} style={{ width: '10px' }}>
+                  <TableCell key={key} style={{ width: "10px" }}>
                     {key}
                   </TableCell>
                 );
@@ -139,12 +140,12 @@ const IndivTable = () => {
                   editRow === rowIdx ? (
                     <TableCell
                       key={`${rowIdx}-${colIdx}`}
-                      component="th"
-                      scope="row"
+                      component='th'
+                      scope='row'
                     >
                       <TextField
                         className={classes.textField}
-                        type="text"
+                        type='text'
                         defaultValue={value}
                         // Name field is how we reference this cell's equivalent
                         // position in the state matrix to make changes
@@ -155,8 +156,8 @@ const IndivTable = () => {
                   ) : (
                     <TableCell
                       key={`${rowIdx}-${colIdx}`}
-                      component="th"
-                      scope="row"
+                      component='th'
+                      scope='row'
                       // Set this row to be the selected row for 'edit mode' in
                       // the state to rerender as a textField
                       onDoubleClick={() => enableEditRow(rowIdx)}
@@ -174,12 +175,28 @@ const IndivTable = () => {
           </TableBody>
         </Table>
       </Paper>
+
       <Button variant="contained" type="button" onClick={handleUpdateSubmit}>
+
         Submit
+      </Button>
+      <Button
+        variant='contained'
+        type='button'
+        onClick={() => console.table(tableMatrix)}
+      >
+        Add Row
+      </Button>
+      <Button
+        variant='contained'
+        type='button'
+        onClick={() => console.table(tableMatrix)}
+      >
+        Remove Row
       </Button>
     </div>
   ) : (
-    ''
+    ""
   );
 };
 
