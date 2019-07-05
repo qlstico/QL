@@ -60,10 +60,6 @@ const getTableData = async (table, database) => {
 
 const updateTableData = async (table, database, data) => {
   setDatabase(database);
-  const newArr = [];
-  for (let index = 0; index < fields.length; index++) {
-    newArr.push(`${fields}=${values}`);
-  }
 
   const pool = new pg.Pool(DB_CONNECTION);
   try {

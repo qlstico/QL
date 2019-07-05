@@ -19,6 +19,7 @@ const {
   GET_TABLE_CONTENTS,
   GET_TABLE_CONTENTS_REPLY,
   CLOSE_SERVER,
+  UPDATE_TABLE_DATA,
 } = require('./src/constants/ipcNames');
 const enableDestroy = require('server-destroy');
 
@@ -191,6 +192,16 @@ ipcMain.on(GET_TABLE_CONTENTS, async (event, args) => {
  */
 ipcMain.on(CLOSE_SERVER, async (event, args) => {
   closeServer(expressServer, 'closeserver*****');
+});
+
+/**
+ * called from ./components/reuse/Header.js
+ * when user qlStico icon, header sends message to trigger stopping the server
+ * from rec new connections
+ * call to get all the db names and replies with the database names
+ */
+ipcMain.on(UPDATE_TABLE_DATA, async (event, args) => {
+  console.log('UPDATE_TABLE_DATA');
 });
 
 // This method will be called when Electron has finished
