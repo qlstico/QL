@@ -1,3 +1,4 @@
+
 import React, { useState, useContext, useEffect } from 'react';
 import {
   DisplayCard,
@@ -6,12 +7,14 @@ import {
   VoyagerDisplayCard
 } from '../index';
 import Grid from '@material-ui/core/Grid';
+import Button from "@material-ui/core/Button";
 import { makeStyles } from '@material-ui/core/styles';
 import { ipcRenderer } from 'electron';
 const {
   GET_TABLE_CONTENTS,
   GET_TABLE_CONTENTS_REPLY
 } = require('../../constants/ipcNames');
+
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -54,7 +57,7 @@ const AllTables = () => {
       <h1>Tables: </h1>
       <Grid container className={classes.root} spacing={3}>
         <Grid item xs={12}>
-          <Grid container justify="center" spacing={spacing}>
+          <Grid container justify='center' spacing={spacing}>
             {tablesContext.map(table => (
               <Grid
                 key={table}
@@ -64,13 +67,28 @@ const AllTables = () => {
                 <DisplayCard
                   className={classes.control}
                   name={table}
-                  type="table"
+                  type='table'
                 />
               </Grid>
             ))}
           </Grid>
         </Grid>
       </Grid>
+      <Button
+        variant='contained'
+        type='button'
+        color='green'
+        onClick={() => console.table(tableMatrix)}
+      >
+        Add Table
+      </Button>
+      <Button
+        variant='contained'
+        type='button'
+        onClick={() => console.table(tableMatrix)}
+      >
+        Remove Table
+      </Button>
     </div>
   );
 };
