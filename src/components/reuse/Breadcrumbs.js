@@ -29,9 +29,6 @@ const BreadcrumbsElem = props => {
     await ipcRenderer.send(CLOSE_SERVER);
   }
   //pretty sure this does nothing
-  const maybeClose = async () => {
-    if (!CLOSE_SERVER) await ipcRenderer.send(CLOSE_SERVER);
-  };
 
   return (
     <div className={classes.root}>
@@ -40,10 +37,7 @@ const BreadcrumbsElem = props => {
           Connect
         </Link>
         {props.location !== "/" ? (
-          <Link
-            id='breadboi'
-            onClick={() => props.history.push("/dbs") && maybeClose()}
-          >
+          <Link id='breadboi' onClick={() => props.history.push("/dbs")}>
             Databases
           </Link>
         ) : (
