@@ -72,10 +72,10 @@ const AllTables = () => {
           </Grid>
         </Grid>
       </Grid>
-      <Button
+      {/* <Button
         variant="contained"
         type="button"
-        color="green"
+        color="inherit"
         onClick={() => console.table(tableMatrix)}
       >
         Add Table
@@ -83,10 +83,11 @@ const AllTables = () => {
       <Button
         variant="contained"
         type="button"
+        color="inherit"
         onClick={() => console.table(tableMatrix)}
       >
         Remove Table
-      </Button>
+      </Button> */}
     </div>
   );
 };

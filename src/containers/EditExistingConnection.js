@@ -6,7 +6,6 @@ import { ipcRenderer } from 'electron';
 const { LOGIN_FORM_DATA } = require('../constants/ipcNames');
 const { encrypt } = require('../server/util');
 
-
 const Edit = props => {
   const [thisUser, setThisUser] = useState(null);
   const [connectionsArray, setConnectionsArray] = useState(null);
@@ -15,11 +14,9 @@ const Edit = props => {
   useEffect(() => {
     storage.get('connectionData', (error, data) => {
       if (error) throw error;
-      const edittableUser = data.find(user => user.id === selectedUser.id);
-      let password = edittableUser.password
-      let newpass = encrypt(password,"decrypt")
-      edittableUser.password = newpass
-      setThisUser(edittableUser);
+      const foundUser = data.find(user => user.id === selectedUser.id);
+      foundUser.password = encrypt(foundUser.password, 'decrypt');
+      setThisUser(foundUser);
       setConnectionsArray(data);
     });
   }, []);
@@ -27,7 +24,14 @@ const Edit = props => {
   const writeToLocalStorage = () => {
     storage.set(
       'connectionData',
-      connectionsArray.map(user => (user.id === thisUser.id ? thisUser : user)),
+      connectionsArray.map(user => {
+        if (user.id === thisUser.id) {
+          user.password = encrypt(thisUser.password, 'encrypt');
+          return user;
+        } else {
+          return user;
+        }
+      }),
       function(error) {
         if (error) throw error;
       }
