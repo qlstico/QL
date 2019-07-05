@@ -63,17 +63,16 @@ const ConnectPage = props => {
               userConfigs.map(connection => (
                 <Card
                   className={classes.card}
-                  key={`${connection.user}-${connection.name}-${
-                    connection.password
-                  }`}
+                  key={`${connection.id}`}
                 >
+                {console.log(connection.key)}
                   <CardContent>
                     <Typography
                       className={classes.pos}
                       align="left"
                       color="textSecondary"
                     >
-                      User: {connection.user}
+                      User: {`${connection.user}`}
                     </Typography>
                     <Typography
                       className={classes.pos}
@@ -97,6 +96,15 @@ const ConnectPage = props => {
                     >
                       Edit
                     </Button>
+                    <Button
+                      onClick={() => {
+
+                      }}
+                      size="large"
+                    >
+                      DELETE
+                    </Button>
+
                   </CardContent>
                   <CardActions />
                 </Card>

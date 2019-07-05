@@ -24,9 +24,6 @@ function encrypt(password,task){
   }
 }
 
-let enc = (encrypt("hi","encrypt"))
-console.log(enc)
-console.log(encrypt(enc,"decrypt"))
 
 module.exports = {
   closeServer, encrypt
