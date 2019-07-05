@@ -3,7 +3,7 @@ import {
   DisplayCard,
   DbRelatedContext,
   GraphQLDisplayCard,
-  VoyagerDisplayCard
+  VoyagerDisplayCard,
 } from '../index';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
@@ -11,16 +11,16 @@ import { makeStyles } from '@material-ui/core/styles';
 import { ipcRenderer } from 'electron';
 const {
   GET_TABLE_CONTENTS,
-  GET_TABLE_CONTENTS_REPLY
+  GET_TABLE_CONTENTS_REPLY,
 } = require('../../constants/ipcNames');
 
 const useStyles = makeStyles(theme => ({
   root: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   control: {
-    padding: theme.spacing(2)
-  }
+    padding: theme.spacing(2),
+  },
 }));
 
 const AllTables = () => {
@@ -30,15 +30,17 @@ const AllTables = () => {
     selectedDb,
     setSelectedTableData,
     serverStatus,
-    setServerStatus
+    setServerStatus,
+    setSelectedTable,
   } = useContext(DbRelatedContext);
   const classes = useStyles();
 
   // args === (table, selectedDb)
-  const getTableContents = async (...args) => {
-    await ipcRenderer.send(GET_TABLE_CONTENTS, args);
-    await ipcRenderer.on(GET_TABLE_CONTENTS_REPLY, (event, arg) => {
-      setSelectedTableData(arg);
+  const getTableContents = async table => {
+    setSelectedTable(table);
+    await ipcRenderer.send(GET_TABLE_CONTENTS, [table, selectedDb]);
+    await ipcRenderer.on(GET_TABLE_CONTENTS_REPLY, (event, tableData) => {
+      setSelectedTableData(tableData);
     });
   };
 
@@ -57,11 +59,7 @@ const AllTables = () => {
         <Grid item xs={12}>
           <Grid container justify="center" spacing={spacing}>
             {tablesContext.map(table => (
-              <Grid
-                key={table}
-                item
-                onClick={() => getTableContents(table, selectedDb)}
-              >
+              <Grid key={table} item onClick={() => getTableContents(table)}>
                 <DisplayCard
                   className={classes.control}
                   name={table}

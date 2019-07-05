@@ -45,7 +45,9 @@ const IndivTable = () => {
   const classes = useStyles();
 
   // Grabbing the tabledata from the context provider
-  const { selectedTableData } = useContext(DbRelatedContext);
+  const { selectedTableData, selectedDb, selectedTable } = useContext(
+    DbRelatedContext
+  );
 
   // Setting the matrix created from the context provider's array of objs
   // to render the table cells and to have a 'sandbox copy' in the state
@@ -103,7 +105,11 @@ const IndivTable = () => {
 
   const handleUpdateSubmit = async () => {
     console.log('handleUpdateSubmit');
-    await ipcRenderer.send(UPDATE_TABLE_DATA, tableMatrix);
+    await ipcRenderer.send(UPDATE_TABLE_DATA, [
+      selectedTable,
+      selectedDb,
+      tableMatrix,
+    ]);
   };
 
   // Tracking which row is in 'edit mode'

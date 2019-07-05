@@ -203,9 +203,10 @@ ipcMain.on(CLOSE_SERVER, async (event, args) => {
  * called from ./components/db/IndivTable.js
  * when the user submits the changes to the table
  */
-ipcMain.on(UPDATE_TABLE_DATA, async (_, arg) => {
-  console.log('UPDATE_TABLE_DATA', arg);
-  const response = await updateTableData();
+// args === [selectedTable,selectedDb,tableMatrix]
+ipcMain.on(UPDATE_TABLE_DATA, async (_, args) => {
+  console.log('UPDATE_TABLE_DATA', args);
+  const response = await updateTableData(...args);
 });
 
 // This method will be called when Electron has finished

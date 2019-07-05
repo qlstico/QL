@@ -58,18 +58,29 @@ const getTableData = async (table, database) => {
 };
 
 const updateTableData = async (table, database, data) => {
-  // setDatabase(database);
-  console.log('hi from updateTableData');
-  // const pool = new pg.Pool(DB_CONNECTION);
-  // try {
-  //   const response = await pool.query(
-  //     `UPDATE ${table} SET ${newArr.join(' ')} where id = ${dbRowId}`
-  //   );
-  //   console.log(response);
-  //   return response.rows;
-  // } catch (error) {
-  //   console.log(error);
-  // }
+  setDatabase(database);
+  console.log('hi from updateTableData', table, database, data);
+
+  /**
+   * grab key from
+   */
+  const obj = data.reduce((accum, row) => {
+    // get key from cell and create object with key of id and value of field(ie key)=value
+    const id = row[0].id;
+    return { [id]: row.map(({ key, value }) => `${key}=${value}`).join(' ') };
+  }, []);
+  // const str = data.map(({key, value}) => )
+  const pool = new pg.Pool(DB_CONNECTION);
+
+  try {
+    // const response = await pool.query(
+    //   `UPDATE ${table} SET ${newArr.join(' ')} where id = ${dbRowId}`
+    // );
+    // console.log(response);
+    // return response.rows;
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 /*
