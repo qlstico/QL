@@ -53,7 +53,8 @@ const IndivTable = () => {
     const matrix = selectedTableData.map(row =>
       // Passing in row id and val as obj to reference inside of
       // handleInputChange and to reference as an attribute inside component
-      Object.values(row).map(value => ({ value, id: row.id }))
+      // Object.values(row).map(value => ({ value, id: row.id }))
+      Object.entries(row).map(([key, value]) => ({ value, id: row.id, key }))
     );
     // Setting the matrix created above as the state for the component instead of
     // just using the context provider directly in order to have a copy we can work with without
