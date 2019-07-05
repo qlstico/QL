@@ -58,6 +58,26 @@ const getTableData = async (table, database) => {
   }
 };
 
+const updateTableData = async (table, database, data) => {
+  setDatabase(database);
+  const newArr = [];
+  for (let index = 0; index < fields.length; index++) {
+    newArr.push(`${fields}=${values}`);
+  }
+
+  const pool = new pg.Pool(DB_CONNECTION);
+  try {
+    const response = await pool.query(
+      `UPDATE ${table} SET ${newArr.join(' ')} where id = ${dbRowId}`
+    );
+    console.log(response);
+    return response.rows;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+/*
 const updateTableData = async (table, database, fields, values, dbRowId) => {
   setDatabase(database);
   const newArr = [];
@@ -76,6 +96,8 @@ const updateTableData = async (table, database, fields, values, dbRowId) => {
     console.log(error);
   }
 };
+*/
+console.log();
 
 module.exports = {
   getAllTables,
