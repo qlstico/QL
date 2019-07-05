@@ -1,12 +1,10 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
-import Typography from "@material-ui/core/Typography";
 import Link from "@material-ui/core/Link";
-import NavigateNextIcon from "@material-ui/icons/NavigateNext";
-import ConnectPage from "../db/ConnectPage";
 import { ipcRenderer } from "electron";
+
+const { CLOSE_SERVER } = require("../../constants/ipcNames");
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -23,14 +21,8 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function handleClick(event) {
-  event.preventDefault();
-  alert("You clicked a breadcrumb.");
-}
-
 const BreadcrumbsElem = props => {
   const classes = useStyles();
-  console.log("CRUMBPROPSSSS", props);
 
   async function sendHome() {
     props.history.push("/");
@@ -44,14 +36,24 @@ const BreadcrumbsElem = props => {
           Connect
         </Link>
         {props.location !== "/" ? (
-          <Link id='breadboi' onClick={() => props.history.push("/dbs")}>
+          <Link
+            id='breadboi'
+            onClick={() =>
+              props.history.push("/dbs") && ipcRenderer.send(CLOSE_SERVER)
+            }
+          >
             Databases
           </Link>
         ) : (
           ""
         )}
         {props.location === "/tables" ? (
-          <Link id='breadboi' onClick={() => props.history.push("/tables")}>
+          <Link
+            id='breadboi'
+            onClick={() =>
+              props.history.push("/tables") && ipcRenderer.send(CLOSE_SERVER)
+            }
+          >
             Tables
           </Link>
         ) : (
@@ -59,11 +61,21 @@ const BreadcrumbsElem = props => {
         )}
         {props.location === "/single" ? (
           <div>
-            <Link id='breadboi' onClick={() => props.history.push("/tables")}>
+            <Link
+              id='breadboi'
+              onClick={() =>
+                props.history.push("/tables") && ipcRenderer.send(CLOSE_SERVER)
+              }
+            >
               Tables
             </Link>
             {"  /  "}
-            <Link id='breadboi' onClick={() => props.history.push("/single")}>
+            <Link
+              id='breadboi'
+              onClick={() =>
+                props.history.push("/single") && ipcRenderer.send(CLOSE_SERVER)
+              }
+            >
               Table Contents
             </Link>
           </div>
