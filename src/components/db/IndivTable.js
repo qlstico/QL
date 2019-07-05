@@ -46,6 +46,8 @@ const IndivTable = () => {
   // to compare changes against the context provider's original version
   const [tableMatrix, setTableMatrix] = useState([]);
 
+  // Will hopefully be able to independently track any changes made to send a smaller
+  // load of only pertinent information to the server to make the requested changes
   const [changesMade, setChangesMade] = useState([]);
 
   // Using this as componentDidMount && componentDidUpdate b/c the provider data from
@@ -88,8 +90,9 @@ const IndivTable = () => {
     });
 
     // setChangesMade(prevChanges => {
-    //   prevChanges.push({id:})
-    // })
+    //   prevChanges.push({ id: dbEntryId, [fieldName]: value });
+    //   return prevChanges;
+    // });
   };
 
   const handleUpdateSubmit = async () => {
