@@ -27,7 +27,14 @@ const Edit = props => {
   const writeToLocalStorage = () => {
     storage.set(
       'connectionData',
-      connectionsArray.map(user => (user.id === thisUser.id ? thisUser : user)),
+      connectionsArray.map(user => {
+        if(user.id === thisUser.id) {
+        thisUser.password = encrypt(thisUser.password,"encrypt")
+        console.log(thisUser)
+        return thisUser
+      } else{
+        return user
+      }}),
       function(error) {
         if (error) throw error;
       }
