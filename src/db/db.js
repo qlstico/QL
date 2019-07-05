@@ -67,10 +67,17 @@ const updateTableData = async (table, database, data) => {
   const obj = data.reduce((accum, row) => {
     // get key from cell and create object with key of id and value of field(ie key)=value
     const id = row[0].id;
-    return { [id]: row.map(({ key, value }) => `${key}=${value}`).join(' ') };
+    return accum.concat([
+      [id, row.map(({ key, value }) => `${key}="${value}"`).join(' ')],
+    ]);
   }, []);
+  // console.log(obj);
   // const str = data.map(({key, value}) => )
   const pool = new pg.Pool(DB_CONNECTION);
+  const str = obj.map(
+    ([rowId, updateStr]) => `UPDATE ${table} SET ${updateStr} WHERE id=${rowId}`
+  );
+  console.log(str);
 
   try {
     // const response = await pool.query(
