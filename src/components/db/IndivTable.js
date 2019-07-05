@@ -1,18 +1,18 @@
-/* eslint-disable no-confusing-arrow */
-import React, { useState, useContext, useEffect } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
-import Button from "@material-ui/core/Button";
-import { DbRelatedContext } from "../index";
-import TextField from "@material-ui/core/TextField";
-import Fab from "@material-ui/core/Fab";
-import AddIcon from "@material-ui/icons/Add";
-import DeleteIcon from "@material-ui/icons/Delete";
+
+import React, { useState, useContext, useEffect } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
+import { DbRelatedContext } from '../index';
+import TextField from '@material-ui/core/TextField';
+import { ipcRenderer } from 'electron';
+const { UPDATE_TABLE_DATA } = require('../../constants/ipcNames');
+
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -47,6 +47,10 @@ const IndivTable = () => {
   // to compare changes against the context provider's original version
   const [tableMatrix, setTableMatrix] = useState([]);
 
+  // Will hopefully be able to independently track any changes made to send a smaller
+  // load of only pertinent information to the server to make the requested changes
+  const [changesMade, setChangesMade] = useState([]);
+
   // Using this as componentDidMount && componentDidUpdate b/c the provider data from
   // context does not make it in time for the initial mounting
   useEffect(() => {
@@ -71,7 +75,7 @@ const IndivTable = () => {
 
   // Handling any changes in the grid's cells - takes the event to identify the target cell, the row
   // in the matrix the cell exists in, and the ID of the cell's parent row/obj as it exists in the db
-  const handleInputChange = (e, matrixRowIdx, dbEntryId) => {
+  const handleInputChange = (e, matrixRowIdx, dbEntryId, fieldName) => {
     // Destructures the 'name' and value of the event target for ease of access to them
     const { name, value } = e.target;
     // Destructures the rowIdx and colIdx from the string returned by the event.target.name
@@ -85,6 +89,15 @@ const IndivTable = () => {
       prevMatrix[rowIdx][colIdx].value = value;
       return prevMatrix;
     });
+
+    // setChangesMade(prevChanges => {
+    //   prevChanges.push({ id: dbEntryId, [fieldName]: value });
+    //   return prevChanges;
+    // });
+  };
+
+  const handleUpdateSubmit = async () => {
+    await ipcRenderer(UPDATE_TABLE_DATA, tableMatrix);
   };
 
   // Tracking which row is in 'edit mode'
@@ -121,7 +134,7 @@ const IndivTable = () => {
             {tableMatrix.map((row, rowIdx) => (
               <TableRow key={rowIdx}>
                 {/* Rows cell data */}
-                {row.map(({ value, id }, colIdx) =>
+                {row.map(({ value, id, key }, colIdx) =>
                   // Checks to see if this row is the editable row, if it is render cells as
                   // textField, else render as a normal read only cells.
                   editRow === rowIdx ? (
@@ -137,7 +150,7 @@ const IndivTable = () => {
                         // Name field is how we reference this cell's equivalent
                         // position in the state matrix to make changes
                         name={`${rowIdx}-${colIdx}`}
-                        onChange={e => handleInputChange(e, rowIdx, id)}
+                        onChange={e => handleInputChange(e, rowIdx, id, key)}
                       />
                     </TableCell>
                   ) : (
@@ -162,11 +175,9 @@ const IndivTable = () => {
           </TableBody>
         </Table>
       </Paper>
-      <Button
-        variant='contained'
-        type='button'
-        onClick={() => console.table(tableMatrix)}
-      >
+
+      <Button variant="contained" type="button" onClick={handleUpdateSubmit}>
+
         Submit
       </Button>
       <Button
