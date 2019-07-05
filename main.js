@@ -4,7 +4,12 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const url = require('url');
-const { getAllDbs, getAllTables, getTableData } = require('./src/db/db');
+const {
+  getAllDbs,
+  getAllTables,
+  getTableData,
+  updateTableData,
+} = require('./src/db/db');
 const express = require('express');
 const { postgraphile } = require('postgraphile');
 // need below for visualizer
@@ -195,13 +200,12 @@ ipcMain.on(CLOSE_SERVER, async (event, args) => {
 });
 
 /**
- * called from ./components/reuse/Header.js
- * when user qlStico icon, header sends message to trigger stopping the server
- * from rec new connections
- * call to get all the db names and replies with the database names
+ * called from ./components/db/IndivTable.js
+ * when the user submits the changes to the table
  */
-ipcMain.on(UPDATE_TABLE_DATA, async (event, args) => {
+ipcMain.on(UPDATE_TABLE_DATA, async (_, args) => {
   console.log('UPDATE_TABLE_DATA');
+  const response = await updateTableData();
 });
 
 // This method will be called when Electron has finished

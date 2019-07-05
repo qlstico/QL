@@ -59,18 +59,18 @@ const getTableData = async (table, database) => {
 };
 
 const updateTableData = async (table, database, data) => {
-  setDatabase(database);
-
-  const pool = new pg.Pool(DB_CONNECTION);
-  try {
-    const response = await pool.query(
-      `UPDATE ${table} SET ${newArr.join(' ')} where id = ${dbRowId}`
-    );
-    console.log(response);
-    return response.rows;
-  } catch (error) {
-    console.log(error);
-  }
+  // setDatabase(database);
+  console.log('hi from updateTableData');
+  // const pool = new pg.Pool(DB_CONNECTION);
+  // try {
+  //   const response = await pool.query(
+  //     `UPDATE ${table} SET ${newArr.join(' ')} where id = ${dbRowId}`
+  //   );
+  //   console.log(response);
+  //   return response.rows;
+  // } catch (error) {
+  //   console.log(error);
+  // }
 };
 
 /*
@@ -99,4 +99,5 @@ module.exports = {
   getAllTables,
   getAllDbs,
   getTableData,
+  updateTableData,
 };
