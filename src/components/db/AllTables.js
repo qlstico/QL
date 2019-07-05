@@ -1,25 +1,26 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext } from "react";
 import {
   DisplayCard,
   DbRelatedContext,
   GraphQLDisplayCard,
-  VoyagerDisplayCard,
-} from '../index';
-import Grid from '@material-ui/core/Grid';
-import { makeStyles } from '@material-ui/core/styles';
-import { ipcRenderer } from 'electron';
+  VoyagerDisplayCard
+} from "../index";
+import Grid from "@material-ui/core/Grid";
+import { makeStyles } from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
+import { ipcRenderer } from "electron";
 const {
   GET_TABLE_CONTENTS,
-  GET_TABLE_CONTENTS_REPLY,
-} = require('../../constants/ipcNames');
+  GET_TABLE_CONTENTS_REPLY
+} = require("../../constants/ipcNames");
 
 const useStyles = makeStyles(theme => ({
   root: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   control: {
-    padding: theme.spacing(2),
-  },
+    padding: theme.spacing(2)
+  }
 }));
 
 const AllTables = () => {
@@ -27,7 +28,7 @@ const AllTables = () => {
   const {
     tables: tablesContext,
     selectedDb,
-    setSelectedTableData,
+    setSelectedTableData
   } = useContext(DbRelatedContext);
   const classes = useStyles();
 
@@ -47,7 +48,7 @@ const AllTables = () => {
       <h1>Tables: </h1>
       <Grid container className={classes.root} spacing={3}>
         <Grid item xs={12}>
-          <Grid container justify="center" spacing={spacing}>
+          <Grid container justify='center' spacing={spacing}>
             {tablesContext.map(table => (
               <Grid
                 key={table}
@@ -57,13 +58,28 @@ const AllTables = () => {
                 <DisplayCard
                   className={classes.control}
                   name={table}
-                  type="table"
+                  type='table'
                 />
               </Grid>
             ))}
           </Grid>
         </Grid>
       </Grid>
+      <Button
+        variant='contained'
+        type='button'
+        color='green'
+        onClick={() => console.table(tableMatrix)}
+      >
+        Add Table
+      </Button>
+      <Button
+        variant='contained'
+        type='button'
+        onClick={() => console.table(tableMatrix)}
+      >
+        Remove Table
+      </Button>
     </div>
   );
 };
