@@ -4,7 +4,7 @@ import storage from 'electron-json-storage';
 import { withRouter } from 'react-router-dom';
 import { ipcRenderer } from 'electron';
 const { LOGIN_FORM_DATA } = require('../constants/ipcNames');
-const { decryptPass } = require('../server/util');
+const { encrypt } = require('../server/util');
 
 
 const Edit = props => {
@@ -17,11 +17,8 @@ const Edit = props => {
       if (error) throw error;
       const edittableUser = data.find(user => user.id === selectedUser.id);
       let password = edittableUser.password
-      console.log(password)
-      let newpass = decryptPass(password)
-      console.log(newpass)
-      // edittableUser.password = newpass
-      console.log(edittableUser)
+      let newpass = encrypt(password,"decrypt")
+      edittableUser.password = newpass
       setThisUser(edittableUser);
       setConnectionsArray(data);
     });
