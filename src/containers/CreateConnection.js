@@ -6,7 +6,6 @@ const { LOGIN_FORM_DATA } = require('../constants/ipcNames');
 import { Login } from '../components/index';
 const { encrypt } = require('../server/util');
 
-
 const generateID = () => {
   return (
     '_' +
@@ -22,7 +21,7 @@ const defaultConnectionSettings = {
   password: '',
   server: 'localhost',
   dbTypePassword: '',
-  databaseName: '',
+  databaseName: ''
 };
 
 const Create = props => {
@@ -54,9 +53,8 @@ const Create = props => {
   };
 
   const handleSubmit = e => {
-    let newpass = encrypt(values.password,"encrypt")
-    values.password = newpass
     e.preventDefault();
+    values.password = encrypt(values.password, 'encrypt');
     writeToLocalStorage(values);
     ipcRenderer.send(LOGIN_FORM_DATA, values);
     props.history.push('/');

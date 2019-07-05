@@ -51,7 +51,17 @@ const ConnectPage = props => {
     }
   }, [serverStatus]);
 
-  console.log('IN ALL CONNECTIONS COMPONENT: ', { serverStatus });
+  const removeConnection = id => {
+    const connectionsAfterRemove = userConfigs.filter(
+      connection => connection.id !== id
+    );
+    setUserConfigs(connectionsAfterRemove);
+    storage.set('connectionData', connectionsAfterRemove, function(error) {
+      if (error) throw error;
+    });
+  };
+
+  console.log(userConfigs);
 
   return (
     <div>
@@ -70,12 +80,7 @@ const ConnectPage = props => {
           <Grid container justify="space-between" spacing={spacing}>
             {Array.isArray(userConfigs) &&
               userConfigs.map(connection => (
-                <Card
-                  className={classes.card}
-                  key={`${connection.user}-${connection.name}-${
-                    connection.password
-                  }`}
-                >
+                <Card className={classes.card} key={`${connection.id}`}>
                   <CardContent>
                     <Typography
                       className={classes.pos}
@@ -105,6 +110,12 @@ const ConnectPage = props => {
                       size="large"
                     >
                       Edit
+                    </Button>
+                    <Button
+                      onClick={() => removeConnection(connection.id)}
+                      size="large"
+                    >
+                      Remove
                     </Button>
                   </CardContent>
                   <CardActions />
