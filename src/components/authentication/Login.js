@@ -7,19 +7,19 @@ import Button from '@material-ui/core/Button';
 const useStyles = makeStyles(theme => ({
   container: {
     display: 'flex',
-    flexWrap: 'wrap',
+    flexWrap: 'wrap'
   },
   textField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
-    width: 200,
+    width: 200
   },
   dense: {
-    marginTop: 19,
+    marginTop: 19
   },
   menu: {
-    width: 200,
-  },
+    width: 200
+  }
 }));
 
 // Used in CreateConnection and EditExistingConnection
@@ -42,7 +42,7 @@ const Login = ({ handleSubmit, handleInputChange, values }) => {
         />
         <TextField
           label="Password"
-          type="text"
+          type="password"
           name="password"
           className={classes.textField}
           value={values.password}

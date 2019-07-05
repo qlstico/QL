@@ -1,18 +1,20 @@
-import React, { useState, useContext } from "react";
+
+import React, { useState, useContext, useEffect } from 'react';
 import {
   DisplayCard,
   DbRelatedContext,
   GraphQLDisplayCard,
   VoyagerDisplayCard
-} from "../index";
-import Grid from "@material-ui/core/Grid";
-import { makeStyles } from "@material-ui/core/styles";
+} from '../index';
+import Grid from '@material-ui/core/Grid';
 import Button from "@material-ui/core/Button";
-import { ipcRenderer } from "electron";
+import { makeStyles } from '@material-ui/core/styles';
+import { ipcRenderer } from 'electron';
 const {
   GET_TABLE_CONTENTS,
   GET_TABLE_CONTENTS_REPLY
-} = require("../../constants/ipcNames");
+} = require('../../constants/ipcNames');
+
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -28,7 +30,9 @@ const AllTables = () => {
   const {
     tables: tablesContext,
     selectedDb,
-    setSelectedTableData
+    setSelectedTableData,
+    serverStatus,
+    setServerStatus
   } = useContext(DbRelatedContext);
   const classes = useStyles();
 
@@ -39,6 +43,11 @@ const AllTables = () => {
       setSelectedTableData(arg);
     });
   };
+
+  useEffect(() => {
+    setServerStatus(true);
+  }, []);
+  console.log({ serverStatus });
 
   return (
     <div>

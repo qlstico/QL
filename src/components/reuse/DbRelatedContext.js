@@ -7,6 +7,7 @@ export const DbRelatedProvider = ({ children }) => {
   const [selectedDb, setSelectedDb] = useState('todos');
   const [selectedTableData, setSelectedTableData] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [serverStatus, setServerStatus] = useState(false);
   return (
     <DbRelatedContext.Provider
       value={{
@@ -17,7 +18,9 @@ export const DbRelatedProvider = ({ children }) => {
         selectedTableData,
         setSelectedTableData,
         selectedUser,
-        setSelectedUser
+        setSelectedUser,
+        serverStatus,
+        setServerStatus
       }}
     >
       {children}

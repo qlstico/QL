@@ -8,28 +8,32 @@ import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import storage from 'electron-json-storage';
+import { ipcRenderer } from 'electron';
+const { CLOSE_SERVER } = require('../../constants/ipcNames');
 
 const useStyles = makeStyles(theme => ({
   root: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   control: {
-    padding: theme.spacing(2),
+    padding: theme.spacing(2)
   },
   card: {
     height: 150,
-    width: 1000,
+    width: 1000
   },
   pos: {
-    marginBottom: 0,
-  },
+    marginBottom: 0
+  }
 }));
 
 const ConnectPage = props => {
   const [spacing] = useState(2);
   const [userConfigs, setUserConfigs] = useState(null);
   const classes = useStyles();
-  const { setSelectedUser } = useContext(DbRelatedContext);
+  const { setSelectedUser, serverStatus, setServerStatus } = useContext(
+    DbRelatedContext
+  );
 
   const existingConnections = () => {
     storage.get('connectionData', (error, data) => {
@@ -41,9 +45,14 @@ const ConnectPage = props => {
 
   useEffect(() => {
     existingConnections();
-  }, []);
+    if (serverStatus) {
+      ipcRenderer.send(CLOSE_SERVER);
+      setServerStatus(false);
+    }
+  }, [serverStatus]);
 
-  console.log(`userConfigs`, userConfigs);
+  console.log('IN ALL CONNECTIONS COMPONENT: ', { serverStatus });
+
   return (
     <div>
       <h1>
