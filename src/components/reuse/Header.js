@@ -75,10 +75,10 @@ function PrimarySearchAppBar(props) {
     setAnchorEl(null);
   }
 
-  async function sendHome() {
-    props.history.push('/');
-    await ipcRenderer.send(CLOSE_SERVER);
-  }
+  // async function sendHome() {
+  //   props.history.push('/');
+  //   await ipcRenderer.send(CLOSE_SERVER);
+  // }
 
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
@@ -104,7 +104,7 @@ function PrimarySearchAppBar(props) {
             className={classes.title}
             variant="h6"
             noWrap
-            onClick={sendHome}
+            onClick={() => props.history.push('/')}
           >
             qlStico
           </Typography>

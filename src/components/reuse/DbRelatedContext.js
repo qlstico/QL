@@ -3,6 +3,7 @@ import React, { useState, createContext } from 'react';
 export const DbRelatedContext = createContext();
 
 export const DbRelatedProvider = ({ children }) => {
+  const [currentTable, setCurrentTable] = useState('users');
   const [tables, setTables] = useState(['todos']);
   const [selectedDb, setSelectedDb] = useState('todos');
   const [selectedTableData, setSelectedTableData] = useState([]);
@@ -20,7 +21,9 @@ export const DbRelatedProvider = ({ children }) => {
         selectedUser,
         setSelectedUser,
         serverStatus,
-        setServerStatus
+        setServerStatus,
+        currentTable,
+        setCurrentTable
       }}
     >
       {children}
