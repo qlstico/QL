@@ -80,7 +80,7 @@ function PrimarySearchAppBar(props) {
   //   props.history.push('/');
   //   await ipcRenderer.send(CLOSE_SERVER);
   // }
-  // onClick={() => props.history.push('/')}
+  //
 
   const menuId = "primary-search-account-menu";
   const renderMenu = (
@@ -102,7 +102,11 @@ function PrimarySearchAppBar(props) {
     <div className={classes.grow}>
       <AppBar position='static'>
         <Toolbar>
-          <img id='headerLogo' src={logoImg} />
+          <img
+            id='headerLogo'
+            src={logoImg}
+            onClick={() => props.history.push("/")}
+          />
           <BreadcrumbsElem
             location={props.location.pathname}
             history={props.history}
