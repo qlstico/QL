@@ -123,7 +123,13 @@ const IndivTable = () => {
   };
 
   const handleRemoveRow = () => {
-    if (selectedRow) ipcRenderer.send(REMOVE_TABLE_ROW, selectedRow);
+    if (selectedRow) {
+      ipcRenderer.send(REMOVE_TABLE_ROW, [
+        selectedTable,
+        selectedDb,
+        selectedRow,
+      ]);
+    }
   };
 
   // Sets the selected row for editing

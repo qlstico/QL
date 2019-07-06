@@ -168,4 +168,5 @@ module.exports = {
   getAllDbs,
   getTableData,
   updateTableData,
+  removeTableRow,
 };

@@ -210,7 +210,8 @@ ipcMain.on(UPDATE_TABLE_DATA, async (_, args) => {
   const response = await updateTableData(...args);
 });
 
-ipcMain.on(REMOVE_TABLE_ROW, async (_, id) => {
+// args === [selectedTable, selectedDb, selectedRowId]
+ipcMain.on(REMOVE_TABLE_ROW, async (_, args) => {
   await console.log('hi from REMOVE_TABLE_ROW');
 });
 
