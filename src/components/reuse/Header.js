@@ -14,7 +14,7 @@ import storage from "electron-json-storage";
 import ArrowBack from "@material-ui/icons/ArrowBack";
 import ArrowForward from "@material-ui/icons/ArrowForward";
 import BreadcrumbsElem from "./Breadcrumbs";
-import logoImg from "../../assets/images/QLsticoLogo.png";
+import logoImg from "../../assets/images/whiteLogo.png";
 const {
   GET_DB_NAMES,
   GET_DB_NAMES_REPLY,
