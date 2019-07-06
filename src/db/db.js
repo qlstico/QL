@@ -25,7 +25,9 @@ const tranformRowToSql = (id, row) => [
         return ``;
       }
       // makes sure we are not converting ints to strings
-      return `${key}=${typeof value === 'string' ? `"${value}"` : value}`;
+      return `${key.toLowerCase()}=${
+        typeof value === 'string' ? `"${value}"` : value
+      }`;
     })
     .join(' '),
 ];
@@ -34,12 +36,15 @@ const tranformRowToSql2 = (id, row) => {
   const valuesArr = [];
   return [
     row
-      .filter(({ key }) => key !== 'createdAt' && key !== 'updatedAt')
+      .filter(
+        ({ key }) => key !== 'createdAt' && key !== 'updatedAt' //&& !/\w+id$/i.test(key)
+      )
       .map(({ key, value }, idx) => {
         // removes these two keys from the sql
         // makes sure we are not converting ints to strings
         valuesArr.push(value);
-        return `${key} = $${idx + 1}`;
+        // postgresSQL is case sensitive so if we use camel case must wrap key in ""
+        return `"${key}" = $${idx + 1}`;
       })
       .join(', '),
     valuesArr.concat(id),
@@ -90,7 +95,7 @@ const getTableData = async (table, database) => {
 
 const updateTableData = async (table, database, data) => {
   setDatabase(database);
-
+  console.log({ DB_CONNECTION });
   /**
    * grab key from
    */
@@ -105,16 +110,16 @@ const updateTableData = async (table, database, data) => {
     `UPDATE ${table} SET ${updateStr} WHERE id=$${values.length} returning *`,
     values,
   ]);
-  // console.log(...queryArr.map(([queryStr, params]) => ({ queryStr, params })));
-  const [queryStr, params] = queryArr[0];
+  console.log(...queryArr.map(([queryStr, params]) => ({ queryStr, params })));
+  // const [queryStr, params] = queryArr[0];
   try {
-    // queryArr.forEach(async query => {
-    //   const response = await pool.query(query);
-    //   console.log(response);
-    // });
-    console.log({ queryStr, params });
-    const { rows } = await pool.query(`${queryStr}`, params);
-    console.log(rows);
+    queryArr.forEach(async ([queryStr, params]) => {
+      const { rows } = await pool.query(queryStr, params);
+      console.log(rows);
+    });
+    // console.log({ queryStr, params });
+    // const { rows } = await pool.query(`${queryStr}`, params);
+    // console.log(rows);
     // const { rows } = await pool.query(
     //   `UPDATE users SET email=$1 WHERE id=$2 returning *`,
     //   ['jdwy215@me.com', 1]
