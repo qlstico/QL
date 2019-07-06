@@ -30,12 +30,14 @@ const AllTables = () => {
     selectedDb,
     setSelectedTableData,
     serverStatus,
-    setServerStatus
+    setServerStatus,
+    setCurrentTable
   } = useContext(DbRelatedContext);
   const classes = useStyles();
 
   // args === (table, selectedDb)
   const getTableContents = async (...args) => {
+    setCurrentTable(args[0]);
     await ipcRenderer.send(GET_TABLE_CONTENTS, args);
     await ipcRenderer.on(GET_TABLE_CONTENTS_REPLY, (event, arg) => {
       setSelectedTableData(arg);

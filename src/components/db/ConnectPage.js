@@ -61,8 +61,6 @@ const ConnectPage = props => {
     });
   };
 
-  console.log(userConfigs);
-
   return (
     <div>
       <h1>
