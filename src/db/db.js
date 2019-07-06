@@ -20,9 +20,11 @@ const tranformRowToSql = (id, row) => [
   id,
   row
     .map(({ key, value }) => {
+      // removes these two keys from the sql
       if (key === 'createdAt' || key === 'updatedAt') {
         return ``;
       }
+      // makes sure we are not converting ints to strings
       return `${key}=${typeof value === 'string' ? `"${value}"` : value}`;
     })
     .join(' '),
@@ -72,7 +74,7 @@ const getTableData = async (table, database) => {
 
 const updateTableData = async (table, database, data) => {
   setDatabase(database);
-  console.log('hi from updateTableData', table, database, data);
+  // console.log('hi from updateTableData', table, database, data);
 
   /**
    * grab key from
@@ -84,16 +86,21 @@ const updateTableData = async (table, database, data) => {
   // console.log(obj);
   // const str = data.map(({key, value}) => )
   const pool = new pg.Pool(DB_CONNECTION);
-  const str = obj.map(
+  const queryArr = obj.map(
     ([rowId, updateStr]) => `UPDATE ${table} SET ${updateStr} WHERE id=${rowId}`
   );
-  console.log(str);
+  console.log(queryArr);
 
   try {
-    // const response = await pool.query(
-    //   `UPDATE ${table} SET ${newArr.join(' ')} where id = ${dbRowId}`
-    // );
-    // console.log(response);
+    // queryArr.forEach(async query => {
+    //   const response = await pool.query(query);
+    //   console.log(response);
+    // });
+    const { rows } = await pool.query(
+      `UPDATE users SET email=$1 WHERE id=$2 returning *`,
+      ['jdwy215@me.com', 1]
+    );
+    console.log(rows);
     // return response.rows;
   } catch (error) {
     console.log(error);
