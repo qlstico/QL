@@ -11,9 +11,22 @@ const DB_CONNECTION = {
   idleTimeoutMillis: 300, // how long a client is allowed to remain idle before being closed
 };
 
+// Helper Functions
 const setDatabase = dbName => {
   DB_CONNECTION.database = dbName;
 };
+
+const tranformRowToSql = (id, row) => [
+  id,
+  row
+    .map(({ key, value }) => {
+      if (key === 'createdAt' || key === 'updatedAt') {
+        return ``;
+      }
+      return `${key}=${typeof value === 'string' ? `"${value}"` : value}`;
+    })
+    .join(' '),
+];
 
 const getAllDbs = async () => {
   const pool = new pg.Pool(DB_CONNECTION);
@@ -66,10 +79,7 @@ const updateTableData = async (table, database, data) => {
    */
   const obj = data.reduce((accum, row) => {
     // get key from cell and create object with key of id and value of field(ie key)=value
-    const id = row[0].id;
-    return accum.concat([
-      [id, row.map(({ key, value }) => `${key}="${value}"`).join(' ')],
-    ]);
+    return accum.concat([tranformRowToSql(row[0].id, row)]);
   }, []);
   // console.log(obj);
   // const str = data.map(({key, value}) => )
