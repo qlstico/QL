@@ -77,6 +77,8 @@ const getTableData = async (table, database) => {
   }
 };
 
+const removeTableRow = (table, database, id) => {};
+
 const updateTableData = async (table, database, data) => {
   setDatabase(database);
   console.log({ DB_CONNECTION });
