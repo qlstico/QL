@@ -6,7 +6,7 @@ import {
   VoyagerDisplayCard
 } from '../index';
 import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
+import { withRouter } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { ipcRenderer } from 'electron';
 const {
@@ -20,11 +20,18 @@ const useStyles = makeStyles(theme => ({
   },
   control: {
     padding: theme.spacing(2)
+  },
+  highlightSelected: {
+    background: 'yellow'
   }
 }));
 
-const AllTables = () => {
+const AllTables = props => {
+  // FOr styling:
+  const classes = useStyles();
   const [spacing] = useState(2);
+
+  // Getting relevant information from context provider component
   const {
     tables: tablesContext,
     selectedDb,
@@ -33,7 +40,11 @@ const AllTables = () => {
     setServerStatus,
     setCurrentTable
   } = useContext(DbRelatedContext);
-  const classes = useStyles();
+
+  const [currentlySelected, setCurrentlySelected] = useState(false);
+  const enableSelected = tableName => {
+    setCurrentlySelected(tableName);
+  };
 
   // args === (table, selectedDb)
   const getTableContents = async (...args) => {
@@ -42,12 +53,13 @@ const AllTables = () => {
     await ipcRenderer.on(GET_TABLE_CONTENTS_REPLY, (event, arg) => {
       setSelectedTableData(arg);
     });
+    props.history.push('/single');
   };
 
+  // Send provider a true value to kick on server
   useEffect(() => {
     setServerStatus(true);
   }, []);
-  console.log({ serverStatus });
 
   return (
     <div>
@@ -62,7 +74,11 @@ const AllTables = () => {
               <Grid
                 key={table}
                 item
-                onClick={() => getTableContents(table, selectedDb)}
+                className={
+                  currentlySelected === table ? classes.highlightSelected : ''
+                }
+                onClick={() => enableSelected(table)}
+                onDoubleClick={() => getTableContents(table, selectedDb)}
               >
                 <DisplayCard
                   className={classes.control}
@@ -94,4 +110,4 @@ const AllTables = () => {
   );
 };
 
-export default AllTables;
+export default withRouter(AllTables);
