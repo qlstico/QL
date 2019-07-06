@@ -1,16 +1,16 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { DisplayCard, DbRelatedContext } from '../index';
-import Grid from '@material-ui/core/Grid';
-import { makeStyles } from '@material-ui/core/styles';
-import storage from 'electron-json-storage';
-import { ipcRenderer } from 'electron';
-import Button from '@material-ui/core/Button';
-import { withRouter } from 'react-router-dom';
+import React, { useState, useEffect, useContext } from "react";
+import { DisplayCard, DbRelatedContext } from "../index";
+import Grid from "@material-ui/core/Grid";
+import { makeStyles } from "@material-ui/core/styles";
+import storage from "electron-json-storage";
+import { ipcRenderer } from "electron";
+import Button from "@material-ui/core/Button";
+import { withRouter } from "react-router-dom";
 const {
   GET_TABLE_NAMES,
   GET_TABLE_NAMES_REPLY,
   CLOSE_SERVER
-} = require('../../constants/ipcNames');
+} = require("../../constants/ipcNames");
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(2)
   },
   highlightSelected: {
-    background: 'yellow'
+    background: "grey"
   }
 }));
 
@@ -48,7 +48,7 @@ const AllDBs = props => {
   // Hooks for setting/retrieving neccesary info to/from config file and context provider
   useEffect(() => {
     // componentDidMount to get all dbnames from local storage
-    storage.get('dbnames', (error, data) => {
+    storage.get("dbnames", (error, data) => {
       if (error) throw error;
       setDbs(data); //setting that response to be component's stateful representation
     });
@@ -66,7 +66,7 @@ const AllDBs = props => {
     await ipcRenderer.on(GET_TABLE_NAMES_REPLY, (_, tableNames) => {
       setTablesContext(tableNames);
     });
-    props.history.push('/tables'); // finally push onto the next component
+    props.history.push("/tables"); // finally push onto the next component
   };
 
   return (
@@ -74,18 +74,18 @@ const AllDBs = props => {
       <h1>Databases: </h1>
       <Grid container className={classes.root} spacing={3}>
         <Grid item xs={12}>
-          <Grid container justify="center" spacing={spacing}>
+          <Grid container justify='center' spacing={spacing}>
             {dbs.map(db => (
               <Grid
                 key={db}
                 className={
-                  currentlySelected === db ? classes.highlightSelected : ''
+                  currentlySelected === db ? classes.highlightSelected : ""
                 }
                 item
                 onClick={() => enableSelected(db)}
                 onDoubleClick={() => selectDb(db)}
               >
-                <DisplayCard className={classes.control} name={db} type="db" />
+                <DisplayCard className={classes.control} name={db} type='db' />
               </Grid>
             ))}
           </Grid>

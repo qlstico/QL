@@ -1,28 +1,28 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from "react";
 import {
   DisplayCard,
   DbRelatedContext,
   GraphQLDisplayCard,
-  VoyagerDisplayCard,
-} from '../index';
-import Grid from '@material-ui/core/Grid';
-import { withRouter } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
-import { ipcRenderer } from 'electron';
+  VoyagerDisplayCard
+} from "../index";
+import Grid from "@material-ui/core/Grid";
+import { withRouter } from "react-router-dom";
+import { makeStyles } from "@material-ui/core/styles";
+import { ipcRenderer } from "electron";
 const {
   GET_TABLE_CONTENTS,
-  GET_TABLE_CONTENTS_REPLY,
-} = require('../../constants/ipcNames');
+  GET_TABLE_CONTENTS_REPLY
+} = require("../../constants/ipcNames");
 
 const useStyles = makeStyles(theme => ({
   root: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   control: {
     padding: theme.spacing(2)
   },
   highlightSelected: {
-    background: 'yellow'
+    background: "grey"
   }
 }));
 
@@ -55,7 +55,7 @@ const AllTables = props => {
     await ipcRenderer.on(GET_TABLE_CONTENTS_REPLY, (event, tableData) => {
       setSelectedTableData(tableData);
     });
-    props.history.push('/single');
+    props.history.push("/single");
   };
 
   // Send provider a true value to kick on server
@@ -71,13 +71,13 @@ const AllTables = props => {
       <h1>Tables: </h1>
       <Grid container className={classes.root} spacing={3}>
         <Grid item xs={12}>
-          <Grid container justify="center" spacing={spacing}>
+          <Grid container justify='center' spacing={spacing}>
             {tablesContext.map(table => (
               <Grid
                 key={table}
                 item
                 className={
-                  currentlySelected === table ? classes.highlightSelected : ''
+                  currentlySelected === table ? classes.highlightSelected : ""
                 }
                 onClick={() => enableSelected(table)}
                 onDoubleClick={() => getTableContents(table, selectedDb)}
@@ -85,29 +85,20 @@ const AllTables = props => {
                 <DisplayCard
                   className={classes.control}
                   name={table}
-                  type="table"
+                  type='table'
                 />
               </Grid>
             ))}
           </Grid>
         </Grid>
       </Grid>
-      {/* <Button
-        variant="contained"
-        type="button"
-        color="inherit"
-        onClick={() => console.table(tableMatrix)}
-      >
+      <Button variant='contained' type='button' color='inherit'>
         Add Table
       </Button>
-      <Button
-        variant="contained"
-        type="button"
-        color="inherit"
-        onClick={() => console.table(tableMatrix)}
-      >
+      <Button variant='contained' type='button' color='inherit'>
         Remove Table
-      </Button> */}
+      </Button>
+      <TextField label='Chupas Bolas Putas' />
     </div>
   );
 };
