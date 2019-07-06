@@ -92,20 +92,10 @@ const AllTables = props => {
           </Grid>
         </Grid>
       </Grid>
-      <Button
-        variant='contained'
-        type='button'
-        color='inherit'
-        onClick={() => console.table(tableMatrix)}
-      >
+      <Button variant='contained' type='button' color='inherit'>
         Add Table
       </Button>
-      <Button
-        variant='contained'
-        type='button'
-        color='inherit'
-        onClick={() => console.table(tableMatrix)}
-      >
+      <Button variant='contained' type='button' color='inherit'>
         Remove Table
       </Button>
       <TextField label='Chupas Bolas Putas' />
