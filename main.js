@@ -25,6 +25,8 @@ const {
   GET_TABLE_CONTENTS_REPLY,
   CLOSE_SERVER,
   UPDATE_TABLE_DATA,
+  REMOVE_TABLE_ROW,
+  ADD_TABLE_ROW,
 } = require('./src/constants/ipcNames');
 const enableDestroy = require('server-destroy');
 
@@ -206,6 +208,11 @@ ipcMain.on(CLOSE_SERVER, async (event, args) => {
 // args === [selectedTable,selectedDb,tableMatrix]
 ipcMain.on(UPDATE_TABLE_DATA, async (_, args) => {
   const response = await updateTableData(...args);
+});
+
+// args === [selectedTable, selectedDb, selectedRowId]
+ipcMain.on(REMOVE_TABLE_ROW, async (_, args) => {
+  await console.log('hi from REMOVE_TABLE_ROW');
 });
 
 // This method will be called when Electron has finished

@@ -16,23 +16,7 @@ const setDatabase = dbName => {
   DB_CONNECTION.database = dbName;
 };
 
-const tranformRowToSql = (id, row) => [
-  id,
-  row
-    .map(({ key, value }) => {
-      // removes these two keys from the sql
-      if (key === 'createdAt' || key === 'updatedAt') {
-        return ``;
-      }
-      // makes sure we are not converting ints to strings
-      return `${key.toLowerCase()}=${
-        typeof value === 'string' ? `"${value}"` : value
-      }`;
-    })
-    .join(' '),
-];
-
-const tranformRowToSql2 = (id, row) => {
+const tranformRowToSql = (id, row) => {
   const valuesArr = [];
   return [
     row
@@ -93,6 +77,8 @@ const getTableData = async (table, database) => {
   }
 };
 
+const removeTableRow = (table, database, id) => {};
+
 const updateTableData = async (table, database, data) => {
   setDatabase(database);
   console.log({ DB_CONNECTION });
@@ -101,7 +87,7 @@ const updateTableData = async (table, database, data) => {
    */
   const obj = data.reduce((accum, row) => {
     // get key from cell and create object with key of id and value of field(ie key)=value
-    return accum.concat([tranformRowToSql2(row[0].id, row)]);
+    return accum.concat([tranformRowToSql(row[0].id, row)]);
   }, []);
   // console.log(obj);
   // const str = data.map(({key, value}) => )
@@ -182,4 +168,5 @@ module.exports = {
   getAllDbs,
   getTableData,
   updateTableData,
+  removeTableRow,
 };
