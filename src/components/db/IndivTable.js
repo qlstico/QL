@@ -15,28 +15,28 @@ const { UPDATE_TABLE_DATA } = require('../../constants/ipcNames');
 
 const useStyles = makeStyles(theme => ({
   root: {
-    width: '100%'
+    width: '100%',
   },
   paper: {
     marginTop: theme.spacing(3),
     width: '100%',
     overflowX: 'auto',
-    marginBottom: theme.spacing(2)
+    marginBottom: theme.spacing(2),
   },
   table: {
-    minWidth: 650
+    minWidth: 650,
   },
   textField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
-    width: 200
+    width: 200,
   },
   selectedRow: {
-    background: 'grey'
+    background: 'grey',
   },
   editRow: {
-    background: 'yellow'
-  }
+    background: 'yellow',
+  },
 }));
 
 const IndivTable = () => {
@@ -45,7 +45,9 @@ const IndivTable = () => {
   const classes = useStyles();
 
   // Grabbing the tabledata from the context provider
-  const { selectedTableData } = useContext(DbRelatedContext);
+  const { selectedTableData, selectedDb, selectedTable } = useContext(
+    DbRelatedContext
+  );
 
   // Setting the matrix created from the context provider's array of objs
   // to render the table cells and to have a 'sandbox copy' in the state
@@ -102,7 +104,12 @@ const IndivTable = () => {
   };
 
   const handleUpdateSubmit = async () => {
-    await ipcRenderer(UPDATE_TABLE_DATA, tableMatrix);
+    console.log('handleUpdateSubmit');
+    await ipcRenderer.send(UPDATE_TABLE_DATA, [
+      selectedTable,
+      selectedDb,
+      tableMatrix,
+    ]);
   };
 
   // Tracking which row is in 'edit mode'

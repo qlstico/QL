@@ -4,7 +4,12 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const url = require('url');
-const { getAllDbs, getAllTables, getTableData } = require('./src/db/db');
+const {
+  getAllDbs,
+  getAllTables,
+  getTableData,
+  updateTableData,
+} = require('./src/db/db');
 const express = require('express');
 const { postgraphile } = require('postgraphile');
 // need below for visualizer
@@ -19,6 +24,7 @@ const {
   GET_TABLE_CONTENTS,
   GET_TABLE_CONTENTS_REPLY,
   CLOSE_SERVER,
+  UPDATE_TABLE_DATA,
 } = require('./src/constants/ipcNames');
 const enableDestroy = require('server-destroy');
 
@@ -191,6 +197,15 @@ ipcMain.on(GET_TABLE_CONTENTS, async (event, args) => {
  */
 ipcMain.on(CLOSE_SERVER, async (event, args) => {
   closeServer(expressServer, 'closeserver*****');
+});
+
+/**
+ * called from ./components/db/IndivTable.js
+ * when the user submits the changes to the table
+ */
+// args === [selectedTable,selectedDb,tableMatrix]
+ipcMain.on(UPDATE_TABLE_DATA, async (_, args) => {
+  const response = await updateTableData(...args);
 });
 
 // This method will be called when Electron has finished
