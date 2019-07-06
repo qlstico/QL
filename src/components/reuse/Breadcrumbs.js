@@ -24,13 +24,6 @@ const useStyles = makeStyles(theme => ({
 
 const BreadcrumbsElem = props => {
   const classes = useStyles();
-
-  // async function sendHome() {
-  //   props.history.push('/');
-  //   await ipcRenderer.send(CLOSE_SERVER);
-  // }
-  //pretty sure this does nothing
-
   const { selectedDb, currentTable } = useContext(DbRelatedContext);
 
   return (

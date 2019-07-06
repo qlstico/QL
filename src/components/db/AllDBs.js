@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import storage from 'electron-json-storage';
 import { ipcRenderer } from 'electron';
 import Button from '@material-ui/core/Button';
-
+import { withRouter } from 'react-router-dom';
 const {
   GET_TABLE_NAMES,
   GET_TABLE_NAMES_REPLY,
@@ -18,25 +18,39 @@ const useStyles = makeStyles(theme => ({
   },
   control: {
     padding: theme.spacing(2)
+  },
+  highlightSelected: {
+    background: 'yellow'
   }
 }));
 
-const AllDBs = () => {
+const AllDBs = props => {
+  // For styling:
+  const classes = useStyles();
   const [spacing] = useState(2);
-  const [dbs, setDbs] = useState([]);
+
+  // Getting relevant information from context provider component
   const {
     setTables: setTablesContext,
     setSelectedDb,
     serverStatus,
     setServerStatus
   } = useContext(DbRelatedContext);
-  const classes = useStyles();
 
+  // Setting up initial state values for rendering/interacting with components
+  const [dbs, setDbs] = useState([]);
+  const [currentlySelected, setCurrentlySelected] = useState(false);
+  // Indirectly re-sets state to be the clicked on DB
+  const enableSelected = dbName => {
+    setCurrentlySelected(dbName);
+  };
+
+  // Hooks for setting/retrieving neccesary info to/from config file and context provider
   useEffect(() => {
     // componentDidMount to get all dbnames from local storage
     storage.get('dbnames', (error, data) => {
       if (error) throw error;
-      setDbs(data);
+      setDbs(data); //setting that response to be component's stateful representation
     });
     if (serverStatus) {
       ipcRenderer.send(CLOSE_SERVER);
@@ -52,6 +66,7 @@ const AllDBs = () => {
     await ipcRenderer.on(GET_TABLE_NAMES_REPLY, (_, tableNames) => {
       setTablesContext(tableNames);
     });
+    props.history.push('/tables'); // finally push onto the next component
   };
 
   return (
@@ -61,7 +76,15 @@ const AllDBs = () => {
         <Grid item xs={12}>
           <Grid container justify="center" spacing={spacing}>
             {dbs.map(db => (
-              <Grid key={db} item onClick={() => selectDb(db)}>
+              <Grid
+                key={db}
+                className={
+                  currentlySelected === db ? classes.highlightSelected : ''
+                }
+                item
+                onClick={() => enableSelected(db)}
+                onDoubleClick={() => selectDb(db)}
+              >
                 <DisplayCard className={classes.control} name={db} type="db" />
               </Grid>
             ))}
@@ -88,4 +111,4 @@ const AllDBs = () => {
   );
 };
 
-export default AllDBs;
+export default withRouter(AllDBs);
