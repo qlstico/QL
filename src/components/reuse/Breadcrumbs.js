@@ -4,6 +4,7 @@ import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Link from '@material-ui/core/Link';
 import { ipcRenderer } from 'electron';
 import { DbRelatedContext } from '../index';
+import Button from '@material-ui/core/Button';
 
 const { CLOSE_SERVER } = require('../../constants/ipcNames');
 
@@ -29,38 +30,51 @@ const BreadcrumbsElem = props => {
   return (
     <div className={classes.root}>
       <Breadcrumbs separator="/" aria-label="Breadcrumb">
-        <Link id="breadcrumbs" onClick={() => props.history.push('/')}>
-          Connect
-        </Link>
-        {props.location !== '/' ? (
-          <Link id="breadcrumbs" onClick={() => props.history.push('/dbs')}>
-            Databases
+        <Button>
+          <Link id="breadcrumbs" onClick={() => props.history.push('/')}>
+            Connect
           </Link>
+        </Button>
+        {props.location !== '/' ? (
+          <Button>
+            <Link id="breadcrumbs" onClick={() => props.history.push('/dbs')}>
+              Databases
+            </Link>
+          </Button>
         ) : (
           ''
         )}
         {props.location === '/tables' ? (
-          <Link id="breadcrumbs" onClick={() => props.history.push('/tables')}>
-            {selectedDb}
-          </Link>
-        ) : (
-          ''
-        )}
-        {props.location === '/single' ? (
-          <div>
+          <Button>
             <Link
               id="breadcrumbs"
               onClick={() => props.history.push('/tables')}
             >
               {selectedDb}
             </Link>
+          </Button>
+        ) : (
+          ''
+        )}
+        {props.location === '/single' ? (
+          <div>
+            <Button>
+              <Link
+                id="breadcrumbs"
+                onClick={() => props.history.push('/tables')}
+              >
+                {selectedDb}
+              </Link>
+            </Button>
             {'  /  '}
-            <Link
-              id="breadcrumbs"
-              onClick={() => props.history.push('/single')}
-            >
-              {currentTable}
-            </Link>
+            <Button size="small">
+              <Link
+                id="breadcrumbs"
+                onClick={() => props.history.push('/single')}
+              >
+                {currentTable}
+              </Link>
+            </Button>
           </div>
         ) : (
           ''
