@@ -216,9 +216,10 @@ const IndivTable = () => {
       <Button variant="contained" type="button" onClick={handleUpdateSubmit}>
         Submit
       </Button>
-      <Button
+      {/* <Button
         variant="contained"
         type="button"
+        color="inherit"
         onClick={() => console.table(tableMatrix)}
       >
         Add Row
@@ -226,13 +227,16 @@ const IndivTable = () => {
       <Button
         variant="contained"
         type="button"
+        color="inherit"
         onClick={() => console.table(tableMatrix)}
       >
         Remove Row
-      </Button>
+      </Button> */}
     </div>
   ) : (
-    ''
+    <div>
+      <h1>Looks like there's nothing here!</h1>
+    </div>
   );
 };
 

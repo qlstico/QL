@@ -6,6 +6,15 @@
   max-width: 50px;
 }
 
-#breadboi {
+#breadcrumbs {
   color: #ffffff;
+}
+
+#headerLogo {
+  height: 135px;
+  width: 135px;
+  margin-top: -10px;
+  margin-bottom: -40px;
+  margin-left: -35px;
+  margin-right: -45px;
 }

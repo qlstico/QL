@@ -6,7 +6,7 @@ import {
   VoyagerDisplayCard,
 } from '../index';
 import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
+import { withRouter } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { ipcRenderer } from 'electron';
 const {
@@ -19,12 +19,19 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
   },
   control: {
-    padding: theme.spacing(2),
+    padding: theme.spacing(2)
   },
+  highlightSelected: {
+    background: 'yellow'
+  }
 }));
 
-const AllTables = () => {
+const AllTables = props => {
+  // FOr styling:
+  const classes = useStyles();
   const [spacing] = useState(2);
+
+  // Getting relevant information from context provider component
   const {
     tables: tablesContext,
     selectedDb,
@@ -32,22 +39,29 @@ const AllTables = () => {
     serverStatus,
     setServerStatus,
     setSelectedTable,
+    setCurrentTable
   } = useContext(DbRelatedContext);
-  const classes = useStyles();
+
+  const [currentlySelected, setCurrentlySelected] = useState(false);
+  const enableSelected = tableName => {
+    setCurrentlySelected(tableName);
+  };
 
   // args === (table, selectedDb)
   const getTableContents = async table => {
     setSelectedTable(table);
+    setCurrentTable(table);
     await ipcRenderer.send(GET_TABLE_CONTENTS, [table, selectedDb]);
     await ipcRenderer.on(GET_TABLE_CONTENTS_REPLY, (event, tableData) => {
       setSelectedTableData(tableData);
     });
+    props.history.push('/single');
   };
 
+  // Send provider a true value to kick on server
   useEffect(() => {
     setServerStatus(true);
   }, []);
-  console.log({ serverStatus });
 
   return (
     <div>
@@ -59,7 +73,15 @@ const AllTables = () => {
         <Grid item xs={12}>
           <Grid container justify="center" spacing={spacing}>
             {tablesContext.map(table => (
-              <Grid key={table} item onClick={() => getTableContents(table)}>
+              <Grid
+                key={table}
+                item
+                className={
+                  currentlySelected === table ? classes.highlightSelected : ''
+                }
+                onClick={() => enableSelected(table)}
+                onDoubleClick={() => getTableContents(table, selectedDb)}
+              >
                 <DisplayCard
                   className={classes.control}
                   name={table}
@@ -70,10 +92,10 @@ const AllTables = () => {
           </Grid>
         </Grid>
       </Grid>
-      <Button
+      {/* <Button
         variant="contained"
         type="button"
-        color="green"
+        color="inherit"
         onClick={() => console.table(tableMatrix)}
       >
         Add Table
@@ -81,12 +103,13 @@ const AllTables = () => {
       <Button
         variant="contained"
         type="button"
+        color="inherit"
         onClick={() => console.table(tableMatrix)}
       >
         Remove Table
-      </Button>
+      </Button> */}
     </div>
   );
 };
 
-export default AllTables;
+export default withRouter(AllTables);
