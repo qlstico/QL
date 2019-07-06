@@ -15,28 +15,28 @@ const { UPDATE_TABLE_DATA } = require('../../constants/ipcNames');
 
 const useStyles = makeStyles(theme => ({
   root: {
-    width: '100%',
+    width: '100%'
   },
   paper: {
     marginTop: theme.spacing(3),
     width: '100%',
     overflowX: 'auto',
-    marginBottom: theme.spacing(2),
+    marginBottom: theme.spacing(2)
   },
   table: {
-    minWidth: 650,
+    minWidth: 650
   },
   textField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
-    width: 200,
+    width: 200
   },
   selectedRow: {
-    background: 'grey',
+    background: 'grey'
   },
   editRow: {
-    background: 'yellow',
-  },
+    background: 'yellow'
+  }
 }));
 
 const IndivTable = () => {
@@ -108,7 +108,7 @@ const IndivTable = () => {
     await ipcRenderer.send(UPDATE_TABLE_DATA, [
       selectedTable,
       selectedDb,
-      tableMatrix,
+      tableMatrix
     ]);
   };
 
@@ -116,8 +116,8 @@ const IndivTable = () => {
   const [editRow, setEditRow] = useState(false);
 
   // Sets the selected row for editing
-  const enableEditRow = rowIdx => {
-    setEditRow(rowIdx);
+  const enableEditRow = dbEntryId => {
+    setEditRow(dbEntryId);
   };
 
   // Removes the selected editable row from 'edit mode'
@@ -129,8 +129,8 @@ const IndivTable = () => {
   const [selectedRow, setSelectedRow] = useState(false);
 
   // Sets the 'selected' row
-  const enableSelectedRow = rowIdx => {
-    setSelectedRow(rowIdx);
+  const enableSelectedRow = dbEntryId => {
+    setSelectedRow(dbEntryId);
   };
 
   // Resets selected rows to none
@@ -167,7 +167,7 @@ const IndivTable = () => {
                 {row.map(({ value, id, key }, colIdx) =>
                   // Checks to see if this row is the editable row, if it is render cells as
                   // textField, else render as a normal read only cells.
-                  editRow === rowIdx ? (
+                  editRow === id ? (
                     <TableCell
                       key={`${rowIdx}-${colIdx}`}
                       component="th"
@@ -190,15 +190,15 @@ const IndivTable = () => {
                       component="th"
                       scope="row"
                       className={
-                        selectedRow === rowIdx ? classes.selectedRow : null
+                        selectedRow === id ? classes.selectedRow : null
                       }
                       // Set this row to be the selected row for 'edit mode' in
                       // the state to rerender as a textField
-                      onDoubleClick={() => enableEditRow(rowIdx)}
+                      onDoubleClick={() => enableEditRow(id)}
                       // If this is not an 'edit mode' row, clicking on it will
                       // remove 'edit mode'
                       onClick={() => {
-                        enableSelectedRow(rowIdx);
+                        enableSelectedRow(id);
                         removeEditRow();
                       }}
                       name={`${rowIdx}-${colIdx}`}
