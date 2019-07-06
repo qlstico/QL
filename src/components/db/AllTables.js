@@ -12,7 +12,11 @@ import { ipcRenderer } from "electron";
 import { Button, TextField } from "@material-ui/core/";
 const {
   GET_TABLE_CONTENTS,
-  GET_TABLE_CONTENTS_REPLY
+  GET_TABLE_CONTENTS_REPLY,
+  CREATE_TABLE,
+  CREATE_TABLE_REPLY,
+  GET_TABLE_NAMES,
+  GET_TABLE_NAMES_REPLY
 } = require("../../constants/ipcNames");
 
 const useStyles = makeStyles(theme => ({
@@ -35,6 +39,7 @@ const AllTables = props => {
   // Getting relevant information from context provider component
   const {
     tables: tablesContext,
+    setTables: setTablesContext,
     selectedDb,
     setSelectedTableData,
     serverStatus,
@@ -42,6 +47,12 @@ const AllTables = props => {
     setSelectedTable,
     setCurrentTable
   } = useContext(DbRelatedContext);
+
+  const [tableToAdd, setTableToAdd] = useState(null);
+  const handleInputChange = e => {
+    const { name, value } = e.target;
+    setTableToAdd(value);
+  };
 
   const [currentlySelected, setCurrentlySelected] = useState(false);
   const enableSelected = tableName => {
@@ -59,10 +70,16 @@ const AllTables = props => {
     props.history.push("/single");
   };
 
+  const createNewTable = async (curDb, newTableName) => {
+    await ipcRenderer.send(CREATE_TABLE, [curDb, newTableName]);
+    await ipcRenderer.on(CREATE_TABLE_REPLY, (event, updatedTables) => {
+      setTablesContext(updatedTables);
+    });
+  };
   // Send provider a true value to kick on server
   useEffect(() => {
     setServerStatus(true);
-  }, []);
+  }, [tablesContext]);
 
   return (
     <div>
@@ -93,13 +110,22 @@ const AllTables = props => {
           </Grid>
         </Grid>
       </Grid>
-      <Button variant='contained' type='button' color='inherit'>
+      <Button
+        variant='contained'
+        type='button'
+        color='inherit'
+        onClick={() => createNewTable(selectedDb, tableToAdd)}
+      >
         Add Table
       </Button>
       <Button variant='contained' type='button' color='inherit'>
         Remove Table
       </Button>
-      <TextField label='Chupas Bolas Putas' />
+      <TextField
+        label='Table Name'
+        name='newTableName'
+        onChange={handleInputChange}
+      />
     </div>
   );
 };
