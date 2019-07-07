@@ -14,7 +14,9 @@ const {
   GET_TABLE_CONTENTS,
   GET_TABLE_CONTENTS_REPLY,
   CREATE_TABLE,
-  CREATE_TABLE_REPLY
+  CREATE_TABLE_REPLY,
+  DELETE_TABLE,
+  DELETE_TABLE_REPLY
 } = require('../../constants/ipcNames');
 
 const useStyles = makeStyles(theme => ({
@@ -70,13 +72,26 @@ const AllTables = props => {
     props.history.push('/single');
   };
 
-  // function for adding table via the GUI
+  // function for creating table via GUI
   const createNewTable = async (currentDb, newTableName) => {
-    await ipcRenderer.send(CREATE_TABLE, [currentDb, newTableName]);
-    await ipcRenderer.on(CREATE_TABLE_REPLY, (event, updatedTables) => {
-      setTablesContext(updatedTables);
-    });
+    if (newTableName) {
+      await ipcRenderer.send(CREATE_TABLE, [currentDb, newTableName]);
+      await ipcRenderer.on(CREATE_TABLE_REPLY, (event, updatedTables) => {
+        setTablesContext(updatedTables);
+      });
+    }
   };
+
+  // function for deleting table via the GUI
+  const deleteTable = async (currentDb, selectedTableName) => {
+    if (selectedTableName) {
+      await ipcRenderer.send(DELETE_TABLE, [currentDb, selectedTableName]);
+      await ipcRenderer.on(DELETE_TABLE_REPLY, (event, updatedTables) => {
+        setTablesContext(updatedTables);
+      });
+    }
+  };
+
   // Send provider a true value to kick on server
   useEffect(() => {
     setServerStatus(true);
@@ -114,7 +129,7 @@ const AllTables = props => {
         </Grid>
       </Grid>
       <TextField
-        label="Table Name"
+        label="Add New Table"
         name="newTableName"
         onChange={handleInputChange}
       />
@@ -127,10 +142,18 @@ const AllTables = props => {
       >
         Add New Table
       </Button>
-      {/* <Button variant='contained' type='button' color='inherit'>
-        Remove Table
-      </Button>
-      <TextField
+      {currentlySelected && (
+        <Button
+          variant="contained"
+          type="button"
+          color="inherit"
+          size="small"
+          onClick={() => deleteTable(selectedDb, currentlySelected)}
+        >
+          Remove Table
+        </Button>
+      )}
+      {/* <TextField
         label='Table Name'
         name='newTableName'
         onChange={handleInputChange}
