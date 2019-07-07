@@ -117,7 +117,6 @@ const AllTables = props => {
         label="Table Name"
         name="newTableName"
         onChange={handleInputChange}
-        value={tableToAdd}
       />
       <Button
         variant="contained"
