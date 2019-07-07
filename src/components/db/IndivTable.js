@@ -15,8 +15,8 @@ import { ipcRenderer } from "electron";
 const {
   UPDATE_TABLE_DATA,
   REMOVE_TABLE_ROW,
-  ADD_TABLE_ROW,
-} = require('../../constants/ipcNames');
+  ADD_TABLE_ROW
+} = require("../../constants/ipcNames");
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -27,15 +27,14 @@ const useStyles = makeStyles(theme => ({
     width: "100%",
     overflowX: "auto",
     marginBottom: theme.spacing(2)
-
   },
   table: {
-    minWidth: 650,
+    minWidth: 650
   },
   textField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
-    width: 200,
+    width: 200
   },
   selectedRow: {
     background: "grey"
@@ -120,7 +119,7 @@ const IndivTable = () => {
     await ipcRenderer.send(UPDATE_TABLE_DATA, [
       selectedTable,
       selectedDb,
-      tableMatrix,
+      tableMatrix
     ]);
   };
 
@@ -129,7 +128,7 @@ const IndivTable = () => {
       ipcRenderer.send(REMOVE_TABLE_ROW, [
         selectedTable,
         selectedDb,
-        selectedRow,
+        selectedRow
       ]);
     }
   };
@@ -190,15 +189,24 @@ const IndivTable = () => {
                       scope='row'
                       className={classes.editRow}
                     >
-                      <TextField
-                        className={classes.textField}
-                        type='text'
-                        defaultValue={value}
-                        // Name field is how we reference this cell's equivalent
-                        // position in the state matrix to make changes
-                        name={`${rowIdx}-${colIdx}`}
-                        onChange={e => handleInputChange(e, rowIdx, id, key)}
-                      />
+                      <span
+                        style={{
+                          whiteSpace: "nowrap",
+                          overflow: "scroll",
+                          width: "90px",
+                          display: "block"
+                        }}
+                      >
+                        <TextField
+                          className={classes.textField}
+                          type='text'
+                          defaultValue={value}
+                          // Name field is how we reference this cell's equivalent
+                          // position in the state matrix to make changes
+                          name={`${rowIdx}-${colIdx}`}
+                          onChange={e => handleInputChange(e, rowIdx, id, key)}
+                        />
+                      </span>
                     </TableCell>
                   ) : (
                     <TableCell
@@ -227,7 +235,7 @@ const IndivTable = () => {
                             width: "150px",
                             display: "block"
                           }}
-                        >{`${value}...`}</span>
+                        >{`${value}...`}</span> //styling so that the cells dont display massive amounts of text by default
                       ) : (
                         `${value}`
                       )}
@@ -253,9 +261,9 @@ const IndivTable = () => {
       </Button>
       */}
       <Button
-        variant="contained"
-        type="button"
-        color="inherit"
+        variant='contained'
+        type='button'
+        color='inherit'
         onClick={handleRemoveRow}
       >
         Remove Row
