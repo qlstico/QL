@@ -154,6 +154,10 @@ const IndivTable = () => {
         selectedDb,
         selectedRow,
       ]);
+      setTableMatrix(prevMatrix =>
+        prevMatrix.filter(row => row[0].id !== selectedRow)
+      );
+      setSelectedRow(false);
     }
   };
 
