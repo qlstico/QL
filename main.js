@@ -4,6 +4,7 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const url = require('url');
+const os = require('os');
 const {
   getAllDbs,
   getAllTables,
@@ -29,7 +30,9 @@ const {
   CREATE_TABLE,
   CREATE_TABLE_REPLY,
   REMOVE_TABLE_ROW,
-  ADD_TABLE_ROW
+  ADD_TABLE_ROW,
+  GET_OS_USER,
+  GET_OS_USER_REPLY
 } = require('./src/constants/ipcNames');
 const enableDestroy = require('server-destroy');
 
@@ -158,6 +161,11 @@ ipcMain.on(LOGIN_FORM_DATA, (_, formData) => {
   const { user } = formData; // take value from form
   // added to global var so we can use for db connection
   LOGGEDIN_USER = user;
+});
+
+ipcMain.on(GET_OS_USER, event => {
+  const { username } = os.userInfo();
+  event.reply(GET_OS_USER_REPLY, username);
 });
 
 /**
