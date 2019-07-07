@@ -62,6 +62,7 @@ const AllDBs = props => {
   // set context with table names
   const selectDb = async dbname => {
     setSelectedDb(dbname); // set db name in context
+
     await ipcRenderer.send(GET_TABLE_NAMES, dbname); // message to get all table names
     await ipcRenderer.on(GET_TABLE_NAMES_REPLY, (_, tableNames) => {
       setTablesContext(tableNames);

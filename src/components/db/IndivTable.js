@@ -1,16 +1,17 @@
 /* eslint-disable no-confusing-arrow */
-import React, { useState, useContext, useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
-import { DbRelatedContext } from '../index';
-import TextField from '@material-ui/core/TextField';
-import { ipcRenderer } from 'electron';
+
+import React, { useState, useContext, useEffect } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Paper from "@material-ui/core/Paper";
+import Button from "@material-ui/core/Button";
+import { DbRelatedContext } from "../index";
+import TextField from "@material-ui/core/TextField";
+import { ipcRenderer } from "electron";
 const {
   UPDATE_TABLE_DATA,
   REMOVE_TABLE_ROW,
@@ -19,13 +20,14 @@ const {
 
 const useStyles = makeStyles(theme => ({
   root: {
-    width: '100%',
+    width: "100%"
   },
   paper: {
     marginTop: theme.spacing(3),
-    width: '100%',
-    overflowX: 'auto',
-    marginBottom: theme.spacing(2),
+    width: "100%",
+    overflowX: "auto",
+    marginBottom: theme.spacing(2)
+
   },
   table: {
     minWidth: 650,
@@ -36,11 +38,11 @@ const useStyles = makeStyles(theme => ({
     width: 200,
   },
   selectedRow: {
-    background: 'grey',
+    background: "grey"
   },
   editRow: {
-    background: 'yellow',
-  },
+    background: "yellow"
+  }
 }));
 
 const IndivTable = () => {
@@ -96,7 +98,7 @@ const IndivTable = () => {
     // Destructures the 'name' and value of the event target for ease of access to them
     const { name, value } = e.target;
     // Destructures the rowIdx and colIdx from the string returned by the event.target.name
-    const [rowIdx, colIdx] = name.split('-');
+    const [rowIdx, colIdx] = name.split("-");
 
     // Makes the changes in state's matrix using the rowIdx and
     //colIdx to locate it's position and rewritting it's value
@@ -114,7 +116,7 @@ const IndivTable = () => {
   };
 
   const handleUpdateSubmit = async () => {
-    console.log('handleUpdateSubmit');
+    console.log("handleUpdateSubmit");
     await ipcRenderer.send(UPDATE_TABLE_DATA, [
       selectedTable,
       selectedDb,
@@ -160,13 +162,13 @@ const IndivTable = () => {
   return tableMatrix.length ? (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <Table className={classes.table} size="small">
+        <Table className={classes.table} size='small'>
           <TableHead>
             <TableRow>
               {/* Column Headers */}
               {Object.keys(selectedTableData[0]).map(key => {
                 return (
-                  <TableCell key={key} style={{ width: '10px' }}>
+                  <TableCell key={key} style={{ width: "10px" }}>
                     {key}
                   </TableCell>
                 );
@@ -184,13 +186,13 @@ const IndivTable = () => {
                   editRow === id ? (
                     <TableCell
                       key={`${rowIdx}-${colIdx}`}
-                      component="th"
-                      scope="row"
+                      component='th'
+                      scope='row'
                       className={classes.editRow}
                     >
                       <TextField
                         className={classes.textField}
-                        type="text"
+                        type='text'
                         defaultValue={value}
                         // Name field is how we reference this cell's equivalent
                         // position in the state matrix to make changes
@@ -201,8 +203,8 @@ const IndivTable = () => {
                   ) : (
                     <TableCell
                       key={`${rowIdx}-${colIdx}`}
-                      component="th"
-                      scope="row"
+                      component='th'
+                      scope='row'
                       className={
                         selectedRow === id ? classes.selectedRow : null
                       }
@@ -217,7 +219,18 @@ const IndivTable = () => {
                       }}
                       name={`${rowIdx}-${colIdx}`}
                     >
-                      {`${value}`}
+                      {value.length > 20 ? (
+                        <span
+                          style={{
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            width: "150px",
+                            display: "block"
+                          }}
+                        >{`${value}...`}</span>
+                      ) : (
+                        `${value}`
+                      )}
                     </TableCell>
                   )
                 )}
@@ -227,7 +240,7 @@ const IndivTable = () => {
         </Table>
       </Paper>
 
-      <Button variant="contained" type="button" onClick={handleUpdateSubmit}>
+      <Button variant='contained' type='button' onClick={handleUpdateSubmit}>
         Submit
       </Button>
       {/* <Button
