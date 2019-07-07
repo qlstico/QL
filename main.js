@@ -1,22 +1,23 @@
-'use strict';
+"use strict";
 
 // Import parts of electron to use
-const { app, BrowserWindow, ipcMain } = require('electron');
-const path = require('path');
-const url = require('url');
-const os = require('os');
+const { app, BrowserWindow, ipcMain } = require("electron");
+const path = require("path");
+const url = require("url");
+const os = require("os");
 const {
   getAllDbs,
   getAllTables,
   getTableData,
   updateTableData,
   createTable,
-} = require('./src/db/db');
-const express = require('express');
-const { postgraphile } = require('postgraphile');
+  createDatabase
+} = require("./src/db/db");
+const express = require("express");
+const { postgraphile } = require("postgraphile");
 // need below for visualizer
-const { express: voyagerMiddleware } = require('graphql-voyager/middleware');
-const { closeServer } = require('./src/server/util');
+const { express: voyagerMiddleware } = require("graphql-voyager/middleware");
+const { closeServer } = require("./src/server/util");
 const {
   LOGIN_FORM_DATA,
   GET_DB_NAMES,
@@ -33,42 +34,44 @@ const {
   ADD_TABLE_ROW,
   GET_OS_USER,
   GET_OS_USER_REPLY,
-} = require('./src/constants/ipcNames');
-const enableDestroy = require('server-destroy');
+  CREATE_DATABASE,
+  CREATE_DATABASE_REPLY
+} = require("./src/constants/ipcNames");
+const enableDestroy = require("server-destroy");
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
-let LOGGEDIN_USER = '';
+let LOGGEDIN_USER = "";
 
 let expressApp;
 let expressServer;
 let PORT_INCREMENT = 0;
 
 /* Setup express server when user clicks a db in the front end */
-function setupExpress(databaseName, username = '', password) {
+function setupExpress(databaseName, username = "", password) {
   /* Major key is just overwriting existing express app.
   This was the solution */
   expressApp = express();
   // config to connect middleware to database
-  const schemaName = 'public';
+  const schemaName = "public";
   const database = `postgres://${username}:${
-    password ? `${password}` : ''
+    password ? `${password}` : ""
   }@localhost:5432/${databaseName}`;
   const pglConfig = {
     watchPg: true,
     graphiql: true,
-    enhanceGraphiql: true,
+    enhanceGraphiql: true
   };
   // console.log(database);
   // setup middleware for creating our graphql api
   expressApp.use(postgraphile(database, schemaName, pglConfig));
   // route for visualizer - access via http://localhost:5000/voyager
-  expressApp.use('/voyager', voyagerMiddleware({ endpointUrl: '/graphql' }));
+  expressApp.use("/voyager", voyagerMiddleware({ endpointUrl: "/graphql" }));
 
   // assign global var our express server so we can close it later
   expressServer = expressApp.listen(5000, function() {
-    console.log('Listening :)');
+    console.log("Listening :)");
     // expressServer.close()
   });
 
@@ -91,9 +94,9 @@ if (
 
 // Temporary fix broken high-dpi scale factor on Windows (125% scaling)
 // info: https://github.com/electron/electron/issues/9691
-if (process.platform === 'win32') {
-  app.commandLine.appendSwitch('high-dpi-support', 'true');
-  app.commandLine.appendSwitch('force-device-scale-factor', '1');
+if (process.platform === "win32") {
+  app.commandLine.appendSwitch("high-dpi-support", "true");
+  app.commandLine.appendSwitch("force-device-scale-factor", "1");
 }
 
 function createWindow() {
@@ -103,32 +106,32 @@ function createWindow() {
     height: 768,
     show: false,
     webPreferences: {
-      nodeIntegration: true,
-    },
+      nodeIntegration: true
+    }
   });
 
   // and load the index.html of the app.
   let indexPath;
 
-  if (dev && process.argv.indexOf('--noDevServer') === -1) {
+  if (dev && process.argv.indexOf("--noDevServer") === -1) {
     indexPath = url.format({
-      protocol: 'http:',
-      host: 'localhost:8080',
-      pathname: 'index.html',
-      slashes: true,
+      protocol: "http:",
+      host: "localhost:8080",
+      pathname: "index.html",
+      slashes: true
     });
   } else {
     indexPath = url.format({
-      protocol: 'file:',
-      pathname: path.join(__dirname, 'dist', 'index.html'),
-      slashes: true,
+      protocol: "file:",
+      pathname: path.join(__dirname, "dist", "index.html"),
+      slashes: true
     });
   }
 
   mainWindow.loadURL(indexPath);
 
   // Don't show until we are ready and loaded
-  mainWindow.once('ready-to-show', () => {
+  mainWindow.once("ready-to-show", () => {
     mainWindow.show();
 
     // Open the DevTools automatically if developing
@@ -138,7 +141,7 @@ function createWindow() {
   });
 
   // Emitted when the window is closed.
-  mainWindow.on('closed', function() {
+  mainWindow.on("closed", function() {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
@@ -179,6 +182,11 @@ ipcMain.on(GET_DB_NAMES, async event => {
   event.reply(GET_DB_NAMES_REPLY, dbNames);
 });
 
+ipcMain.on(CREATE_DATABASE, async (event, databaseName) => {
+  const createDb = await createDatabase(databaseName);
+  // reply with database names from query
+  event.reply(CREATE_DATABASE_REPLY, createDb);
+});
 /**
  * called from ./components/db/AllDBs.js
  * when user clicks database, sends message to trigger getting the table data
@@ -209,7 +217,7 @@ ipcMain.on(GET_TABLE_CONTENTS, async (event, args) => {
  * call to get all the db names and replies with the database names
  */
 ipcMain.on(CLOSE_SERVER, async (event, args) => {
-  closeServer(expressServer, 'closeserver*****');
+  closeServer(expressServer, "closeserver*****");
 });
 
 /**
@@ -233,24 +241,24 @@ ipcMain.on(CREATE_TABLE, async (event, args) => {
 
 // args === [selectedTable, selectedDb, selectedRowId]
 ipcMain.on(REMOVE_TABLE_ROW, async (_, args) => {
-  await console.log('hi from REMOVE_TABLE_ROW');
+  await console.log("hi from REMOVE_TABLE_ROW");
 });
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow);
+app.on("ready", createWindow);
 
 // Quit when all windows are closed.
-app.on('window-all-closed', () => {
+app.on("window-all-closed", () => {
   // On macOS it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
-  if (process.platform !== 'darwin') {
+  if (process.platform !== "darwin") {
     app.quit();
   }
 });
 
-app.on('activate', () => {
+app.on("activate", () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (mainWindow === null) {
