@@ -10,7 +10,8 @@ const {
   getAllTables,
   getTableData,
   updateTableData,
-  createTable
+  createTable,
+  updateTableDataV2,
 } = require('./src/db/db');
 const express = require('express');
 const { postgraphile } = require('postgraphile');
@@ -32,7 +33,7 @@ const {
   REMOVE_TABLE_ROW,
   ADD_TABLE_ROW,
   GET_OS_USER,
-  GET_OS_USER_REPLY
+  GET_OS_USER_REPLY,
 } = require('./src/constants/ipcNames');
 const enableDestroy = require('server-destroy');
 
@@ -58,7 +59,7 @@ function setupExpress(databaseName, username = '', password) {
   const pglConfig = {
     watchPg: true,
     graphiql: true,
-    enhanceGraphiql: true
+    enhanceGraphiql: true,
   };
   // console.log(database);
   // setup middleware for creating our graphql api
@@ -103,8 +104,8 @@ function createWindow() {
     height: 768,
     show: false,
     webPreferences: {
-      nodeIntegration: true
-    }
+      nodeIntegration: true,
+    },
   });
 
   // and load the index.html of the app.
@@ -115,13 +116,13 @@ function createWindow() {
       protocol: 'http:',
       host: 'localhost:8080',
       pathname: 'index.html',
-      slashes: true
+      slashes: true,
     });
   } else {
     indexPath = url.format({
       protocol: 'file:',
       pathname: path.join(__dirname, 'dist', 'index.html'),
-      slashes: true
+      slashes: true,
     });
   }
 
@@ -218,7 +219,8 @@ ipcMain.on(CLOSE_SERVER, async (event, args) => {
  */
 // args === [selectedTable,selectedDb,tableMatrix]
 ipcMain.on(UPDATE_TABLE_DATA, async (_, args) => {
-  const response = await updateTableData(...args);
+  // const response = await updateTableData(...args);
+  const response = await updateTableDataV2(...args);
 });
 
 /**
