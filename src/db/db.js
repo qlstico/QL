@@ -8,7 +8,7 @@ const DB_CONNECTION = {
   password: '', // env var: PGPASSWORD
   host: 'localhost', // Server hosting the postgres database
   port: 5432, // env var: PGPORT
-  idleTimeoutMillis: 300 // how long a client is allowed to remain idle before being closed
+  idleTimeoutMillis: 300, // how long a client is allowed to remain idle before being closed
 };
 
 // Helper Functions
@@ -31,7 +31,7 @@ const tranformRowToSql = (id, row) => {
         return `"${key}" = $${idx + 1}`;
       })
       .join(', '),
-    valuesArr.concat(id)
+    valuesArr.concat(id),
   ];
 };
 
@@ -115,9 +115,9 @@ const updateTableData = async (table, database, data) => {
   const pool = new pg.Pool(DB_CONNECTION);
   const queryArr = obj.map(([updateStr, values]) => [
     `UPDATE ${table} SET ${updateStr} WHERE id=$${values.length} returning *`,
-    values
+    values,
   ]);
-  console.log(...queryArr.map(([queryStr, params]) => ({ queryStr, params })));
+  // console.log(...queryArr.map(([queryStr, params]) => ({ queryStr, params })));
   // const [queryStr, params] = queryArr[0];
   try {
     queryArr.forEach(async ([queryStr, params]) => {
@@ -184,11 +184,43 @@ const updateTableData = async (table, database, fields, values, dbRowId) => {
 //   ],
 // ]);
 
+const tranformCellToSql = ({ key, value, id }) => {
+  return [`"${key}" = $${1}`, [value, id]];
+};
+
+const updateTableDataV2 = async (table, database, allUpdatedCells) => {
+  console.log(allUpdatedCells);
+  setDatabase(database);
+  const pool = new pg.Pool(DB_CONNECTION);
+  const keysAndParamsNestedArr = allUpdatedCells.reduce((accum, cell) => {
+    // get key from cell and create object with key of id and value of field(ie key)=value
+    return accum.concat([tranformCellToSql(cell)]);
+  }, []);
+  console.log({ keysAndParamsNestedArr });
+  const queryArr = keysAndParamsNestedArr.map(([updateStr, values]) => [
+    `UPDATE ${table} SET ${updateStr} WHERE id=$${values.length} returning *`,
+    values,
+  ]);
+  console.log(
+    'updateTableDataV2',
+    ...queryArr.map(([queryStr, params]) => ({ queryStr, params }))
+  );
+  try {
+    queryArr.forEach(async ([queryStr, params]) => {
+      const { rows } = await pool.query(queryStr, params);
+      console.log(rows);
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   getAllTables,
   getAllDbs,
   getTableData,
   updateTableData,
   createTable,
-  removeTableRow
+  removeTableRow,
+  updateTableDataV2,
 };
