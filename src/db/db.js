@@ -70,15 +70,18 @@ const createTable = async (selectedDb, newTableName) => {
   setDatabase(selectedDb);
   const pool = new pg.Pool(DB_CONNECTION);
   try {
-    await pool.query(`CREATE TABLE information_schema.${newTableName}`);
+    await pool.query(
+      `CREATE TABLE IF NOT EXISTS "${newTableName}" (
+      "id" SERIAL PRIMARY KEY
+      );`
+    );
 
-    // const res = await pool.query(
-    //   `SELECT table_name FROM  information_schema.tables
-    //   WHERE table_type = 'BASE TABLE'
-    //   AND table_schema NOT IN ('pg_catalog', 'information_schema', 'management','postgraphile_watch') and table_name != '_Migration'`
-    // );
-    // return res;
-    return [];
+    const response = await pool.query(
+      `SELECT table_name FROM  information_schema.tables
+      WHERE table_type = 'BASE TABLE'
+      AND table_schema NOT IN ('pg_catalog', 'information_schema', 'management','postgraphile_watch') and table_name != '_Migration'`
+    );
+    return response.rows.map(({ table_name }) => table_name);
   } catch (error) {
     console.log(error);
   }
