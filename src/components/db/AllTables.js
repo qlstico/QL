@@ -1,23 +1,21 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect } from 'react';
 import {
   DisplayCard,
   DbRelatedContext,
   GraphQLDisplayCard,
   VoyagerDisplayCard
-} from "../index";
-import Grid from "@material-ui/core/Grid";
-import { withRouter } from "react-router-dom";
-import { makeStyles } from "@material-ui/core/styles";
-import { ipcRenderer } from "electron";
-import { Button, TextField } from "@material-ui/core/";
+} from '../index';
+import Grid from '@material-ui/core/Grid';
+import { withRouter } from 'react-router-dom';
+import { makeStyles } from '@material-ui/core/styles';
+import { ipcRenderer } from 'electron';
+import { Button, TextField } from '@material-ui/core/';
 const {
   GET_TABLE_CONTENTS,
   GET_TABLE_CONTENTS_REPLY,
   CREATE_TABLE,
-  CREATE_TABLE_REPLY,
-  GET_TABLE_NAMES,
-  GET_TABLE_NAMES_REPLY
-} = require("../../constants/ipcNames");
+  CREATE_TABLE_REPLY
+} = require('../../constants/ipcNames');
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -27,7 +25,7 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(2)
   },
   highlightSelected: {
-    background: "grey"
+    background: 'grey'
   }
 }));
 
@@ -48,18 +46,20 @@ const AllTables = props => {
     setCurrentTable
   } = useContext(DbRelatedContext);
 
+  // Sets and stores values provided from "add table" field
   const [tableToAdd, setTableToAdd] = useState(null);
   const handleInputChange = e => {
     const { name, value } = e.target;
     setTableToAdd(value);
   };
 
+  // Managed which table is 'currently selected'
   const [currentlySelected, setCurrentlySelected] = useState(false);
   const enableSelected = tableName => {
     setCurrentlySelected(tableName);
   };
 
-  // args === (table, selectedDb)
+  // Retrieves the tables data from the double clicked table icon
   const getTableContents = async table => {
     setSelectedTable(table);
     setCurrentTable(table);
@@ -67,11 +67,12 @@ const AllTables = props => {
     await ipcRenderer.on(GET_TABLE_CONTENTS_REPLY, (event, tableData) => {
       setSelectedTableData(tableData);
     });
-    props.history.push("/single");
+    props.history.push('/single');
   };
 
-  const createNewTable = async (curDb, newTableName) => {
-    await ipcRenderer.send(CREATE_TABLE, [curDb, newTableName]);
+  // function for adding table via the GUI
+  const createNewTable = async (currentDb, newTableName) => {
+    await ipcRenderer.send(CREATE_TABLE, [currentDb, newTableName]);
     await ipcRenderer.on(CREATE_TABLE_REPLY, (event, updatedTables) => {
       setTablesContext(updatedTables);
     });
@@ -79,6 +80,8 @@ const AllTables = props => {
   // Send provider a true value to kick on server
   useEffect(() => {
     setServerStatus(true);
+    //listens for rerender when anything in the tables context provider changes,
+    // i.e. a table is added or removed
   }, [tablesContext]);
 
   return (
@@ -89,13 +92,13 @@ const AllTables = props => {
       <h1>Tables: </h1>
       <Grid container className={classes.root} spacing={3}>
         <Grid item xs={12}>
-          <Grid container justify='center' spacing={spacing}>
+          <Grid container justify="center" spacing={spacing}>
             {tablesContext.map(table => (
               <Grid
                 key={table}
                 item
                 className={
-                  currentlySelected === table ? classes.highlightSelected : ""
+                  currentlySelected === table ? classes.highlightSelected : ''
                 }
                 onClick={() => enableSelected(table)}
                 onDoubleClick={() => getTableContents(table, selectedDb)}
@@ -103,29 +106,36 @@ const AllTables = props => {
                 <DisplayCard
                   className={classes.control}
                   name={table}
-                  type='table'
+                  type="table"
                 />
               </Grid>
             ))}
           </Grid>
         </Grid>
       </Grid>
+      <TextField
+        label="Table Name"
+        name="newTableName"
+        onChange={handleInputChange}
+        value={tableToAdd}
+      />
       <Button
-        variant='contained'
-        type='button'
-        color='inherit'
+        variant="contained"
+        type="button"
+        color="inherit"
+        size="small"
         onClick={() => createNewTable(selectedDb, tableToAdd)}
       >
-        Add Table
+        Add New Table
       </Button>
-      <Button variant='contained' type='button' color='inherit'>
+      {/* <Button variant='contained' type='button' color='inherit'>
         Remove Table
       </Button>
       <TextField
         label='Table Name'
         name='newTableName'
         onChange={handleInputChange}
-      />
+      /> */}
     </div>
   );
 };
