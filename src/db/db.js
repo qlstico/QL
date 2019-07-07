@@ -1,12 +1,12 @@
-const pg = require("pg");
+const pg = require('pg');
 // const storage = require('electron-json-storage');
 // const {app} = require('electron')
 
 const DB_CONNECTION = {
-  user: "", // env var: PGUSER
-  database: "", // env var: PGDATABASE
-  password: "", // env var: PGPASSWORD
-  host: "localhost", // Server hosting the postgres database
+  user: '', // env var: PGUSER
+  database: '', // env var: PGDATABASE
+  password: '', // env var: PGPASSWORD
+  host: 'localhost', // Server hosting the postgres database
   port: 5432, // env var: PGPORT
   idleTimeoutMillis: 300 // how long a client is allowed to remain idle before being closed
 };
@@ -21,15 +21,15 @@ const tranformRowToSql = (id, row) => [
   row
     .map(({ key, value }) => {
       // removes these two keys from the sql
-      if (key === "createdAt" || key === "updatedAt") {
+      if (key === 'createdAt' || key === 'updatedAt') {
         return ``;
       }
       // makes sure we are not converting ints to strings
       return `${key.toLowerCase()}=${
-        typeof value === "string" ? `"${value}"` : value
+        typeof value === 'string' ? `"${value}"` : value
       }`;
     })
-    .join(" ")
+    .join(' ')
 ];
 
 const tranformRowToSql2 = (id, row) => {
@@ -37,7 +37,7 @@ const tranformRowToSql2 = (id, row) => {
   return [
     row
       .filter(
-        ({ key }) => key !== "createdAt" && key !== "updatedAt" //&& !/\w+id$/i.test(key)
+        ({ key }) => key !== 'createdAt' && key !== 'updatedAt' //&& !/\w+id$/i.test(key)
       )
       .map(({ key, value }, idx) => {
         // removes these two keys from the sql
@@ -46,7 +46,7 @@ const tranformRowToSql2 = (id, row) => {
         // postgresSQL is case sensitive so if we use camel case must wrap key in ""
         return `"${key}" = $${idx + 1}`;
       })
-      .join(", "),
+      .join(', '),
     valuesArr.concat(id)
   ];
 };
@@ -55,7 +55,7 @@ const getAllDbs = async () => {
   const pool = new pg.Pool(DB_CONNECTION);
   try {
     const response = await pool.query(
-      "SELECT datname FROM pg_database WHERE datistemplate = false"
+      'SELECT datname FROM pg_database WHERE datistemplate = false'
     );
     const arrayOfDbNames = response.rows.map(({ datname }) => {
       return datname;
@@ -86,15 +86,18 @@ const createTable = async (selectedDb, newTableName) => {
   setDatabase(selectedDb);
   const pool = new pg.Pool(DB_CONNECTION);
   try {
-    await pool.query(`CREATE TABLE information_schema.${newTableName}`);
+    await pool.query(
+      `CREATE TABLE IF NOT EXISTS "${newTableName}" (
+      "id" SERIAL PRIMARY KEY
+      );`
+    );
 
-    // const res = await pool.query(
-    //   `SELECT table_name FROM  information_schema.tables
-    //   WHERE table_type = 'BASE TABLE'
-    //   AND table_schema NOT IN ('pg_catalog', 'information_schema', 'management','postgraphile_watch') and table_name != '_Migration'`
-    // );
-    // return res;
-    return [];
+    const response = await pool.query(
+      `SELECT table_name FROM  information_schema.tables
+      WHERE table_type = 'BASE TABLE'
+      AND table_schema NOT IN ('pg_catalog', 'information_schema', 'management','postgraphile_watch') and table_name != '_Migration'`
+    );
+    return response.rows.map(({ table_name }) => table_name);
   } catch (error) {
     console.log(error);
   }

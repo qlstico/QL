@@ -1,23 +1,21 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect } from 'react';
 import {
   DisplayCard,
   DbRelatedContext,
   GraphQLDisplayCard,
   VoyagerDisplayCard
-} from "../index";
-import Grid from "@material-ui/core/Grid";
-import { withRouter } from "react-router-dom";
-import { makeStyles } from "@material-ui/core/styles";
-import { ipcRenderer } from "electron";
-import { Button, TextField } from "@material-ui/core/";
+} from '../index';
+import Grid from '@material-ui/core/Grid';
+import { withRouter } from 'react-router-dom';
+import { makeStyles } from '@material-ui/core/styles';
+import { ipcRenderer } from 'electron';
+import { Button, TextField } from '@material-ui/core/';
 const {
   GET_TABLE_CONTENTS,
   GET_TABLE_CONTENTS_REPLY,
   CREATE_TABLE,
-  CREATE_TABLE_REPLY,
-  GET_TABLE_NAMES,
-  GET_TABLE_NAMES_REPLY
-} = require("../../constants/ipcNames");
+  CREATE_TABLE_REPLY
+} = require('../../constants/ipcNames');
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -27,7 +25,7 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(2)
   },
   highlightSelected: {
-    background: "grey"
+    background: 'grey'
   }
 }));
 
@@ -67,11 +65,11 @@ const AllTables = props => {
     await ipcRenderer.on(GET_TABLE_CONTENTS_REPLY, (event, tableData) => {
       setSelectedTableData(tableData);
     });
-    props.history.push("/single");
+    props.history.push('/single');
   };
 
-  const createNewTable = async (curDb, newTableName) => {
-    await ipcRenderer.send(CREATE_TABLE, [curDb, newTableName]);
+  const createNewTable = async (db, newTableName) => {
+    await ipcRenderer.send(CREATE_TABLE, [db, newTableName]);
     await ipcRenderer.on(CREATE_TABLE_REPLY, (event, updatedTables) => {
       setTablesContext(updatedTables);
     });
@@ -89,13 +87,13 @@ const AllTables = props => {
       <h1>Tables: </h1>
       <Grid container className={classes.root} spacing={3}>
         <Grid item xs={12}>
-          <Grid container justify='center' spacing={spacing}>
+          <Grid container justify="center" spacing={spacing}>
             {tablesContext.map(table => (
               <Grid
                 key={table}
                 item
                 className={
-                  currentlySelected === table ? classes.highlightSelected : ""
+                  currentlySelected === table ? classes.highlightSelected : ''
                 }
                 onClick={() => enableSelected(table)}
                 onDoubleClick={() => getTableContents(table, selectedDb)}
@@ -103,29 +101,30 @@ const AllTables = props => {
                 <DisplayCard
                   className={classes.control}
                   name={table}
-                  type='table'
+                  type="table"
                 />
               </Grid>
             ))}
           </Grid>
         </Grid>
       </Grid>
+
+      <TextField
+        label="Table Name"
+        name="newTableName"
+        onChange={handleInputChange}
+      />
       <Button
-        variant='contained'
-        type='button'
-        color='inherit'
+        variant="contained"
+        type="button"
+        color="inherit"
         onClick={() => createNewTable(selectedDb, tableToAdd)}
       >
         Add Table
       </Button>
-      <Button variant='contained' type='button' color='inherit'>
+      <Button variant="contained" type="button" color="inherit">
         Remove Table
       </Button>
-      <TextField
-        label='Table Name'
-        name='newTableName'
-        onChange={handleInputChange}
-      />
     </div>
   );
 };
