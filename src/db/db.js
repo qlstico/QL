@@ -77,7 +77,16 @@ const getTableData = async (table, database) => {
   }
 };
 
-const removeTableRow = (table, database, id) => {};
+const removeTableRow = async (table, database, id) => {
+  setDatabase(database);
+  const pool = new pg.Pool(DB_CONNECTION);
+  try {
+    const response = await pool.query(`DELETE FROM ${table} where id=${id}`);
+    return response.rows;
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 const tranformCellToSql = ({ key, value, id }) => {
   return [`"${key}" = $${1}`, [value, id]];
