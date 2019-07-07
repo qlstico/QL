@@ -192,8 +192,8 @@ const IndivTable = () => {
                       <span
                         style={{
                           whiteSpace: "nowrap",
-                          overflow: "scroll",
-                          width: "90px",
+                          overflow: "hidden",
+                          width: 85, //`${Number.isInteger(value) ? 30 : 130}`
                           display: "block"
                         }}
                       >
