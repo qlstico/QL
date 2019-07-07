@@ -11,6 +11,7 @@ const {
   getTableData,
   updateTableData,
   createTable,
+  removeTableRow,
 } = require('./src/db/db');
 const express = require('express');
 const { postgraphile } = require('postgraphile');
@@ -233,7 +234,8 @@ ipcMain.on(CREATE_TABLE, async (event, args) => {
 
 // args === [selectedTable, selectedDb, selectedRowId]
 ipcMain.on(REMOVE_TABLE_ROW, async (_, args) => {
-  await console.log('hi from REMOVE_TABLE_ROW');
+  console.log('hi from REMOVE_TABLE_ROW');
+  await removeTableRow(...args);
 });
 
 // This method will be called when Electron has finished

@@ -100,17 +100,12 @@ const updateTableData = async (table, database, allUpdatedCells) => {
     // get key from cell and create object with key of id and value of field(ie key)=value
     return accum.concat([tranformCellToSql(cell)]);
   }, []);
-  console.log({ keysAndParamsNestedArr });
   const queryArr = keysAndParamsNestedArr.map(([updateStr, values]) => [
     `UPDATE ${table} SET ${updateStr} WHERE id=$${values.length} returning *`,
     values,
   ]);
-  console.log(
-    'updateTableDataV2',
-    ...queryArr.map(([queryStr, params]) => ({ queryStr, params }))
-  );
   try {
-    queryArr.forEach(async ([queryStr, params]) => {
+    await queryArr.forEach(async ([queryStr, params]) => {
       const { rows } = await pool.query(queryStr, params);
       console.log(rows);
     });
@@ -126,5 +121,4 @@ module.exports = {
   updateTableData,
   createTable,
   removeTableRow,
-  // updateTableDataV2,
 };
