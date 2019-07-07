@@ -2,7 +2,11 @@ import React, { useState, useEffect } from 'react';
 import storage from 'electron-json-storage';
 import { withRouter } from 'react-router-dom';
 const { ipcRenderer } = require('electron');
-const { LOGIN_FORM_DATA } = require('../constants/ipcNames');
+const {
+  LOGIN_FORM_DATA,
+  GET_OS_USER,
+  GET_OS_USER_REPLY
+} = require('../constants/ipcNames');
 import { Login } from '../components/index';
 const { encrypt } = require('../server/util');
 
@@ -29,7 +33,17 @@ const Create = props => {
   const [values, setValues] = useState(defaultConnectionSettings);
   const [connectionData, setConnectionData] = useState(null);
 
+  // Async function to retrieve OS Username as default create connection username
+  async function getOSUserName() {
+    await ipcRenderer.send(GET_OS_USER);
+    await ipcRenderer.on(GET_OS_USER_REPLY, (event, OSusername) => {
+      defaultConnectionSettings.user = OSusername;
+    });
+  }
+
   useEffect(() => {
+    // call to retrieve OS Username as default
+    getOSUserName();
     // componentDidMount -> get connection data from ls
     storage.get('connectionData', (error, data) => {
       if (error) throw error;
