@@ -16,24 +16,24 @@ const setDatabase = dbName => {
   DB_CONNECTION.database = dbName;
 };
 
-const tranformRowToSql = (id, row) => {
-  const valuesArr = [];
-  return [
-    row
-      .filter(
-        ({ key }) => key !== 'createdAt' && key !== 'updatedAt' //&& !/\w+id$/i.test(key)
-      )
-      .map(({ key, value }, idx) => {
-        // removes these two keys from the sql
-        // makes sure we are not converting ints to strings
-        valuesArr.push(value);
-        // postgresSQL is case sensitive so if we use camel case must wrap key in ""
-        return `"${key}" = $${idx + 1}`;
-      })
-      .join(', '),
-    valuesArr.concat(id),
-  ];
-};
+// const tranformRowToSql = (id, row) => {
+//   const valuesArr = [];
+//   return [
+//     row
+//       .filter(
+//         ({ key }) => key !== 'createdAt' && key !== 'updatedAt' //&& !/\w+id$/i.test(key)
+//       )
+//       .map(({ key, value }, idx) => {
+//         // removes these two keys from the sql
+//         // makes sure we are not converting ints to strings
+//         valuesArr.push(value);
+//         // postgresSQL is case sensitive so if we use camel case must wrap key in ""
+//         return `"${key}" = $${idx + 1}`;
+//       })
+//       .join(', '),
+//     valuesArr.concat(id),
+//   ];
+// };
 
 const getAllDbs = async () => {
   const pool = new pg.Pool(DB_CONNECTION);
@@ -100,43 +100,43 @@ const getTableData = async (table, database) => {
 
 const removeTableRow = (table, database, id) => {};
 
-const updateTableData = async (table, database, data) => {
-  setDatabase(database);
-  console.log({ DB_CONNECTION });
-  /**
-   * grab key from
-   */
-  const obj = data.reduce((accum, row) => {
-    // get key from cell and create object with key of id and value of field(ie key)=value
-    return accum.concat([tranformRowToSql(row[0].id, row)]);
-  }, []);
-  // console.log(obj);
-  // const str = data.map(({key, value}) => )
-  const pool = new pg.Pool(DB_CONNECTION);
-  const queryArr = obj.map(([updateStr, values]) => [
-    `UPDATE ${table} SET ${updateStr} WHERE id=$${values.length} returning *`,
-    values,
-  ]);
-  // console.log(...queryArr.map(([queryStr, params]) => ({ queryStr, params })));
-  // const [queryStr, params] = queryArr[0];
-  try {
-    queryArr.forEach(async ([queryStr, params]) => {
-      const { rows } = await pool.query(queryStr, params);
-      console.log(rows);
-    });
-    // console.log({ queryStr, params });
-    // const { rows } = await pool.query(`${queryStr}`, params);
-    // console.log(rows);
-    // const { rows } = await pool.query(
-    //   `UPDATE users SET email=$1 WHERE id=$2 returning *`,
-    //   ['jdwy215@me.com', 1]
-    // );
-    // console.log(rows);
-    // return response.rows;
-  } catch (error) {
-    console.log(error);
-  }
-};
+// const updateTableData = async (table, database, data) => {
+//   setDatabase(database);
+//   console.log({ DB_CONNECTION });
+//   /**
+//    * grab key from
+//    */
+//   const obj = data.reduce((accum, row) => {
+//     // get key from cell and create object with key of id and value of field(ie key)=value
+//     return accum.concat([tranformRowToSql(row[0].id, row)]);
+//   }, []);
+//   // console.log(obj);
+//   // const str = data.map(({key, value}) => )
+//   const pool = new pg.Pool(DB_CONNECTION);
+//   const queryArr = obj.map(([updateStr, values]) => [
+//     `UPDATE ${table} SET ${updateStr} WHERE id=$${values.length} returning *`,
+//     values,
+//   ]);
+//   // console.log(...queryArr.map(([queryStr, params]) => ({ queryStr, params })));
+//   // const [queryStr, params] = queryArr[0];
+//   try {
+//     queryArr.forEach(async ([queryStr, params]) => {
+//       const { rows } = await pool.query(queryStr, params);
+//       console.log(rows);
+//     });
+//     // console.log({ queryStr, params });
+//     // const { rows } = await pool.query(`${queryStr}`, params);
+//     // console.log(rows);
+//     // const { rows } = await pool.query(
+//     //   `UPDATE users SET email=$1 WHERE id=$2 returning *`,
+//     //   ['jdwy215@me.com', 1]
+//     // );
+//     // console.log(rows);
+//     // return response.rows;
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
 
 /*
 const updateTableData = async (table, database, fields, values, dbRowId) => {
@@ -188,7 +188,7 @@ const tranformCellToSql = ({ key, value, id }) => {
   return [`"${key}" = $${1}`, [value, id]];
 };
 
-const updateTableDataV2 = async (table, database, allUpdatedCells) => {
+const updateTableData = async (table, database, allUpdatedCells) => {
   console.log(allUpdatedCells);
   setDatabase(database);
   const pool = new pg.Pool(DB_CONNECTION);
@@ -222,5 +222,5 @@ module.exports = {
   updateTableData,
   createTable,
   removeTableRow,
-  updateTableDataV2,
+  // updateTableDataV2,
 };
