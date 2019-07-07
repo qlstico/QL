@@ -27,9 +27,12 @@ const {
   CLOSE_SERVER,
   UPDATE_TABLE_DATA,
   CREATE_TABLE,
-  CREATE_TABLE_REPLY
-} = require("./src/constants/ipcNames");
-const enableDestroy = require("server-destroy");
+  CREATE_TABLE_REPLY,
+  REMOVE_TABLE_ROW,
+  ADD_TABLE_ROW,
+} = require('./src/constants/ipcNames');
+const enableDestroy = require('server-destroy');
+
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -211,9 +214,16 @@ ipcMain.on(UPDATE_TABLE_DATA, async (_, args) => {
   const response = await updateTableData(...args);
 });
 
+// args === [selectedDb, newTableName]
 ipcMain.on(CREATE_TABLE, async (event, args) => {
   const newTableAddition = await createTable(...args);
   event.reply(CREATE_TABLE_REPLY, newTableAddition);
+ });
+
+// args === [selectedTable, selectedDb, selectedRowId]
+ipcMain.on(REMOVE_TABLE_ROW, async (_, args) => {
+  await console.log('hi from REMOVE_TABLE_ROW');
+
 });
 
 // This method will be called when Electron has finished

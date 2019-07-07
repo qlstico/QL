@@ -1,4 +1,5 @@
 /* eslint-disable no-confusing-arrow */
+
 import React, { useState, useContext, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -11,7 +12,11 @@ import Button from "@material-ui/core/Button";
 import { DbRelatedContext } from "../index";
 import TextField from "@material-ui/core/TextField";
 import { ipcRenderer } from "electron";
-const { UPDATE_TABLE_DATA } = require("../../constants/ipcNames");
+const {
+  UPDATE_TABLE_DATA,
+  REMOVE_TABLE_ROW,
+  ADD_TABLE_ROW,
+} = require('../../constants/ipcNames');
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -22,14 +27,15 @@ const useStyles = makeStyles(theme => ({
     width: "100%",
     overflowX: "auto",
     marginBottom: theme.spacing(2)
+
   },
   table: {
-    minWidth: 650
+    minWidth: 650,
   },
   textField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
-    width: 200
+    width: 200,
   },
   selectedRow: {
     background: "grey"
@@ -49,6 +55,9 @@ const IndivTable = () => {
     DbRelatedContext
   );
 
+  // Tracking which row is in 'edit mode'
+  const [editRow, setEditRow] = useState(false);
+
   // Setting the matrix created from the context provider's array of objs
   // to render the table cells and to have a 'sandbox copy' in the state
   // to compare changes against the context provider's original version
@@ -57,6 +66,9 @@ const IndivTable = () => {
   // Will hopefully be able to independently track any changes made to send a smaller
   // load of only pertinent information to the server to make the requested changes
   const [changesMade, setChangesMade] = useState([]);
+
+  // Tracking which row is 'selected'
+  const [selectedRow, setSelectedRow] = useState(false);
 
   // Using this as componentDidMount && componentDidUpdate b/c the provider data from
   // context does not make it in time for the initial mounting
@@ -108,12 +120,19 @@ const IndivTable = () => {
     await ipcRenderer.send(UPDATE_TABLE_DATA, [
       selectedTable,
       selectedDb,
-      tableMatrix
+      tableMatrix,
     ]);
   };
 
-  // Tracking which row is in 'edit mode'
-  const [editRow, setEditRow] = useState(false);
+  const handleRemoveRow = () => {
+    if (selectedRow) {
+      ipcRenderer.send(REMOVE_TABLE_ROW, [
+        selectedTable,
+        selectedDb,
+        selectedRow,
+      ]);
+    }
+  };
 
   // Sets the selected row for editing
   const enableEditRow = dbEntryId => {
@@ -124,9 +143,6 @@ const IndivTable = () => {
   const removeEditRow = () => {
     setEditRow(false);
   };
-
-  // Tracking which row is 'selected'
-  const [selectedRow, setSelectedRow] = useState(false);
 
   // Sets the 'selected' row
   const enableSelectedRow = dbEntryId => {
@@ -235,14 +251,15 @@ const IndivTable = () => {
       >
         Add Row
       </Button>
+      */}
       <Button
         variant="contained"
         type="button"
         color="inherit"
-        onClick={() => console.table(tableMatrix)}
+        onClick={handleRemoveRow}
       >
         Remove Row
-      </Button> */}
+      </Button>
     </div>
   ) : (
     <div>
