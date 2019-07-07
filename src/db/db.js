@@ -1,6 +1,4 @@
 const pg = require('pg');
-// const storage = require('electron-json-storage');
-// const {app} = require('electron')
 
 const DB_CONNECTION = {
   user: '', // env var: PGUSER
@@ -34,6 +32,7 @@ const tranformRowToSql = (id, row) => {
     valuesArr.concat(id)
   ];
 };
+
 
 const getAllDbs = async () => {
   const pool = new pg.Pool(DB_CONNECTION);
@@ -117,95 +116,12 @@ const getTableData = async (table, database) => {
 
 const removeTableRow = (table, database, id) => {};
 
-const updateTableData = async (table, database, data) => {
-  setDatabase(database);
-  console.log({ DB_CONNECTION });
-  /**
-   * grab key from
-   */
-  const obj = data.reduce((accum, row) => {
-    // get key from cell and create object with key of id and value of field(ie key)=value
-    return accum.concat([tranformRowToSql(row[0].id, row)]);
-  }, []);
-  // console.log(obj);
-  // const str = data.map(({key, value}) => )
-  const pool = new pg.Pool(DB_CONNECTION);
-  const queryArr = obj.map(([updateStr, values]) => [
-    `UPDATE ${table} SET ${updateStr} WHERE id=$${values.length} returning *`,
-    values
-  ]);
-  // console.log(...queryArr.map(([queryStr, params]) => ({ queryStr, params })));
-  // const [queryStr, params] = queryArr[0];
-  try {
-    queryArr.forEach(async ([queryStr, params]) => {
-      const { rows } = await pool.query(queryStr, params);
-      console.log(rows);
-    });
-    // console.log({ queryStr, params });
-    // const { rows } = await pool.query(`${queryStr}`, params);
-    // console.log(rows);
-    // const { rows } = await pool.query(
-    //   `UPDATE users SET email=$1 WHERE id=$2 returning *`,
-    //   ['jdwy215@me.com', 1]
-    // );
-    // console.log(rows);
-    // return response.rows;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-/*
-const updateTableData = async (table, database, fields, values, dbRowId) => {
-  setDatabase(database);
-  const newArr = [];
-  for (let index = 0; index < fields.length; index++) {
-    newArr.push(`${fields}=${values}`);
-  }
-
-  const pool = new pg.Pool(DB_CONNECTION);
-  try {
-    const response = await pool.query(
-      `UPDATE ${table} SET ${newArr.join(' ')} where id = ${dbRowId}`
-    );
-    console.log(response);
-    return response.rows;
-  } catch (error) {
-    console.log(error);
-  }
-};
-*/
-
-// https://blog.logrocket.com/setting-up-a-restful-api-with-node-js-and-postgresql-d96d6fc892d8/
-// failing because they need commas between them in set
-// const testUpdateTable = async (table = 'users', database = 'loggin', data) => {
-//   setDatabase(database);
-//   const pool = new pg.Pool(DB_CONNECTION);
-//   const [queryStr, params] = data;
-//   try {
-//     const { rows } = await pool.query(`${queryStr}`, params);
-//     console.log(rows);
-//   } catch (error) {
-//     console.error(error);
-//   }
-// };
-
-// testUpdateTable('users', 'loggin', [
-//   'UPDATE users SET email = $1, googleId = $2, imageUrl = $3, password = $4 WHERE id=$5 returning *',
-//   [
-//     'jdwy215@mec.com',
-//     '101268191319555494355',
-//     'https://lh3.googleusercontent.com/-5UxBs3uyzEY/AAAAAAAAAAI/AAAAAAAAAAA/BQOl6ImVh9k/photo.jpg',
-//     null,
-//     1,
-//   ],
-// ]);
 
 const tranformCellToSql = ({ key, value, id }) => {
   return [`"${key}" = $${1}`, [value, id]];
 };
 
-const updateTableDataV2 = async (table, database, allUpdatedCells) => {
+const updateTableData = async (table, database, allUpdatedCells) => {
   console.log(allUpdatedCells);
   setDatabase(database);
   const pool = new pg.Pool(DB_CONNECTION);
@@ -240,5 +156,4 @@ module.exports = {
   createTable,
   deleteTable,
   removeTableRow,
-  updateTableDataV2
 };

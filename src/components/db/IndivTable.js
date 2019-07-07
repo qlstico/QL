@@ -114,7 +114,7 @@ const IndivTable = () => {
 
   // Handling any changes in the grid's cells - takes the event to identify the target cell, the row
   // in the matrix the cell exists in, and the ID of the cell's parent row/obj as it exists in the db
-  const handleInputChange = (e, matrixRowIdx, dbEntryId, fieldName) => {
+  const handleInputChange = e => {
     // Destructures the 'name' and value of the event target for ease of access to them
     const { name, value } = e.target;
     // Destructures the rowIdx and colIdx from the string returned by the event.target.name
@@ -140,12 +140,6 @@ const IndivTable = () => {
   };
 
   const handleUpdateSubmit = async () => {
-    console.log('handleUpdateSubmit');
-    // await ipcRenderer.send(UPDATE_TABLE_DATA, [
-    //   selectedTable,
-    //   selectedDb,
-    //   tableMatrix,
-    // ]);
     await ipcRenderer.send(UPDATE_TABLE_DATA, [
       selectedTable,
       selectedDb,
@@ -188,7 +182,6 @@ const IndivTable = () => {
   //   removeEditRow();
   // });
 
-  console.log({ changesMade });
   return tableMatrix.length ? (
     <div className={classes.root}>
       <Paper className={classes.paper}>
