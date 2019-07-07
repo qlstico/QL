@@ -256,7 +256,7 @@ const IndivTable = () => {
                       }}
                       name={`${rowIdx}-${colIdx}`}
                     >
-                      {value.length > 20 ? (
+                      {value && value.length > 20 ? (
                         <span
                           style={{
                             whiteSpace: 'nowrap',
