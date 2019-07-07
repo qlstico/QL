@@ -9,31 +9,38 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import storage from 'electron-json-storage';
 import { ipcRenderer } from 'electron';
-const { CLOSE_SERVER } = require('../../constants/ipcNames');
+const {
+  CLOSE_SERVER,
+  GET_DB_NAMES,
+  GET_DB_NAMES_REPLY,
+} = require('../../constants/ipcNames');
 
 const useStyles = makeStyles(theme => ({
   root: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   control: {
-    padding: theme.spacing(2)
+    padding: theme.spacing(2),
   },
   card: {
     height: 150,
-    width: 1000
+    width: 1000,
   },
   pos: {
-    marginBottom: 0
-  }
+    marginBottom: 0,
+  },
 }));
 
 const ConnectPage = props => {
   const [spacing] = useState(2);
   const [userConfigs, setUserConfigs] = useState(null);
   const classes = useStyles();
-  const { setSelectedUser, serverStatus, setServerStatus } = useContext(
-    DbRelatedContext
-  );
+  const {
+    setSelectedUser,
+    serverStatus,
+    setServerStatus,
+    setAllDbNames,
+  } = useContext(DbRelatedContext);
 
   const existingConnections = () => {
     storage.get('connectionData', (error, data) => {
@@ -59,6 +66,14 @@ const ConnectPage = props => {
     storage.set('connectionData', connectionsAfterRemove, function(error) {
       if (error) throw error;
     });
+  };
+
+  const setAllDBNames = async () => {
+    await ipcRenderer.send(GET_DB_NAMES);
+    await ipcRenderer.on(GET_DB_NAMES_REPLY, (_, databaseNames) => {
+      setAllDbNames(databaseNames);
+    });
+    props.history.push('/dbs');
   };
 
   return (
@@ -94,10 +109,7 @@ const ConnectPage = props => {
                     >
                       Host: {connection.server}
                     </Typography>
-                    <Button
-                      onClick={() => props.history.push('/dbs')}
-                      size="large"
-                    >
+                    <Button onClick={setAllDBNames} size="large">
                       Connect
                     </Button>
                     <Button
