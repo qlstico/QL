@@ -6,13 +6,33 @@ const DB_CONNECTION = {
   password: '', // env var: PGPASSWORD
   host: 'localhost', // Server hosting the postgres database
   port: 5432, // env var: PGPORT
-  idleTimeoutMillis: 300, // how long a client is allowed to remain idle before being closed
+  idleTimeoutMillis: 300 // how long a client is allowed to remain idle before being closed
 };
 
 // Helper Functions
 const setDatabase = dbName => {
   DB_CONNECTION.database = dbName;
 };
+
+const tranformRowToSql = (id, row) => {
+  const valuesArr = [];
+  return [
+    row
+      .filter(
+        ({ key }) => key !== 'createdAt' && key !== 'updatedAt' //&& !/\w+id$/i.test(key)
+      )
+      .map(({ key, value }, idx) => {
+        // removes these two keys from the sql
+        // makes sure we are not converting ints to strings
+        valuesArr.push(value);
+        // postgresSQL is case sensitive so if we use camel case must wrap key in ""
+        return `"${key}" = $${idx + 1}`;
+      })
+      .join(', '),
+    valuesArr.concat(id)
+  ];
+};
+
 
 const getAllDbs = async () => {
   const pool = new pg.Pool(DB_CONNECTION);
@@ -66,6 +86,23 @@ const createTable = async (selectedDb, newTableName) => {
   }
 };
 
+const deleteTable = async (selectedDb, selectedTableName) => {
+  setDatabase(selectedDb);
+  const pool = new pg.Pool(DB_CONNECTION);
+  try {
+    await pool.query(`DROP TABLE ${selectedTableName}`);
+
+    const response = await pool.query(
+      `SELECT table_name FROM  information_schema.tables
+      WHERE table_type = 'BASE TABLE'
+      AND table_schema NOT IN ('pg_catalog', 'information_schema', 'management','postgraphile_watch') and table_name != '_Migration'`
+    );
+    return response.rows.map(({ table_name }) => table_name);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const getTableData = async (table, database) => {
   setDatabase(database);
   const pool = new pg.Pool(DB_CONNECTION);
@@ -88,6 +125,7 @@ const removeTableRow = async (table, database, id) => {
   }
 };
 
+
 const tranformCellToSql = ({ key, value, id }) => {
   return [`"${key}" = $${1}`, [value, id]];
 };
@@ -102,7 +140,7 @@ const updateTableData = async (table, database, allUpdatedCells) => {
   }, []);
   const queryArr = keysAndParamsNestedArr.map(([updateStr, values]) => [
     `UPDATE ${table} SET ${updateStr} WHERE id=$${values.length} returning *`,
-    values,
+    values
   ]);
   try {
     await queryArr.forEach(async ([queryStr, params]) => {
@@ -120,5 +158,6 @@ module.exports = {
   getTableData,
   updateTableData,
   createTable,
+  deleteTable,
   removeTableRow,
 };
