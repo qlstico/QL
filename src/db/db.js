@@ -8,7 +8,7 @@ const DB_CONNECTION = {
   password: '', // env var: PGPASSWORD
   host: 'localhost', // Server hosting the postgres database
   port: 5432, // env var: PGPORT
-  idleTimeoutMillis: 300, // how long a client is allowed to remain idle before being closed
+  idleTimeoutMillis: 300 // how long a client is allowed to remain idle before being closed
 };
 
 // Helper Functions
@@ -31,7 +31,7 @@ const tranformRowToSql = (id, row) => {
         return `"${key}" = $${idx + 1}`;
       })
       .join(', '),
-    valuesArr.concat(id),
+    valuesArr.concat(id)
   ];
 };
 
@@ -87,6 +87,23 @@ const createTable = async (selectedDb, newTableName) => {
   }
 };
 
+const deleteTable = async (selectedDb, selectedTableName) => {
+  setDatabase(selectedDb);
+  const pool = new pg.Pool(DB_CONNECTION);
+  try {
+    await pool.query(`DROP TABLE ${selectedTableName}`);
+
+    const response = await pool.query(
+      `SELECT table_name FROM  information_schema.tables
+      WHERE table_type = 'BASE TABLE'
+      AND table_schema NOT IN ('pg_catalog', 'information_schema', 'management','postgraphile_watch') and table_name != '_Migration'`
+    );
+    return response.rows.map(({ table_name }) => table_name);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const getTableData = async (table, database) => {
   setDatabase(database);
   const pool = new pg.Pool(DB_CONNECTION);
@@ -115,7 +132,7 @@ const updateTableData = async (table, database, data) => {
   const pool = new pg.Pool(DB_CONNECTION);
   const queryArr = obj.map(([updateStr, values]) => [
     `UPDATE ${table} SET ${updateStr} WHERE id=$${values.length} returning *`,
-    values,
+    values
   ]);
   // console.log(...queryArr.map(([queryStr, params]) => ({ queryStr, params })));
   // const [queryStr, params] = queryArr[0];
@@ -199,7 +216,7 @@ const updateTableDataV2 = async (table, database, allUpdatedCells) => {
   console.log({ keysAndParamsNestedArr });
   const queryArr = keysAndParamsNestedArr.map(([updateStr, values]) => [
     `UPDATE ${table} SET ${updateStr} WHERE id=$${values.length} returning *`,
-    values,
+    values
   ]);
   console.log(
     'updateTableDataV2',
@@ -221,6 +238,7 @@ module.exports = {
   getTableData,
   updateTableData,
   createTable,
+  deleteTable,
   removeTableRow,
-  updateTableDataV2,
+  updateTableDataV2
 };

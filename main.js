@@ -12,6 +12,7 @@ const {
   updateTableData,
   createTable,
   updateTableDataV2,
+  deleteTable
 } = require('./src/db/db');
 const express = require('express');
 const { postgraphile } = require('postgraphile');
@@ -34,6 +35,8 @@ const {
   ADD_TABLE_ROW,
   GET_OS_USER,
   GET_OS_USER_REPLY,
+  DELETE_TABLE,
+  DELETE_TABLE_REPLY
 } = require('./src/constants/ipcNames');
 const enableDestroy = require('server-destroy');
 
@@ -59,7 +62,7 @@ function setupExpress(databaseName, username = '', password) {
   const pglConfig = {
     watchPg: true,
     graphiql: true,
-    enhanceGraphiql: true,
+    enhanceGraphiql: true
   };
   // console.log(database);
   // setup middleware for creating our graphql api
@@ -104,8 +107,8 @@ function createWindow() {
     height: 768,
     show: false,
     webPreferences: {
-      nodeIntegration: true,
-    },
+      nodeIntegration: true
+    }
   });
 
   // and load the index.html of the app.
@@ -116,13 +119,13 @@ function createWindow() {
       protocol: 'http:',
       host: 'localhost:8080',
       pathname: 'index.html',
-      slashes: true,
+      slashes: true
     });
   } else {
     indexPath = url.format({
       protocol: 'file:',
       pathname: path.join(__dirname, 'dist', 'index.html'),
-      slashes: true,
+      slashes: true
     });
   }
 
@@ -231,6 +234,16 @@ ipcMain.on(UPDATE_TABLE_DATA, async (_, args) => {
 ipcMain.on(CREATE_TABLE, async (event, args) => {
   const newTableAddition = await createTable(...args);
   event.reply(CREATE_TABLE_REPLY, newTableAddition);
+});
+
+/**
+ * called from ./components/db/allTables.js
+ * when the user submits request for deleting table
+ */
+// args === [selectedDb, selectedTableName]
+ipcMain.on(DELETE_TABLE, async (event, args) => {
+  const tablesAfterDeletion = await deleteTable(...args);
+  event.reply(DELETE_TABLE_REPLY, tablesAfterDeletion);
 });
 
 // args === [selectedTable, selectedDb, selectedRowId]
