@@ -15,33 +15,33 @@ import { ipcRenderer } from 'electron';
 const {
   UPDATE_TABLE_DATA,
   REMOVE_TABLE_ROW,
-  ADD_TABLE_ROW,
+  ADD_TABLE_ROW
 } = require('../../constants/ipcNames');
 
 const useStyles = makeStyles(theme => ({
   root: {
-    width: '100%',
+    width: '100%'
   },
   paper: {
     marginTop: theme.spacing(3),
     width: '100%',
     overflowX: 'auto',
-    marginBottom: theme.spacing(2),
+    marginBottom: theme.spacing(2)
   },
   table: {
-    minWidth: 650,
+    minWidth: 650
   },
   textField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
-    width: 200,
+    width: 200
   },
   selectedRow: {
-    background: 'grey',
+    background: 'grey'
   },
   editRow: {
-    background: 'yellow',
-  },
+    background: 'yellow'
+  }
 }));
 
 const IndivTable = () => {
@@ -64,7 +64,7 @@ const IndivTable = () => {
   // to compare changes against the context provider's original version
   const [tableMatrix, setTableMatrix] = useState([]);
 
-  // Will hopefully be able to independently track any changes made to send a smaller
+  // Stateful field to independently track any changes made to send a smaller
   // load of only pertinent information to the server to make the requested changes
   const [changesMade, setChangesMade] = useState([]);
 
@@ -93,15 +93,20 @@ const IndivTable = () => {
     // get ahold of this to properly set our state an kick off rending of the grid table.
   }, [selectedTableData]);
 
+  // Handles input changes for grid cells into the changesMade state field
   const recordCellChangesMade = cell => {
+    // checking if we already have a record of requested change in the changesMade
+    // state pertaining to this entry
     const inChangeMadeArr = changesMade.some(
-      cellData => cellData.id === cell.id
+      cellData => cellData.id === cell.id && cellData.key === cell.key
     );
 
     setChangesMade(prevVal => {
       if (inChangeMadeArr) {
         return prevVal.map(cellData => {
-          if (cellData.id === cell.id) {
+          // Checks if this current change already exists by ID and key in order to
+          // allow multiple edits of the same entry at the same time.
+          if (cellData.id === cell.id && cellData.key === cell.key) {
             return cell;
           }
           return cellData;
@@ -132,18 +137,13 @@ const IndivTable = () => {
       prevMatrix[rowIdx][colIdx].value = value;
       return prevMatrix;
     });
-
-    // setChangesMade(prevChanges => {
-    //   prevChanges.push({ id: dbEntryId, [fieldName]: value });
-    //   return prevChanges;
-    // });
   };
 
   const handleUpdateSubmit = async () => {
     await ipcRenderer.send(UPDATE_TABLE_DATA, [
       selectedTable,
       selectedDb,
-      changesMade,
+      changesMade
     ]);
   };
 
@@ -152,7 +152,7 @@ const IndivTable = () => {
       ipcRenderer.send(REMOVE_TABLE_ROW, [
         selectedTable,
         selectedDb,
-        selectedRow,
+        selectedRow
       ]);
       setTableMatrix(prevMatrix =>
         prevMatrix.filter(row => row[0].id !== selectedRow)
@@ -181,11 +181,6 @@ const IndivTable = () => {
     setSelectedRow(false);
   };
 
-  // How to click on anything but the editable row to exit edit mode...
-  // window.addEventListener('click', function() {
-  //   removeEditRow();
-  // });
-  console.log({ selectedTableData });
   return tableMatrix.length ? (
     <div className={classes.root}>
       <Paper className={classes.paper}>
@@ -225,7 +220,7 @@ const IndivTable = () => {
                           whiteSpace: 'nowrap',
                           overflow: 'hidden',
                           width: 85, //`${Number.isInteger(value) ? 30 : 130}`
-                          display: 'block',
+                          display: 'block'
                         }}
                       >
                         <TextField
@@ -264,7 +259,7 @@ const IndivTable = () => {
                             whiteSpace: 'nowrap',
                             overflow: 'hidden',
                             width: '150px',
-                            display: 'block',
+                            display: 'block'
                           }}
                         >{`${value}...`}</span> //styling so that the cells dont display massive amounts of text by default
                       ) : (
