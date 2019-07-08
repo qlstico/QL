@@ -157,7 +157,7 @@ const AllDBs = props => {
         color="inherit"
         id="menuButton"
       >
-        Add Database
+        Add A Database
       </Button>
       {currentlySelected && (
         <Button
