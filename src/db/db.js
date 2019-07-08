@@ -59,7 +59,23 @@ const getAllDbs = async () => {
 const createDatabase = async databaseName => {
   const pool = new pg.Pool(DB_CONNECTION);
   try {
-    await pool.query(`CREATE DATABASE ${databaseName}`);
+    await pool.query(`CREATE DATABASE "${databaseName}"`);
+    const response = await pool.query(
+      'SELECT datname FROM pg_database WHERE datistemplate = false'
+    );
+    const arrayOfDbNames = response.rows.map(({ datname }) => {
+      return datname;
+    });
+    return arrayOfDbNames;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const deleteDatabase = async databaseName => {
+  const pool = new pg.Pool(DB_CONNECTION);
+  try {
+    await pool.query(`DROP DATABASE "${databaseName}"`);
     const response = await pool.query(
       'SELECT datname FROM pg_database WHERE datistemplate = false'
     );
@@ -183,6 +199,6 @@ module.exports = {
   deleteTable,
   removeTableRow,
   createDatabase,
-  // updateTableDataV2,
   setUserProvidedDbConnection,
+  deleteDatabase
 };
