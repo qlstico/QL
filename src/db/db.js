@@ -1,12 +1,12 @@
-const pg = require("pg");
+const pg = require('pg');
 
 const DB_CONNECTION = {
-  user: "", // env var: PGUSER
-  database: "", // env var: PGDATABASE
-  password: "", // env var: PGPASSWORD
-  host: "localhost", // Server hosting the postgres database
+  user: '', // env var: PGUSER
+  database: '', // env var: PGDATABASE
+  password: '', // env var: PGPASSWORD
+  host: 'localhost', // Server hosting the postgres database
   port: 5432, // env var: PGPORT
-  idleTimeoutMillis: 300 // how long a client is allowed to remain idle before being closed
+  idleTimeoutMillis: 300, // how long a client is allowed to remain idle before being closed
 };
 
 // Helper Functions
@@ -29,16 +29,15 @@ const tranformRowToSql = (id, row) => {
         return `"${key}" = $${idx + 1}`;
       })
       .join(', '),
-    valuesArr.concat(id)
+    valuesArr.concat(id),
   ];
 };
-
 
 const getAllDbs = async () => {
   const pool = new pg.Pool(DB_CONNECTION);
   try {
     const response = await pool.query(
-      "SELECT datname FROM pg_database WHERE datistemplate = false"
+      'SELECT datname FROM pg_database WHERE datistemplate = false'
     );
     const arrayOfDbNames = response.rows.map(({ datname }) => {
       return datname;
@@ -54,7 +53,7 @@ const createDatabase = async databaseName => {
   try {
     await pool.query(`CREATE DATABASE ${databaseName}`);
     const response = await pool.query(
-      "SELECT datname FROM pg_database WHERE datistemplate = false"
+      'SELECT datname FROM pg_database WHERE datistemplate = false'
     );
     const arrayOfDbNames = response.rows.map(({ datname }) => {
       return datname;
@@ -123,7 +122,7 @@ const getTableData = async (table, database) => {
   setDatabase(database);
   const pool = new pg.Pool(DB_CONNECTION);
   try {
-    const response = await pool.query(`SELECT * from ${table}`);
+    const response = await pool.query(`SELECT * from "${table}"`);
     return response.rows;
   } catch (error) {
     console.log(error);
@@ -134,13 +133,12 @@ const removeTableRow = async (table, database, id) => {
   setDatabase(database);
   const pool = new pg.Pool(DB_CONNECTION);
   try {
-    const response = await pool.query(`DELETE FROM ${table} where id=${id}`);
+    const response = await pool.query(`DELETE FROM "${table}" where id=${id}`);
     return response.rows;
   } catch (error) {
     console.error(error);
   }
 };
-
 
 const tranformCellToSql = ({ key, value, id }) => {
   return [`"${key}" = $${1}`, [value, id]];
@@ -155,8 +153,8 @@ const updateTableData = async (table, database, allUpdatedCells) => {
     return accum.concat([tranformCellToSql(cell)]);
   }, []);
   const queryArr = keysAndParamsNestedArr.map(([updateStr, values]) => [
-    `UPDATE ${table} SET ${updateStr} WHERE id=$${values.length} returning *`,
-    values
+    `UPDATE "${table}" SET ${updateStr} WHERE id=$${values.length} returning *`,
+    values,
   ]);
   try {
     await queryArr.forEach(async ([queryStr, params]) => {
@@ -176,6 +174,6 @@ module.exports = {
   createTable,
   deleteTable,
   removeTableRow,
-  createDatabase
+  createDatabase,
   // updateTableDataV2,
 };
