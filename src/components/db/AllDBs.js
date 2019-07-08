@@ -134,9 +134,23 @@ const AllDBs = props => {
         aria-haspopup='true'
         onClick={handleProfileMenuOpen}
         color='inherit'
+        id='menuButton'
       >
         Add Database
       </Button>
+      {currentlySelected && (
+        <Button
+          variant='contained'
+          type='button'
+          text='white'
+          size='small'
+          style={{ background: "#FF715B" }}
+          onClick={() => console.log("PUTA MADRE")}
+          id='menuButton'
+        >
+          Remove Database
+        </Button>
+      )}
       <Grid container className={classes.root} spacing={3}>
         <Grid item xs={12}>
           <Grid container justify='center' spacing={spacing}>

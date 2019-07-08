@@ -101,6 +101,7 @@ const AllTables = props => {
   const isMenuOpen = Boolean(anchorEl);
 
   function handleProfileMenuOpen(event) {
+    setCurrentlySelected(false);
     setAnchorEl(event.currentTarget);
   }
 
@@ -156,6 +157,7 @@ const AllTables = props => {
         aria-haspopup='true'
         onClick={handleProfileMenuOpen}
         color='inherit'
+        id='menuButton'
       >
         Add A Table
       </Button>
@@ -167,7 +169,7 @@ const AllTables = props => {
           size='small'
           style={{ background: "#FF715B" }}
           onClick={() => deleteTable(selectedDb, currentlySelected)}
-          id='removeButton'
+          id='menuButton'
         >
           Remove Table
         </Button>
