@@ -15,33 +15,34 @@ import { ipcRenderer } from 'electron';
 const {
   UPDATE_TABLE_DATA,
   REMOVE_TABLE_ROW,
-  ADD_TABLE_ROW
+  ADD_TABLE_ROW,
+  DATABASE_ERROR,
 } = require('../../constants/ipcNames');
 
 const useStyles = makeStyles(theme => ({
   root: {
-    width: '100%'
+    width: '100%',
   },
   paper: {
     marginTop: theme.spacing(3),
     width: '100%',
     overflowX: 'auto',
-    marginBottom: theme.spacing(2)
+    marginBottom: theme.spacing(2),
   },
   table: {
-    minWidth: 650
+    minWidth: 650,
   },
   textField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
-    width: 200
+    width: 200,
   },
   selectedRow: {
-    background: 'grey'
+    background: 'grey',
   },
   editRow: {
-    background: 'yellow'
-  }
+    background: 'yellow',
+  },
 }));
 
 const IndivTable = () => {
@@ -141,8 +142,11 @@ const IndivTable = () => {
     await ipcRenderer.send(UPDATE_TABLE_DATA, [
       selectedTable,
       selectedDb,
-      changesMade
+      changesMade,
     ]);
+    await ipcRenderer.on(DATABASE_ERROR, (event, errorMessage) => {
+      console.log({ errorMessage });
+    });
   };
 
   const handleRemoveRow = () => {
@@ -150,7 +154,7 @@ const IndivTable = () => {
       ipcRenderer.send(REMOVE_TABLE_ROW, [
         selectedTable,
         selectedDb,
-        selectedRow
+        selectedRow,
       ]);
       setTableMatrix(prevMatrix =>
         prevMatrix.filter(row => row[0].id !== selectedRow)
@@ -218,7 +222,7 @@ const IndivTable = () => {
                           whiteSpace: 'nowrap',
                           overflow: 'hidden',
                           width: 85, //`${Number.isInteger(value) ? 30 : 130}`
-                          display: 'block'
+                          display: 'block',
                         }}
                       >
                         <TextField
@@ -257,7 +261,7 @@ const IndivTable = () => {
                             whiteSpace: 'nowrap',
                             overflow: 'hidden',
                             width: '150px',
-                            display: 'block'
+                            display: 'block',
                           }}
                         >{`${value}...`}</span> //styling so that the cells dont display massive amounts of text by default
                       ) : (
