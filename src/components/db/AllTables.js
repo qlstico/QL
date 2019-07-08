@@ -10,6 +10,8 @@ import { withRouter } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { ipcRenderer } from 'electron';
 import { Button, TextField } from '@material-ui/core/';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const {
   GET_TABLE_CONTENTS,
   GET_TABLE_CONTENTS_REPLY,
@@ -18,6 +20,16 @@ const {
   DELETE_TABLE,
   DELETE_TABLE_REPLY
 } = require('../../constants/ipcNames');
+
+const notifyRemoved = (parent, deletedItem) =>
+  toast(`✌️✌️Removed "${deletedItem}" from ${parent}!`, {
+    position: 'top-center',
+    autoClose: 3000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true
+  });
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -91,6 +103,7 @@ const AllTables = props => {
       });
       setCurrentlySelected(false);
     }
+    notifyRemoved(currentDb, selectedTableName);
   };
 
   // Send provider a true value to kick on server

@@ -113,7 +113,7 @@ const deleteTable = async (selectedDb, selectedTableName) => {
   setDatabase(selectedDb);
   const pool = new pg.Pool(DB_CONNECTION);
   try {
-    await pool.query(`DROP TABLE ${selectedTableName}`);
+    await pool.query(`DROP TABLE "${selectedTableName}"`);
 
     const response = await pool.query(
       `SELECT table_name FROM  information_schema.tables

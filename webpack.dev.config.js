@@ -16,7 +16,10 @@ module.exports = {
           { loader: 'css-loader' },
           { loader: 'postcss-loader' }
         ],
-        include: defaultInclude
+        include: [
+          defaultInclude,
+          path.resolve(__dirname, 'node_modules/react-toastify')
+        ]
       },
       {
         test: /\.jsx?$/,
