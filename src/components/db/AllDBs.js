@@ -20,7 +20,9 @@ const {
   GET_TABLE_NAMES_REPLY,
   CLOSE_SERVER,
   CREATE_DATABASE,
-  CREATE_DATABASE_REPLY
+  CREATE_DATABASE_REPLY,
+  DELETE_DATABASE,
+  DELETE_DATABASE_REPLY
 } = require('../../constants/ipcNames');
 
 const useStyles = makeStyles(theme => ({
@@ -90,11 +92,24 @@ const AllDBs = props => {
     });
     props.history.push('/tables'); // finally push onto the next component
   };
+
+  const deleteDb = async selectedDbName => {
+    if (selectedDbName) {
+      await ipcRenderer.send(DELETE_DATABASE, selectedDbName);
+      await ipcRenderer.on(DELETE_DATABASE_REPLY, (event, updatedDatabases) => {
+        setAllDbNames(updatedDatabases);
+      });
+      setCurrentlySelected(false);
+      notifyRemoved('your PG databases', selectedDbName);
+    }
+  };
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const menuId = 'primary-search-account-menu';
   const isMenuOpen = Boolean(anchorEl);
 
   function handleProfileMenuOpen(event) {
+    setCurrentlySelected(false);
     setAnchorEl(event.currentTarget);
   }
 
@@ -139,20 +154,20 @@ const AllDBs = props => {
         aria-controls={menuId}
         aria-haspopup="true"
         onClick={handleProfileMenuOpen}
-        color='inherit'
-        id='menuButton'
+        color="inherit"
+        id="menuButton"
       >
         Add Database
       </Button>
       {currentlySelected && (
         <Button
-          variant='contained'
-          type='button'
-          text='white'
-          size='small'
-          style={{ background: "#FF715B" }}
-          onClick={() => console.log("PUTA MADRE")}
-          id='menuButton'
+          variant="contained"
+          type="button"
+          text="white"
+          size="small"
+          style={{ background: '#FF715B' }}
+          onClick={() => deleteDb(currentlySelected)}
+          id="menuButton"
         >
           Remove Database
         </Button>

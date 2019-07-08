@@ -14,7 +14,8 @@ const {
   removeTableRow,
   deleteTable,
   createDatabase,
-  setUserProvidedDbConnection
+  setUserProvidedDbConnection,
+  deleteDatabase
 } = require('./src/db/db');
 const express = require('express');
 const { postgraphile } = require('postgraphile');
@@ -41,7 +42,9 @@ const {
   CREATE_DATABASE_REPLY,
   DELETE_TABLE,
   DELETE_TABLE_REPLY,
-  SET_USER_DB_CONNECTION
+  SET_USER_DB_CONNECTION,
+  DELETE_DATABASE,
+  DELETE_DATABASE_REPLY
 } = require('./src/constants/ipcNames');
 const enableDestroy = require('server-destroy');
 
@@ -188,11 +191,28 @@ ipcMain.on(GET_DB_NAMES, async event => {
   event.reply(GET_DB_NAMES_REPLY, dbNames);
 });
 
+/**
+ * called from ./components/db/AllDBs.js
+ * when user clicks database, sends message to trigger creating a db
+ * and replies with updated array of all db names after dletion
+ */
 ipcMain.on(CREATE_DATABASE, async (event, databaseName) => {
-  const createDb = await createDatabase(databaseName);
+  const existingDatabases = await createDatabase(databaseName);
   // reply with database names from query
-  event.reply(CREATE_DATABASE_REPLY, createDb);
+  event.reply(CREATE_DATABASE_REPLY, existingDatabases);
 });
+
+/**
+ * called from ./components/db/AllDBs.js
+ * when user clicks database, sends message to trigger delete a db
+ * and replies with updated array of all db names after dletion
+ */
+ipcMain.on(DELETE_DATABASE, async (event, databaseName) => {
+  const existingDatabases = await deleteDatabase(databaseName);
+  // reply with database names from query
+  event.reply(DELETE_DATABASE_REPLY, existingDatabases);
+});
+
 /**
  * called from ./components/db/AllDBs.js
  * when user clicks database, sends message to trigger getting the table data
