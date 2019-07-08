@@ -1,27 +1,30 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { DisplayCard, DbRelatedContext } from '../index';
-import Grid from '@material-ui/core/Grid';
-import { makeStyles } from '@material-ui/core/styles';
-import storage from 'electron-json-storage';
-import { ipcRenderer } from 'electron';
-import Button from '@material-ui/core/Button';
-import { withRouter } from 'react-router-dom';
+import React, { useState, useEffect, useContext } from "react";
+import { DisplayCard, DbRelatedContext } from "../index";
+import Grid from "@material-ui/core/Grid";
+import { makeStyles } from "@material-ui/core/styles";
+import storage from "electron-json-storage";
+import { ipcRenderer } from "electron";
+import { Button, TextField } from "@material-ui/core/";
+import { withRouter } from "react-router-dom";
+
 const {
   GET_TABLE_NAMES,
   GET_TABLE_NAMES_REPLY,
   CLOSE_SERVER,
-} = require('../../constants/ipcNames');
+  CREATE_DATABASE,
+  CREATE_DATABASE_REPLY
+} = require("../../constants/ipcNames");
 
 const useStyles = makeStyles(theme => ({
   root: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   control: {
-    padding: theme.spacing(2),
+    padding: theme.spacing(2)
   },
   highlightSelected: {
-    background: 'grey',
-  },
+    background: "grey"
+  }
 }));
 
 const AllDBs = props => {
@@ -36,10 +39,12 @@ const AllDBs = props => {
     serverStatus,
     setServerStatus,
     allDbNames,
+    setAllDbNames
   } = useContext(DbRelatedContext);
 
   // Setting up initial state values for rendering/interacting with components
   const [currentlySelected, setCurrentlySelected] = useState(false);
+  const [dbToAdd, setDbToAdd] = useState(null);
   // Indirectly re-sets state to be the clicked on DB
   const enableSelected = dbName => {
     setCurrentlySelected(dbName);
@@ -54,6 +59,17 @@ const AllDBs = props => {
     }
   }, [serverStatus]);
 
+  const handleInputChange = e => {
+    const { name, value } = e.target;
+    setDbToAdd(value);
+  };
+
+  const createNewDatabase = async newDbName => {
+    await ipcRenderer.send(CREATE_DATABASE, newDbName);
+    await ipcRenderer.on(CREATE_DATABASE_REPLY, (event, updatedDatabases) => {
+      setAllDbNames(updatedDatabases);
+    });
+  };
   // when user clicks database, sends message to trigger getting the table data
   // set context with table names
   const selectDb = async dbname => {
@@ -63,7 +79,7 @@ const AllDBs = props => {
     await ipcRenderer.on(GET_TABLE_NAMES_REPLY, (_, tableNames) => {
       setTablesContext(tableNames);
     });
-    props.history.push('/tables'); // finally push onto the next component
+    props.history.push("/tables"); // finally push onto the next component
   };
 
   return (
@@ -71,13 +87,13 @@ const AllDBs = props => {
       <h1>Databases: </h1>
       <Grid container className={classes.root} spacing={3}>
         <Grid item xs={12}>
-          <Grid container justify="center" spacing={spacing}>
+          <Grid container justify='center' spacing={spacing}>
             {allDbNames &&
               allDbNames.map(db => (
                 <Grid
                   key={db}
                   className={
-                    currentlySelected === db ? classes.highlightSelected : ''
+                    currentlySelected === db ? classes.highlightSelected : ""
                   }
                   item
                   onClick={() => enableSelected(db)}
@@ -86,29 +102,26 @@ const AllDBs = props => {
                   <DisplayCard
                     className={classes.control}
                     name={db}
-                    type="db"
+                    type='db'
                   />
                 </Grid>
               ))}
           </Grid>
         </Grid>
       </Grid>
-      {/* <Button
-        variant="contained"
-        type="button"
-        color="inherit"
-        onClick={() => console.table(tableMatrix)}
+      <TextField
+        label='Database Name'
+        name='newDbName'
+        onChange={handleInputChange}
+      />
+      <Button
+        variant='contained'
+        type='button'
+        color='inherit'
+        onClick={() => createNewDatabase(dbToAdd)}
       >
         Add Database
       </Button>
-      <Button
-        variant="contained"
-        type="button"
-        color="inherit"
-        onClick={() => console.table(tableMatrix)}
-      >
-        Remove Database
-      </Button> */}
     </div>
   );
 };

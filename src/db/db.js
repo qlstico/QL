@@ -1,10 +1,10 @@
-const pg = require('pg');
+const pg = require("pg");
 
 const DB_CONNECTION = {
-  user: '', // env var: PGUSER
-  database: '', // env var: PGDATABASE
-  password: '', // env var: PGPASSWORD
-  host: 'localhost', // Server hosting the postgres database
+  user: "", // env var: PGUSER
+  database: "", // env var: PGDATABASE
+  password: "", // env var: PGPASSWORD
+  host: "localhost", // Server hosting the postgres database
   port: 5432, // env var: PGPORT
   idleTimeoutMillis: 300 // how long a client is allowed to remain idle before being closed
 };
@@ -38,7 +38,23 @@ const getAllDbs = async () => {
   const pool = new pg.Pool(DB_CONNECTION);
   try {
     const response = await pool.query(
-      'SELECT datname FROM pg_database WHERE datistemplate = false'
+      "SELECT datname FROM pg_database WHERE datistemplate = false"
+    );
+    const arrayOfDbNames = response.rows.map(({ datname }) => {
+      return datname;
+    });
+    return arrayOfDbNames;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const createDatabase = async databaseName => {
+  const pool = new pg.Pool(DB_CONNECTION);
+  try {
+    await pool.query(`CREATE DATABASE ${databaseName}`);
+    const response = await pool.query(
+      "SELECT datname FROM pg_database WHERE datistemplate = false"
     );
     const arrayOfDbNames = response.rows.map(({ datname }) => {
       return datname;
@@ -160,4 +176,6 @@ module.exports = {
   createTable,
   deleteTable,
   removeTableRow,
+  createDatabase
+  // updateTableDataV2,
 };
