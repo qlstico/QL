@@ -21,7 +21,7 @@ export const notifyAdded = (parent, addedItem) =>
 
 export const notifyError = errorMessage =>
   toast.error(
-    `Oh no! We've encountered the following error: "${errorMessage}"`,
+    `😭😭Oh no! We've encountered the following error: "${errorMessage}"`,
     {
       position: 'top-center',
       autoClose: 3000,
