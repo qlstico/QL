@@ -154,6 +154,10 @@ const IndivTable = () => {
         selectedDb,
         selectedRow,
       ]);
+      setTableMatrix(prevMatrix =>
+        prevMatrix.filter(row => row[0].id !== selectedRow)
+      );
+      setSelectedRow(false);
     }
   };
 
@@ -252,7 +256,7 @@ const IndivTable = () => {
                       }}
                       name={`${rowIdx}-${colIdx}`}
                     >
-                      {value.length > 20 ? (
+                      {value && value.length > 20 ? (
                         <span
                           style={{
                             whiteSpace: 'nowrap',

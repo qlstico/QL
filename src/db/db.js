@@ -14,6 +14,26 @@ const setDatabase = dbName => {
   DB_CONNECTION.database = dbName;
 };
 
+const tranformRowToSql = (id, row) => {
+  const valuesArr = [];
+  return [
+    row
+      .filter(
+        ({ key }) => key !== 'createdAt' && key !== 'updatedAt' //&& !/\w+id$/i.test(key)
+      )
+      .map(({ key, value }, idx) => {
+        // removes these two keys from the sql
+        // makes sure we are not converting ints to strings
+        valuesArr.push(value);
+        // postgresSQL is case sensitive so if we use camel case must wrap key in ""
+        return `"${key}" = $${idx + 1}`;
+      })
+      .join(', '),
+    valuesArr.concat(id)
+  ];
+};
+
+
 const getAllDbs = async () => {
   const pool = new pg.Pool(DB_CONNECTION);
   try {
@@ -82,6 +102,23 @@ const createTable = async (selectedDb, newTableName) => {
   }
 };
 
+const deleteTable = async (selectedDb, selectedTableName) => {
+  setDatabase(selectedDb);
+  const pool = new pg.Pool(DB_CONNECTION);
+  try {
+    await pool.query(`DROP TABLE ${selectedTableName}`);
+
+    const response = await pool.query(
+      `SELECT table_name FROM  information_schema.tables
+      WHERE table_type = 'BASE TABLE'
+      AND table_schema NOT IN ('pg_catalog', 'information_schema', 'management','postgraphile_watch') and table_name != '_Migration'`
+    );
+    return response.rows.map(({ table_name }) => table_name);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const getTableData = async (table, database) => {
   setDatabase(database);
   const pool = new pg.Pool(DB_CONNECTION);
@@ -93,7 +130,17 @@ const getTableData = async (table, database) => {
   }
 };
 
-const removeTableRow = (table, database, id) => {};
+const removeTableRow = async (table, database, id) => {
+  setDatabase(database);
+  const pool = new pg.Pool(DB_CONNECTION);
+  try {
+    const response = await pool.query(`DELETE FROM ${table} where id=${id}`);
+    return response.rows;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 
 const tranformCellToSql = ({ key, value, id }) => {
   return [`"${key}" = $${1}`, [value, id]];
@@ -107,17 +154,12 @@ const updateTableData = async (table, database, allUpdatedCells) => {
     // get key from cell and create object with key of id and value of field(ie key)=value
     return accum.concat([tranformCellToSql(cell)]);
   }, []);
-  console.log({ keysAndParamsNestedArr });
   const queryArr = keysAndParamsNestedArr.map(([updateStr, values]) => [
     `UPDATE ${table} SET ${updateStr} WHERE id=$${values.length} returning *`,
     values
   ]);
-  console.log(
-    "updateTableDataV2",
-    ...queryArr.map(([queryStr, params]) => ({ queryStr, params }))
-  );
   try {
-    queryArr.forEach(async ([queryStr, params]) => {
+    await queryArr.forEach(async ([queryStr, params]) => {
       const { rows } = await pool.query(queryStr, params);
       console.log(rows);
     });
@@ -132,6 +174,7 @@ module.exports = {
   getTableData,
   updateTableData,
   createTable,
+  deleteTable,
   removeTableRow,
   createDatabase
   // updateTableDataV2,

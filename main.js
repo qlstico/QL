@@ -11,10 +11,12 @@ const {
   getTableData,
   updateTableData,
   createTable,
-  createDatabase
-} = require("./src/db/db");
-const express = require("express");
-const { postgraphile } = require("postgraphile");
+  removeTableRow,
+  deleteTable,
+  createDatabase,
+} = require('./src/db/db');
+const express = require('express');
+const { postgraphile } = require('postgraphile');
 // need below for visualizer
 const { express: voyagerMiddleware } = require("graphql-voyager/middleware");
 const { closeServer } = require("./src/server/util");
@@ -35,9 +37,12 @@ const {
   GET_OS_USER,
   GET_OS_USER_REPLY,
   CREATE_DATABASE,
-  CREATE_DATABASE_REPLY
-} = require("./src/constants/ipcNames");
-const enableDestroy = require("server-destroy");
+  CREATE_DATABASE_REPLY,
+  DELETE_TABLE,
+  DELETE_TABLE_REPLY
+} = require('./src/constants/ipcNames');
+const enableDestroy = require('server-destroy');
+
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -115,15 +120,15 @@ function createWindow() {
 
   if (dev && process.argv.indexOf("--noDevServer") === -1) {
     indexPath = url.format({
-      protocol: "http:",
-      host: "localhost:8080",
-      pathname: "index.html",
+      protocol: 'http:',
+      host: 'localhost:8080',
+      pathname: 'index.html',
       slashes: true
     });
   } else {
     indexPath = url.format({
-      protocol: "file:",
-      pathname: path.join(__dirname, "dist", "index.html"),
+      protocol: 'file:',
+      pathname: path.join(__dirname, 'dist', 'index.html'),
       slashes: true
     });
   }
@@ -239,9 +244,20 @@ ipcMain.on(CREATE_TABLE, async (event, args) => {
   event.reply(CREATE_TABLE_REPLY, newTableAddition);
 });
 
+/**
+ * called from ./components/db/allTables.js
+ * when the user submits request for deleting table
+ */
+// args === [selectedDb, selectedTableName]
+ipcMain.on(DELETE_TABLE, async (event, args) => {
+  const tablesAfterDeletion = await deleteTable(...args);
+  event.reply(DELETE_TABLE_REPLY, tablesAfterDeletion);
+});
+
 // args === [selectedTable, selectedDb, selectedRowId]
 ipcMain.on(REMOVE_TABLE_ROW, async (_, args) => {
-  await console.log("hi from REMOVE_TABLE_ROW");
+  console.log('hi from REMOVE_TABLE_ROW');
+  await removeTableRow(...args);
 });
 
 // This method will be called when Electron has finished
