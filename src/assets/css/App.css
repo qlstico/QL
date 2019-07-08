@@ -1,6 +1,6 @@
 /* Main CSS file */
 
-@import '_example/_example.css';
+@import "_example/_example.css";
 
 .sucio {
   max-width: 50px;
@@ -19,4 +19,8 @@
   margin-left: -35px;
   margin-right: -45px;
   cursor: pointer;
+}
+
+#menuBar {
+  color: #753689;
 }
