@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from "react";
 import {
   DisplayCard,
   DbRelatedContext,
@@ -12,6 +12,9 @@ import { withRouter } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { ipcRenderer } from 'electron';
 import { Button, TextField } from '@material-ui/core/';
+import Menu from "@material-ui/core/Menu";
+import AddIcon from "@material-ui/icons/Add";
+
 
 const {
   GET_TABLE_CONTENTS,
@@ -20,7 +23,7 @@ const {
   CREATE_TABLE_REPLY,
   DELETE_TABLE,
   DELETE_TABLE_REPLY
-} = require('../../constants/ipcNames');
+} = require("../../constants/ipcNames");
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -30,7 +33,7 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(2)
   },
   highlightSelected: {
-    background: 'grey'
+    background: "grey"
   }
 }));
 
@@ -72,7 +75,7 @@ const AllTables = props => {
     await ipcRenderer.on(GET_TABLE_CONTENTS_REPLY, (event, tableData) => {
       setSelectedTableData(tableData);
     });
-    props.history.push('/single');
+    props.history.push("/single");
   };
 
   // function for creating table via GUI
@@ -98,6 +101,46 @@ const AllTables = props => {
     notifyRemoved(currentDb, selectedTableName);
   };
 
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const menuId = "primary-search-account-menu";
+  const isMenuOpen = Boolean(anchorEl);
+
+  function handleProfileMenuOpen(event) {
+    setAnchorEl(event.currentTarget);
+  }
+
+  function handleMenuClose() {
+    setAnchorEl(null);
+  }
+  const renderMenu = (
+    <Menu
+      anchorEl={anchorEl}
+      anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      id={menuId}
+      keepMounted
+      transformOrigin={{ vertical: "top", horizontal: "right" }}
+      open={isMenuOpen}
+      onClose={handleMenuClose}
+    >
+      <div id='add_db_menu' onClick={handleProfileMenuOpen}>
+        <TextField
+          label='Add New Table'
+          name='newTableName'
+          onChange={handleInputChange}
+        />
+        <Button
+          variant='contained'
+          type='button'
+          color='inherit'
+          size='small'
+          onClick={() => createNewTable(selectedDb, tableToAdd)}
+        >
+          <AddIcon onClick={handleMenuClose} />
+        </Button>
+      </div>
+    </Menu>
+  );
+
   // Send provider a true value to kick on server
   useEffect(() => {
     setServerStatus(true);
@@ -111,15 +154,38 @@ const AllTables = props => {
       <GraphQLDisplayCard />
       <VoyagerDisplayCard />
       <h1>Tables: </h1>
+      <Button
+        edge='end'
+        aria-label='create db'
+        aria-controls={menuId}
+        aria-haspopup='true'
+        onClick={handleProfileMenuOpen}
+        color='inherit'
+      >
+        Add A Table
+      </Button>
+      {currentlySelected && (
+        <Button
+          variant='contained'
+          type='button'
+          text='white'
+          size='small'
+          style={{ background: "#FF715B" }}
+          onClick={() => deleteTable(selectedDb, currentlySelected)}
+          id='removeButton'
+        >
+          Remove Table
+        </Button>
+      )}
       <Grid container className={classes.root} spacing={3}>
         <Grid item xs={12}>
-          <Grid container justify="center" spacing={spacing}>
+          <Grid container justify='center' spacing={spacing}>
             {tablesContext.map(table => (
               <Grid
                 key={table}
                 item
                 className={
-                  currentlySelected === table ? classes.highlightSelected : ''
+                  currentlySelected === table ? classes.highlightSelected : ""
                 }
                 onClick={() => enableSelected(table)}
                 onDoubleClick={() => getTableContents(table, selectedDb)}
@@ -127,43 +193,14 @@ const AllTables = props => {
                 <DisplayCard
                   className={classes.control}
                   name={table}
-                  type="table"
+                  type='table'
                 />
               </Grid>
             ))}
           </Grid>
         </Grid>
       </Grid>
-      <TextField
-        label="Add New Table"
-        name="newTableName"
-        onChange={handleInputChange}
-      />
-      <Button
-        variant="contained"
-        type="button"
-        color="inherit"
-        size="small"
-        onClick={() => createNewTable(selectedDb, tableToAdd)}
-      >
-        Add New Table
-      </Button>
-      {currentlySelected && (
-        <Button
-          variant="contained"
-          type="button"
-          color="inherit"
-          size="small"
-          onClick={() => deleteTable(selectedDb, currentlySelected)}
-        >
-          Remove Table
-        </Button>
-      )}
-      {/* <TextField
-        label='Table Name'
-        name='newTableName'
-        onChange={handleInputChange}
-      /> */}
+      {renderMenu}
     </div>
   );
 };
