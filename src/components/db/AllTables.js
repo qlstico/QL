@@ -3,15 +3,18 @@ import {
   DisplayCard,
   DbRelatedContext,
   GraphQLDisplayCard,
-  VoyagerDisplayCard
-} from "../index";
-import Grid from "@material-ui/core/Grid";
-import { withRouter } from "react-router-dom";
-import { makeStyles } from "@material-ui/core/styles";
-import { ipcRenderer } from "electron";
-import { Button, TextField } from "@material-ui/core/";
+  VoyagerDisplayCard,
+  notifyRemoved,
+  notifyAdded
+} from '../index';
+import Grid from '@material-ui/core/Grid';
+import { withRouter } from 'react-router-dom';
+import { makeStyles } from '@material-ui/core/styles';
+import { ipcRenderer } from 'electron';
+import { Button, TextField } from '@material-ui/core/';
 import Menu from "@material-ui/core/Menu";
 import AddIcon from "@material-ui/icons/Add";
+
 
 const {
   GET_TABLE_CONTENTS,
@@ -82,6 +85,7 @@ const AllTables = props => {
       await ipcRenderer.on(CREATE_TABLE_REPLY, (event, updatedTables) => {
         setTablesContext(updatedTables);
       });
+      notifyAdded(currentDb, newTableName);
     }
   };
 
@@ -94,6 +98,7 @@ const AllTables = props => {
       });
       setCurrentlySelected(false);
     }
+    notifyRemoved(currentDb, selectedTableName);
   };
 
   const [anchorEl, setAnchorEl] = React.useState(null);
