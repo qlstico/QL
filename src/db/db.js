@@ -15,10 +15,6 @@ const setDatabase = dbName => {
   DB_CONNECTION.database = dbName;
 };
 
-// const handleDbError = (error, ipcActionType) => {
-//   throw new
-// }
-
 const setUserProvidedDbConnection = userConnection => {
   const { user, password, host } = userConnection;
   DB_CONNECTION.user = user;
@@ -169,12 +165,12 @@ const updateTableData = async (table, database, allUpdatedCells) => {
     values,
   ]);
   try {
-    await queryArr.forEach(async ([queryStr, params]) => {
-      const { rows } = await pool.query(queryStr, params);
-      console.log(rows);
-    });
+    for (const [queryStr, params] of queryArr) {
+      await pool.query(queryStr, params);
+    }
   } catch (error) {
-    throw error;
+    console.log('>>>>>', { error });
+    return error.message;
   }
 };
 

@@ -233,11 +233,8 @@ ipcMain.on(CLOSE_SERVER, async (event, args) => {
  */
 // args === [selectedTable,selectedDb,tableMatrix]
 ipcMain.on(UPDATE_TABLE_DATA, async (event, args) => {
-  try {
-    const response = await updateTableData(...args);
-  } catch (error) {
-    event.reply(DATABASE_ERROR, error.message);
-  }
+  const response = await updateTableData(...args);
+  typeof response === 'string' && event.reply(DATABASE_ERROR, response);
 });
 
 /**
