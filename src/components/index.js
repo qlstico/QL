@@ -17,7 +17,11 @@ export { DbRelatedContext, DbRelatedProvider } from './reuse/DbRelatedContext';
 export { default as PrimarySearchAppBar } from './reuse/Header';
 export { default as GraphQLDisplayCard } from './reuse/GraphiqlCard';
 export { default as VoyagerDisplayCard } from './reuse/voyagerCard';
-export { notifyAdded, notifyRemoved } from './reuse/ToastNotifications';
+export {
+  notifyAdded,
+  notifyRemoved,
+  notifyError,
+} from './reuse/ToastNotifications';
 
 // Container folder files
 export { default as Edit } from '../containers/EditExistingConnection';

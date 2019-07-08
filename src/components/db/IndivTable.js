@@ -9,7 +9,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
-import { DbRelatedContext } from '../index';
+import { DbRelatedContext, notifyError } from '../index';
 import TextField from '@material-ui/core/TextField';
 import { ipcRenderer } from 'electron';
 const {
@@ -148,7 +148,8 @@ const IndivTable = () => {
       changesMade,
     ]);
     ipcRenderer.on(DATABASE_ERROR, (_, errorMsg) => {
-      setErrorMessage(errorMsg);
+      // setErrorMessage(errorMsg);
+      notifyError(errorMsg);
     });
   };
 
@@ -186,7 +187,6 @@ const IndivTable = () => {
     setSelectedRow(false);
   };
 
-  console.log('in indivTable', { errorMessage });
   return tableMatrix.length ? (
     <div className={classes.root}>
       <Paper className={classes.paper}>
