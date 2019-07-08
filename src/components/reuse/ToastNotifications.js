@@ -6,7 +6,7 @@ export const notifyRemoved = (parent, deletedItem) =>
     hideProgressBar: false,
     closeOnClick: true,
     pauseOnHover: true,
-    draggable: true
+    draggable: true,
   });
 
 export const notifyAdded = (parent, addedItem) =>
@@ -16,5 +16,15 @@ export const notifyAdded = (parent, addedItem) =>
     hideProgressBar: false,
     closeOnClick: true,
     pauseOnHover: true,
-    draggable: true
+    draggable: true,
+  });
+
+export const notifyError = errorMessage =>
+  toast.error(` The horror "${errorMessage}"!`, {
+    position: 'top-center',
+    autoClose: 3000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
   });
