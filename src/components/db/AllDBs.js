@@ -1,19 +1,19 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext } from "react";
 import {
   DisplayCard,
   DbRelatedContext,
   notifyAdded,
   notifyRemoved
-} from '../index';
-import Grid from '@material-ui/core/Grid';
-import { makeStyles } from '@material-ui/core/styles';
-import storage from 'electron-json-storage';
-import { ipcRenderer } from 'electron';
-import { Button, TextField } from '@material-ui/core/';
-import { withRouter } from 'react-router-dom';
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
-import AddIcon from '@material-ui/icons/Add';
+} from "../index";
+import Grid from "@material-ui/core/Grid";
+import { makeStyles } from "@material-ui/core/styles";
+import storage from "electron-json-storage";
+import { ipcRenderer } from "electron";
+import { Button, TextField } from "@material-ui/core/";
+import { withRouter } from "react-router-dom";
+import MenuItem from "@material-ui/core/MenuItem";
+import Menu from "@material-ui/core/Menu";
+import AddIcon from "@material-ui/icons/Add";
 
 const {
   GET_TABLE_NAMES,
@@ -23,7 +23,7 @@ const {
   CREATE_DATABASE_REPLY,
   DELETE_DATABASE,
   DELETE_DATABASE_REPLY
-} = require('../../constants/ipcNames');
+} = require("../../constants/ipcNames");
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -33,7 +33,7 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(2)
   },
   highlightSelected: {
-    background: 'grey'
+    background: "grey"
   }
 }));
 
@@ -79,7 +79,7 @@ const AllDBs = props => {
     await ipcRenderer.on(CREATE_DATABASE_REPLY, (event, updatedDatabases) => {
       setAllDbNames(updatedDatabases);
     });
-    notifyAdded('your PG databses', newDbName);
+    notifyAdded("your PG databses", newDbName);
   };
   // when user clicks database, sends message to trigger getting the table data
   // set context with table names
@@ -90,7 +90,7 @@ const AllDBs = props => {
     await ipcRenderer.on(GET_TABLE_NAMES_REPLY, (_, tableNames) => {
       setTablesContext(tableNames);
     });
-    props.history.push('/tables'); // finally push onto the next component
+    props.history.push("/tables"); // finally push onto the next component
   };
 
   const deleteDb = async selectedDbName => {
@@ -100,12 +100,12 @@ const AllDBs = props => {
         setAllDbNames(updatedDatabases);
       });
       setCurrentlySelected(false);
-      notifyRemoved('your PG databases', selectedDbName);
+      notifyRemoved("your PG databases", selectedDbName);
     }
   };
 
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const menuId = 'primary-search-account-menu';
+  const menuId = "primary-search-account-menu";
   const isMenuOpen = Boolean(anchorEl);
 
   function handleProfileMenuOpen(event) {
@@ -119,24 +119,23 @@ const AllDBs = props => {
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
-      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      anchorOrigin={{ vertical: "top", horizontal: "right" }}
       id={menuId}
       keepMounted
-      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      transformOrigin={{ vertical: "top", horizontal: "right" }}
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <div id="add_db_menu" onClick={handleProfileMenuOpen}>
+      <div id='add_db_menu' onClick={handleProfileMenuOpen}>
         <TextField
-          label="Database Name"
-          name="newDbName"
+          label='Database Name'
+          name='newDbName'
           onChange={handleInputChange}
         />
         <Button
-          variant="contained"
-          type="circle"
-          aria-label="Add"
-          color="inherit"
+          variant='contained'
+          aria-label='Add'
+          color='inherit'
           onClick={() => createNewDatabase(dbToAdd)}
         >
           <AddIcon onClick={handleMenuClose} />
@@ -149,38 +148,38 @@ const AllDBs = props => {
     <div>
       <h1>Databases: </h1>
       <Button
-        edge="end"
-        aria-label="create db"
+        edge='end'
+        aria-label='create db'
         aria-controls={menuId}
-        aria-haspopup="true"
+        aria-haspopup='true'
         onClick={handleProfileMenuOpen}
-        color="inherit"
-        id="menuButton"
+        color='inherit'
+        id='menuButton'
       >
         Add A Database
       </Button>
       {currentlySelected && (
         <Button
-          variant="contained"
-          type="button"
-          text="white"
-          size="small"
-          style={{ background: '#FF715B' }}
+          variant='contained'
+          type='button'
+          text='white'
+          size='small'
+          style={{ background: "#FF715B" }}
           onClick={() => deleteDb(currentlySelected)}
-          id="menuButton"
+          id='menuButton'
         >
           Remove Database
         </Button>
       )}
       <Grid container className={classes.root} spacing={3}>
         <Grid item xs={12}>
-          <Grid container justify="center" spacing={spacing}>
+          <Grid container justify='center' spacing={spacing}>
             {allDbNames &&
               allDbNames.map(db => (
                 <Grid
                   key={db}
                   className={
-                    currentlySelected === db ? classes.highlightSelected : ''
+                    currentlySelected === db ? classes.highlightSelected : ""
                   }
                   item
                   onClick={() => enableSelected(db)}
@@ -189,7 +188,7 @@ const AllDBs = props => {
                   <DisplayCard
                     className={classes.control}
                     name={db}
-                    type="db"
+                    type='db'
                   />
                 </Grid>
               ))}
