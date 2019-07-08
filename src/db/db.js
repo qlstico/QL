@@ -1,3 +1,4 @@
+const { encrypt } = require('../server/util');
 const pg = require('pg');
 
 const DB_CONNECTION = {
@@ -6,12 +7,19 @@ const DB_CONNECTION = {
   password: '', // env var: PGPASSWORD
   host: 'localhost', // Server hosting the postgres database
   port: 5432, // env var: PGPORT
-  idleTimeoutMillis: 300, // how long a client is allowed to remain idle before being closed
+  idleTimeoutMillis: 300 // how long a client is allowed to remain idle before being closed
 };
 
 // Helper Functions
 const setDatabase = dbName => {
   DB_CONNECTION.database = dbName;
+};
+
+const setUserProvidedDbConnection = userConnection => {
+  const { user, password, host } = userConnection;
+  DB_CONNECTION.user = user;
+  DB_CONNECTION.password = encrypt(password, 'decrypt');
+  DB_CONNECTION.host = host;
 };
 
 const tranformRowToSql = (id, row) => {
@@ -29,7 +37,7 @@ const tranformRowToSql = (id, row) => {
         return `"${key}" = $${idx + 1}`;
       })
       .join(', '),
-    valuesArr.concat(id),
+    valuesArr.concat(id)
   ];
 };
 
@@ -154,7 +162,7 @@ const updateTableData = async (table, database, allUpdatedCells) => {
   }, []);
   const queryArr = keysAndParamsNestedArr.map(([updateStr, values]) => [
     `UPDATE "${table}" SET ${updateStr} WHERE id=$${values.length} returning *`,
-    values,
+    values
   ]);
   try {
     await queryArr.forEach(async ([queryStr, params]) => {
@@ -176,4 +184,5 @@ module.exports = {
   removeTableRow,
   createDatabase,
   // updateTableDataV2,
+  setUserProvidedDbConnection
 };

@@ -50,13 +50,13 @@ const Login = ({ handleSubmit, handleInputChange, values }) => {
           placeholder={values.password}
         />
         <TextField
-          label="Server"
+          label="Host"
           type="text"
-          name="server"
+          name="host"
           className={classes.textField}
-          value={values.server}
+          value={values.host}
           onChange={handleInputChange}
-          placeholder={values.server}
+          placeholder={values.host}
         />
         <TextField
           label="Database Name"
