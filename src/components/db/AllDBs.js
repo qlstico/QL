@@ -6,6 +6,9 @@ import storage from "electron-json-storage";
 import { ipcRenderer } from "electron";
 import { Button, TextField } from "@material-ui/core/";
 import { withRouter } from "react-router-dom";
+import MenuItem from "@material-ui/core/MenuItem";
+import Menu from "@material-ui/core/Menu";
+import AddIcon from "@material-ui/icons/Add";
 
 const {
   GET_TABLE_NAMES,
@@ -81,10 +84,59 @@ const AllDBs = props => {
     });
     props.history.push("/tables"); // finally push onto the next component
   };
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const menuId = "primary-search-account-menu";
+  const isMenuOpen = Boolean(anchorEl);
+
+  function handleProfileMenuOpen(event) {
+    setAnchorEl(event.currentTarget);
+  }
+
+  function handleMenuClose() {
+    setAnchorEl(null);
+  }
+  const renderMenu = (
+    <Menu
+      anchorEl={anchorEl}
+      anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      id={menuId}
+      keepMounted
+      transformOrigin={{ vertical: "top", horizontal: "right" }}
+      open={isMenuOpen}
+      onClose={handleMenuClose}
+    >
+      <div id='add_db_menu' onClick={handleProfileMenuOpen}>
+        <TextField
+          label='Database Name'
+          name='newDbName'
+          onChange={handleInputChange}
+        />
+        <Button
+          variant='contained'
+          type='circle'
+          aria-label='Add'
+          color='inherit'
+          onClick={() => createNewDatabase(dbToAdd)}
+        >
+          <AddIcon onClick={handleMenuClose} />
+        </Button>
+      </div>
+    </Menu>
+  );
 
   return (
     <div>
       <h1>Databases: </h1>
+      <Button
+        edge='end'
+        aria-label='create db'
+        aria-controls={menuId}
+        aria-haspopup='true'
+        onClick={handleProfileMenuOpen}
+        color='inherit'
+      >
+        Add Database
+      </Button>
       <Grid container className={classes.root} spacing={3}>
         <Grid item xs={12}>
           <Grid container justify='center' spacing={spacing}>
@@ -109,19 +161,7 @@ const AllDBs = props => {
           </Grid>
         </Grid>
       </Grid>
-      <TextField
-        label='Database Name'
-        name='newDbName'
-        onChange={handleInputChange}
-      />
-      <Button
-        variant='contained'
-        type='button'
-        color='inherit'
-        onClick={() => createNewDatabase(dbToAdd)}
-      >
-        Add Database
-      </Button>
+      {renderMenu}
     </div>
   );
 };
