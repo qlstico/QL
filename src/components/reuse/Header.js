@@ -15,6 +15,7 @@ import ArrowBack from "@material-ui/icons/ArrowBack";
 import ArrowForward from "@material-ui/icons/ArrowForward";
 import BreadcrumbsElem from "./Breadcrumbs";
 import logoImg from "../../assets/images/whiteLogo.png";
+import { Button } from "@material-ui/core/";
 
 const useStyles = makeStyles(theme => ({
   grow: {
@@ -50,49 +51,18 @@ const useStyles = makeStyles(theme => ({
 
 function PrimarySearchAppBar(props) {
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = React.useState(null);
-
-  const isMenuOpen = Boolean(anchorEl);
-
-  function handleProfileMenuOpen(event) {
-    setAnchorEl(event.currentTarget);
-  }
-
-  function handleMenuClose() {
-    setAnchorEl(null);
-  }
-
-  // async function sendHome() {
-  //   props.history.push('/');
-  //   await ipcRenderer.send(CLOSE_SERVER);
-  // }
-  //
-
-  const menuId = "primary-search-account-menu";
-  const renderMenu = (
-    <Menu
-      anchorEl={anchorEl}
-      anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      id={menuId}
-      keepMounted
-      transformOrigin={{ vertical: "top", horizontal: "right" }}
-      open={isMenuOpen}
-      onClose={handleMenuClose}
-    >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-    </Menu>
-  );
 
   return (
     <div className={classes.grow}>
       <AppBar position='static' id='menuBar' style={{ background: "#753689" }}>
         <Toolbar>
-          <img
-            id='headerLogo'
-            src={logoImg}
+          <Button
+            style={{ backgroundColor: "transparent" }}
+            disableTouchRipple
             onClick={() => props.history.push("/")}
-          />
+          >
+            <img id='headerLogo' src={logoImg} />
+          </Button>
           <BreadcrumbsElem
             location={props.location.pathname}
             history={props.history}
@@ -108,7 +78,6 @@ function PrimarySearchAppBar(props) {
           </div>
         </Toolbar>
       </AppBar>
-      {renderMenu}
     </div>
   );
 }
