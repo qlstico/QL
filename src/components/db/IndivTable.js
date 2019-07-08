@@ -70,6 +70,9 @@ const IndivTable = () => {
   // Tracking which row is 'selected'
   const [selectedRow, setSelectedRow] = useState(false);
 
+  // Error State
+  const [errorMessage, setErrorMessage] = useState(null);
+
   // Using this as componentDidMount && componentDidUpdate b/c the provider data from
   // context does not make it in time for the initial mounting
   useEffect(() => {
@@ -144,8 +147,8 @@ const IndivTable = () => {
       selectedDb,
       changesMade,
     ]);
-    await ipcRenderer.on(DATABASE_ERROR, (event, errorMessage) => {
-      console.log({ errorMessage });
+    ipcRenderer.on(DATABASE_ERROR, (_, errorMsg) => {
+      setErrorMessage(errorMsg);
     });
   };
 
@@ -183,6 +186,7 @@ const IndivTable = () => {
     setSelectedRow(false);
   };
 
+  console.log('in indivTable', { errorMessage });
   return tableMatrix.length ? (
     <div className={classes.root}>
       <Paper className={classes.paper}>
