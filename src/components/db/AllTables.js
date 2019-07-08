@@ -89,6 +89,7 @@ const AllTables = props => {
       await ipcRenderer.on(DELETE_TABLE_REPLY, (event, updatedTables) => {
         setTablesContext(updatedTables);
       });
+      setCurrentlySelected(false);
     }
   };
 
