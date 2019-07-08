@@ -4,7 +4,7 @@ import { PrimarySearchAppBar, Footer } from "..";
 const LayoutMain = ({ children }) => {
   return (
     <>
-      <PrimarySearchAppBar />
+      <PrimarySearchAppBar style={{ background: "#753689" }} />
       {children}
     </>
   );
