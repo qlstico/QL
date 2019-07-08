@@ -23,7 +23,7 @@ const defaultConnectionSettings = {
   id: '',
   user: '',
   password: '',
-  server: 'localhost',
+  host: 'localhost',
   dbTypePassword: '',
   databaseName: ''
 };

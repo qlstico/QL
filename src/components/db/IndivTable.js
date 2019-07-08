@@ -54,8 +54,6 @@ const IndivTable = () => {
     DbRelatedContext
   );
 
-  const [updatedFields, setUpdatedFields] = useState(null);
-
   // Tracking which row is in 'edit mode'
   const [editRow, setEditRow] = useState(false);
 
@@ -96,7 +94,7 @@ const IndivTable = () => {
   // Handles input changes for grid cells into the changesMade state field
   const recordCellChangesMade = cell => {
     // checking if we already have a record of requested change in the changesMade
-    // state pertaining to this entry
+    // state pertaining to this entry by id and key to support multi-field edits
     const inChangeMadeArr = changesMade.some(
       cellData => cellData.id === cell.id && cellData.key === cell.key
     );
@@ -105,7 +103,7 @@ const IndivTable = () => {
       if (inChangeMadeArr) {
         return prevVal.map(cellData => {
           // Checks if this current change already exists by ID and key in order to
-          // allow multiple edits of the same entry at the same time.
+          // allow multiple edits of the same entry at the same time and prevent overwritting
           if (cellData.id === cell.id && cellData.key === cell.key) {
             return cell;
           }
