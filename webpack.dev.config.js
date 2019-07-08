@@ -46,7 +46,7 @@ module.exports = {
   ],
   devtool: 'cheap-source-map',
   devServer: {
-    process.env.PORT || 9000,
+    port: process.env.PORT || 9000,
     contentBase: path.resolve(__dirname, 'dist'),
     stats: {
       colors: true,
