@@ -185,7 +185,7 @@ const IndivTable = () => {
   // window.addEventListener('click', function() {
   //   removeEditRow();
   // });
-
+  console.log({ selectedTableData });
   return tableMatrix.length ? (
     <div className={classes.root}>
       <Paper className={classes.paper}>
@@ -193,6 +193,7 @@ const IndivTable = () => {
           <TableHead>
             <TableRow>
               {/* Column Headers */}
+              {/* check if there is data, check if array has nested obj, then render */}
               {selectedTableData &&
                 selectedTableData[0] &&
                 Object.keys(selectedTableData[0]).map(key => {
