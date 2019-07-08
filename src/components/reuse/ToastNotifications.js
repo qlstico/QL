@@ -20,11 +20,14 @@ export const notifyAdded = (parent, addedItem) =>
   });
 
 export const notifyError = errorMessage =>
-  toast.error(` The horror "${errorMessage}"!`, {
-    position: 'top-center',
-    autoClose: 3000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-  });
+  toast.error(
+    `Oh no! We've encountered the following error: "${errorMessage}"`,
+    {
+      position: 'top-center',
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+    }
+  );
