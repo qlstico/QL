@@ -185,7 +185,6 @@ const updateTableData = async (table, database, allUpdatedCells) => {
       await pool.query(queryStr, params);
     }
   } catch (error) {
-    console.log('>>>>>', { error });
     return error.message;
   }
 };
@@ -200,5 +199,5 @@ module.exports = {
   removeTableRow,
   createDatabase,
   setUserProvidedDbConnection,
-  deleteDatabase
+  deleteDatabase,
 };

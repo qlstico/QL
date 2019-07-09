@@ -15,7 +15,7 @@ const {
   deleteTable,
   createDatabase,
   setUserProvidedDbConnection,
-  deleteDatabase
+  deleteDatabase,
 } = require('./src/db/db');
 const express = require('express');
 const { postgraphile } = require('postgraphile');
@@ -45,7 +45,7 @@ const {
   SET_USER_DB_CONNECTION,
   DELETE_DATABASE,
   DELETE_DATABASE_REPLY,
-  DATABASE_ERROR
+  DATABASE_ERROR,
 } = require('./src/constants/ipcNames');
 const enableDestroy = require('server-destroy');
 
