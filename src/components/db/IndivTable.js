@@ -152,6 +152,8 @@ const IndivTable = () => {
       selectedDb,
       changesMade,
     ]);
+    // need to use .once instead of .on because .once remove event listener
+    // if you use .on, the toast error will first tons of times
     await ipcRenderer.once(DATABASE_ERROR, (_, errorMsg) => {
       if (errorMessage !== errorMsg) {
         notifyError(errorMsg);
