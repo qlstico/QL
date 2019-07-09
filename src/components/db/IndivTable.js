@@ -196,9 +196,11 @@ const IndivTable = () => {
     setSelectedRow(false);
   };
 
-  const loadingOrEmpty = document.getElementById('load-or-empty');
   window.setTimeout(() => {
-    loadingOrEmpty.innerHTML = 'Looks like this table is empty!';
+    const loadingOrEmpty = document.getElementById('load-or-empty');
+    if (loadingOrEmpty) {
+      loadingOrEmpty.innerHTML = `Couldn't find anything here!`;
+    }
   }, 3500);
 
   return tableMatrix.length ? (

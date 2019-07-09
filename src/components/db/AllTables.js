@@ -149,6 +149,13 @@ const AllTables = props => {
     // i.e. a table is added or removed
   }, [tablesContext]);
 
+  window.setTimeout(() => {
+    const loadingOrEmpty = document.getElementById('load-or-empty');
+    if (loadingOrEmpty) {
+      loadingOrEmpty.innerHTML = `Couldn't find anything here!`;
+    }
+  }, 2500);
+
   return (
     <div>
       <h1>GraphQL Tools: </h1>
@@ -182,23 +189,29 @@ const AllTables = props => {
       <Grid container className={classes.root} spacing={3}>
         <Grid item xs={12}>
           <Grid container justify="center" spacing={spacing}>
-            {tablesContext.map(table => (
-              <Grid
-                key={table}
-                item
-                className={
-                  currentlySelected === table ? classes.highlightSelected : ''
-                }
-                onClick={() => enableSelected(table)}
-                onDoubleClick={() => getTableContents(table, selectedDb)}
-              >
-                <DisplayCard
-                  className={classes.control}
-                  name={table}
-                  type="table"
-                />
-              </Grid>
-            ))}
+            {tablesContext.length ? (
+              tablesContext.map(table => (
+                <Grid
+                  key={table}
+                  item
+                  className={
+                    currentlySelected === table ? classes.highlightSelected : ''
+                  }
+                  onClick={() => enableSelected(table)}
+                  onDoubleClick={() => getTableContents(table, selectedDb)}
+                >
+                  <DisplayCard
+                    className={classes.control}
+                    name={table}
+                    type="table"
+                  />
+                </Grid>
+              ))
+            ) : (
+              <div>
+                <h1 id="load-or-empty">One second please...</h1>
+              </div>
+            )}
           </Grid>
         </Grid>
       </Grid>
