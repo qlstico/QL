@@ -33,16 +33,16 @@ yarn start
 
 **Creating a Connection**
 
-![Set Up Connection](https://user-images.githubusercontent.com/46896778/60850640-34034b00-a1be-11e9-9bef-a62221afc5f8.png)
+![First Connection](https://user-images.githubusercontent.com/46896778/60853263-45058980-a1c9-11e9-91ee-b7322b7ff2d4.png)
 
 You have the option to specify a Postgres connection you wish to create and store via the `Create Connection` button. By default, your OS' currently logged in username is prepoulated and Host field is
 defaulted to `localhost`.
 
-![Create Connection](https://user-images.githubusercontent.com/46896778/60850779-d3c0d900-a1be-11e9-8c11-97694accbdb8.png)
+![Create Connection](https://user-images.githubusercontent.com/46896778/60853269-4931a700-a1c9-11e9-871e-ff03a5569507.png)
 
 In most cases, unless you have password protected databases or proctected connections, this should be good enough to hit submit and connect with! Otherwise, feel free to provide the password and a different host to connect to (default port is 5432).
 
-![Connection tile](https://user-images.githubusercontent.com/46896778/60851330-c60c5300-a1c0-11e9-97e5-ee7540e57433.png)
+![Connection tile](https://user-images.githubusercontent.com/46896778/60853271-4b940100-a1c9-11e9-91d4-a2629ddebfa9.png)
 
 **Editing a Connection**
 
