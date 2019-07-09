@@ -117,7 +117,7 @@ const ConnectPage = props => {
                       align="left"
                       color="textSecondary"
                     >
-                      Host: {connection.server}
+                      Host: {connection.host}
                     </Typography>
                     <Button
                       onClick={() => handleConnect(connection)}
