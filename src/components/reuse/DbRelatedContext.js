@@ -3,9 +3,9 @@ import React, { useState, createContext } from 'react';
 export const DbRelatedContext = createContext();
 
 export const DbRelatedProvider = ({ children }) => {
-  const [allDbNames, setAllDbNames] = useState(null);
+  const [allDbNames, setAllDbNames] = useState([]);
   const [currentTable, setCurrentTable] = useState('users');
-  const [tables, setTables] = useState(['todos']);
+  const [tables, setTables] = useState([]);
   const [selectedDb, setSelectedDb] = useState('todos');
   const [selectedTableData, setSelectedTableData] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -29,7 +29,7 @@ export const DbRelatedProvider = ({ children }) => {
         currentTable,
         setCurrentTable,
         allDbNames,
-        setAllDbNames,
+        setAllDbNames
       }}
     >
       {children}
