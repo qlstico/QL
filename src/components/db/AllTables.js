@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect } from 'react';
 import {
   DisplayCard,
   DbRelatedContext,
@@ -12,9 +12,8 @@ import { withRouter } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { ipcRenderer } from 'electron';
 import { Button, TextField } from '@material-ui/core/';
-import Menu from "@material-ui/core/Menu";
-import AddIcon from "@material-ui/icons/Add";
-
+import Menu from '@material-ui/core/Menu';
+import AddIcon from '@material-ui/icons/Add';
 
 const {
   GET_TABLE_CONTENTS,
@@ -23,7 +22,7 @@ const {
   CREATE_TABLE_REPLY,
   DELETE_TABLE,
   DELETE_TABLE_REPLY
-} = require("../../constants/ipcNames");
+} = require('../../constants/ipcNames');
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -33,7 +32,7 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(2)
   },
   highlightSelected: {
-    background: "grey"
+    background: 'grey'
   }
 }));
 
@@ -69,13 +68,14 @@ const AllTables = props => {
 
   // Retrieves the tables data from the double clicked table icon
   const getTableContents = async table => {
+    setSelectedTableData([]);
     setSelectedTable(table);
     setCurrentTable(table);
     await ipcRenderer.send(GET_TABLE_CONTENTS, [table, selectedDb]);
     await ipcRenderer.on(GET_TABLE_CONTENTS_REPLY, (event, tableData) => {
       setSelectedTableData(tableData);
     });
-    props.history.push("/single");
+    props.history.push('/single');
   };
 
   // function for creating table via GUI
@@ -102,7 +102,7 @@ const AllTables = props => {
   };
 
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const menuId = "primary-search-account-menu";
+  const menuId = 'primary-search-account-menu';
   const isMenuOpen = Boolean(anchorEl);
 
   function handleProfileMenuOpen(event) {
@@ -116,24 +116,24 @@ const AllTables = props => {
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
-      anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       id={menuId}
       keepMounted
-      transformOrigin={{ vertical: "top", horizontal: "right" }}
+      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <div id='add_db_menu' onClick={handleProfileMenuOpen}>
+      <div id="add_db_menu" onClick={handleProfileMenuOpen}>
         <TextField
-          label='Add New Table'
-          name='newTableName'
+          label="Add New Table"
+          name="newTableName"
           onChange={handleInputChange}
         />
         <Button
-          variant='contained'
-          type='button'
-          color='inherit'
-          size='small'
+          variant="contained"
+          type="button"
+          color="inherit"
+          size="small"
           onClick={() => createNewTable(selectedDb, tableToAdd)}
         >
           <AddIcon onClick={handleMenuClose} />
@@ -156,38 +156,38 @@ const AllTables = props => {
       <VoyagerDisplayCard />
       <h1>Tables: </h1>
       <Button
-        edge='end'
-        aria-label='create db'
+        edge="end"
+        aria-label="create db"
         aria-controls={menuId}
-        aria-haspopup='true'
+        aria-haspopup="true"
         onClick={handleProfileMenuOpen}
-        color='inherit'
-        id='menuButton'
+        color="inherit"
+        id="menuButton"
       >
         Add A Table
       </Button>
       {currentlySelected && (
         <Button
-          variant='contained'
-          type='button'
-          text='white'
-          size='small'
-          style={{ background: "#FF715B" }}
+          variant="contained"
+          type="button"
+          text="white"
+          size="small"
+          style={{ background: '#FF715B' }}
           onClick={() => deleteTable(selectedDb, currentlySelected)}
-          id='menuButton'
+          id="menuButton"
         >
           Remove Table
         </Button>
       )}
       <Grid container className={classes.root} spacing={3}>
         <Grid item xs={12}>
-          <Grid container justify='center' spacing={spacing}>
+          <Grid container justify="center" spacing={spacing}>
             {tablesContext.map(table => (
               <Grid
                 key={table}
                 item
                 className={
-                  currentlySelected === table ? classes.highlightSelected : ""
+                  currentlySelected === table ? classes.highlightSelected : ''
                 }
                 onClick={() => enableSelected(table)}
                 onDoubleClick={() => getTableContents(table, selectedDb)}
@@ -195,7 +195,7 @@ const AllTables = props => {
                 <DisplayCard
                   className={classes.control}
                   name={table}
-                  type='table'
+                  type="table"
                 />
               </Grid>
             ))}
