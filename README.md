@@ -13,7 +13,7 @@ Welcome to **QLStico(beta)**: An easy-to-use desktop application that helps you 
 
 #### Requirements
 
-MacOS, Linux, and Unix OS's are supported - all you need is Postgres installed on your machine!
+MacOS, Linux, and Unix OS' are supported - all you need is Postgres installed on your machine!
 
 #### How to Install
 
@@ -33,54 +33,56 @@ yarn start
 
 **Creating a Connection**
 
+Upon opening the app, you will be brought to your `Connections` page:
+
 ![First Connection](https://user-images.githubusercontent.com/46896778/60853263-45058980-a1c9-11e9-91ee-b7322b7ff2d4.png)
 
-You have the option to specify a Postgres connection you wish to create and store via the `Create Connection` button. By default, your OS' currently logged in username is prepoulated and Host field is
-defaulted to `localhost`.
+You have the option to specify a Postgres connection you wish to create and store via the `Create Connection` button. By default, the `User` and `Host` fields are pre-populated with your OS's currently logged in username and `localhost`, respectively.
+In most cases, unless you have password protected databases or proctected connections, this should be good enough to hit submit and create a valid connection configuration. Otherwise, feel free to provide a `Password` and/or a different `Host` to connect to (default port is 5432).
 
 ![Create Connection](https://user-images.githubusercontent.com/46896778/60853269-4931a700-a1c9-11e9-871e-ff03a5569507.png)
 
-In most cases, unless you have password protected databases or proctected connections, this should be good enough to hit submit and connect with! Otherwise, feel free to provide the password and a different host to connect to (default port is 5432).
+After submitting a connection configuration, you are brought back to the `Connections` page where your creating configuration is stored as a tile for future use. You may have several connection configurations that will all exist as their own tile. Hit `Connect` on any existing connection tile to use that connection configuration.
 
-![Connection tile](https://user-images.githubusercontent.com/46896778/60853271-4b940100-a1c9-11e9-91d4-a2629ddebfa9.png)
+![Connection Tile](https://user-images.githubusercontent.com/46896778/60885215-0dc0c800-a21d-11e9-9350-2fbcb5753edc.png)
 
 **Editing a Connection**
 
-Similar to creating a connection, you always have the option to edit existing connections or remove them right from their respective tiles' buttons!
+You always have the option to `Edit` existing connections or `Remove` them right from their respective tile's buttons!
 
 **Viewing Databases**
 
-After establishing a valid connection, you'll see all your PG databases rendered as tiles. Double any tile to enter the database of choice!
+After establishing a valid connection, you will see all your PG databases rendered as tiles. Double-click any tile to enter the database of choice!
 
 ![View All Dbs](https://user-images.githubusercontent.com/46896778/60851525-78dcb100-a1c1-11e9-8fea-3844b6641640.png)
 
 **Adding/Deleting Databases**
 
-You have the option of pressing the `Add A Database` button which will prompt you to provide a database name to create.
+You have the option of pressing the `Add A Database` button at any time while on this page. This will prompt you to provide a database name to create.
 
-You also have the option of deleting a database by single-clicking to select it (indicated with dark grey background on tile), and the `Remove Database` will apear at the top of the page. Clicking this will delete that database.
+You also have the option of deleting a database by single-clicking to select it (indicated with dark grey background behind tile), and the `Remove Database` will apear at the top of the page. Clicking this will delete the selected database.
 
 ![Add or Delete DB](https://user-images.githubusercontent.com/46896778/60851645-00c2bb00-a1c2-11e9-894d-af6fef86f4cc.png)
 
 **Viewing Tables**
 
-You are able to view all tables contained by a database. You may double click on any of these tiles to enter the table and see it's contents.
+You are able to view all tables contained by a database. You may double-click on any of these tiles to enter the table and see it's contents.
 
 ![All Tables](https://user-images.githubusercontent.com/46896778/60852187-97907700-a1c4-11e9-8438-a50a30c10937.png)
 
 **Adding/Deleting Tables**
 
-Similar to adding/deleting databases, you can add a table to the database by htting the corresponding buttons (deletion option available upon single-clicking a table to select it).
+Similar to adding/deleting databases, you can add or delete a table to the database by pressing the corresponding `Add a Table` or `Remove Table` buttons (deletion option available upon single-clicking a table to select it).
 
 **Generating GraphQL Queries & Mutations**
 
-At the top of the tables view, there are corresponding `GraphQL Queries` and `Visualize Schema` buttons. Clicking the `GraphQL Queries` button will open a seperate window with a PostGraphiQL IDE which represents you database tables in a GraphQL queriable format.
+At the top of the all tables view, there are corresponding `GraphQL Queries` and `Visualize Schema` buttons. Clicking the `GraphQL Queries` button will open a seperate window with a PostGraphiQL IDE which represents you database tables in a GraphQL queriable format.
 
 You can write a **GraphQL query** or **GraphQL mutation** in the lefthand input section, and once your command is complete, click **Play** button near top. If your query has any errors, an error message will display telling you exactly where the error occured.
 
 ![PostGraphiQL Window](https://user-images.githubusercontent.com/46896778/60852189-9a8b6780-a1c4-11e9-8d5c-24cc7206c218.png)
 
-After clicking execute, you'll be able to see your results in the righthand **Results** section. Additionally, the `Docs` and `Explorer` buttons will reveal helpful information to help contruct
+After clicking **Play**, you will be able to see your results in the righthand **Results** section. Additionally, the `Docs` and `Explorer` buttons will reveal helpful information to help contruct
 GraphQL queries.
 
 **Visualizing GraphQL Schema**
@@ -91,11 +93,11 @@ Next to the `GraphQL Queries` button, the `Visualize Schema` button will open a 
 
 **Table Contents Grid View**
 
-Upon entering a table, a grid is generated comprised of all of it's contents. You may single click to select a row, prompting the `Remove Row` button to appear to give the option of deletion.
+Upon entering a table, a grid is generated comprised of all of it's contents. You may single-click to select a row, prompting the `Remove Row` button to appear to give the option of deletion.
 
 ![Table Grid View](https://user-images.githubusercontent.com/46896778/60852582-441f2880-a1c6-11e9-82e5-1bae0064f91b.png)
 
-Double-clicking a row sets that row into edit mode for you to modify any of the row's contents. Upon changing and item, you may hit submit to update your table with these changes. Any errors in updating will be reported back to you.
+Double-clicking a row sets that row into edit mode for you to modify any of the row's contents. Upon changing any item(s), you may hit submit to update your table with these changes. Any errors in updating will be reported back to you.
 
 ![Submission Error](https://user-images.githubusercontent.com/46896778/60852776-230b0780-a1c7-11e9-8618-6f80adbe7de7.png)
 
