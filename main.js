@@ -16,6 +16,7 @@ const {
   createDatabase,
   setUserProvidedDbConnection,
   deleteDatabase,
+  addTableRow
 } = require('./src/db/db');
 const express = require('express');
 const { postgraphile } = require('postgraphile');
@@ -45,7 +46,7 @@ const {
   SET_USER_DB_CONNECTION,
   DELETE_DATABASE,
   DELETE_DATABASE_REPLY,
-  DATABASE_ERROR,
+  DATABASE_ERROR
 } = require('./src/constants/ipcNames');
 const enableDestroy = require('server-destroy');
 
@@ -71,7 +72,7 @@ function setupExpress(databaseName, username = '', password) {
   const pglConfig = {
     watchPg: true,
     graphiql: true,
-    enhanceGraphiql: true,
+    enhanceGraphiql: true
   };
   // console.log(database);
   // setup middleware for creating our graphql api
@@ -116,8 +117,8 @@ function createWindow() {
     height: 768,
     show: false,
     webPreferences: {
-      nodeIntegration: true,
-    },
+      nodeIntegration: true
+    }
   });
 
   // and load the index.html of the app.
@@ -128,13 +129,13 @@ function createWindow() {
       protocol: 'http:',
       host: `localhost:${process.env.PORT || 9000}`,
       pathname: 'index.html',
-      slashes: true,
+      slashes: true
     });
   } else {
     indexPath = url.format({
       protocol: 'file:',
       pathname: path.join(__dirname, 'dist', 'index.html'),
-      slashes: true,
+      slashes: true
     });
   }
 
@@ -284,6 +285,15 @@ ipcMain.on(DELETE_TABLE, async (event, args) => {
 // args === [selectedTable, selectedDb, selectedRowId]
 ipcMain.on(REMOVE_TABLE_ROW, async (_, args) => {
   await removeTableRow(...args);
+});
+
+/**
+ * called from ./components/db/IndivTable.js
+ * when the user submits request for adding a row in the grid
+ */
+// args === [selectedTable, selectedDb, ]
+ipcMain.on(ADD_TABLE_ROW, async (_, args) => {
+  await addTableRow(...args);
 });
 
 /**

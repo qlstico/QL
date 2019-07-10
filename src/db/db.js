@@ -7,7 +7,7 @@ const DB_CONNECTION = {
   password: '', // env var: PGPASSWORD
   host: 'localhost', // Server hosting the postgres database
   port: 5432, // env var: PGPORT
-  idleTimeoutMillis: 300, // how long a client is allowed to remain idle before being closed
+  idleTimeoutMillis: 300 // how long a client is allowed to remain idle before being closed
 };
 
 // Helper Functions
@@ -37,7 +37,7 @@ const tranformRowToSql = (id, row) => {
         return `"${key}" = $${idx + 1}`;
       })
       .join(', '),
-    valuesArr.concat(id),
+    valuesArr.concat(id)
   ];
 };
 
@@ -164,6 +164,19 @@ const removeTableRow = async (table, database, id) => {
   }
 };
 
+const addTableRow = async (table, database) => {
+  setDatabase(database);
+  const pool = new pg.Pool(DB_CONNECTION);
+  try {
+    const response = await pool.query(
+      `INSERT INTO "${table}"(id) VALUES (101010)`
+    );
+    return response.rows;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 const tranformCellToSql = ({ key, value, id }) => {
   return [`"${key}" = $${1}`, [value, id]];
 };
@@ -178,7 +191,7 @@ const updateTableData = async (table, database, allUpdatedCells) => {
   }, []);
   const queryArr = keysAndParamsNestedArr.map(([updateStr, values]) => [
     `UPDATE "${table}" SET ${updateStr} WHERE id=$${values.length} returning *`,
-    values,
+    values
   ]);
   try {
     for (const [queryStr, params] of queryArr) {
@@ -200,4 +213,5 @@ module.exports = {
   createDatabase,
   setUserProvidedDbConnection,
   deleteDatabase,
+  addTableRow
 };

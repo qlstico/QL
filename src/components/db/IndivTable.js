@@ -98,7 +98,7 @@ const IndivTable = () => {
     // We're listening for any changes in selectedDataTable since it takes a little
     // bit for this to come through, therefore we need to update once we actually
     // get ahold of this to properly set our state an kick off rending of the grid table.
-  }, [selectedTableData]);
+  }, [selectedTableData, tableMatrix]);
 
   // Handles input changes for grid cells into the changesMade state field
   const recordCellChangesMade = cell => {
@@ -194,6 +194,23 @@ const IndivTable = () => {
   // Resets selected rows to none
   const unSelectRow = () => {
     setSelectedRow(false);
+  };
+
+  const addRowToState = keys => {
+    const row = [];
+    for (let key of keys) {
+      const cell = { key, value: '' };
+      row.push(cell);
+    }
+    console.log(tableMatrix);
+    setTableMatrix(prevMatrix => {
+      prevMatrix.push(row);
+      return prevMatrix;
+    });
+  };
+
+  const addRowToDb = async (table = selectedTable, db = selectedDb) => {
+    await ipcRenderer.send(ADD_TABLE_ROW, [table, db]);
   };
 
   window.setTimeout(() => {
@@ -307,15 +324,19 @@ const IndivTable = () => {
       >
         Submit
       </Button>
-      {/* <Button
+      <Button
+        edge="end"
         variant="contained"
         type="button"
+        // onClick={() => addRowToState(Object.keys(selectedTableData[0]))}
+        onClick={() => addRowToDb()}
         color="inherit"
-        onClick={() => console.table(tableMatrix)}
+        id="menuButton"
+        size="small"
       >
         Add Row
       </Button>
-      */}
+
       {selectedRow && (
         <Button
           variant="contained"
