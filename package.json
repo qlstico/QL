@@ -40,7 +40,7 @@
     "clsx": "^1.0.4",
     "electron": "^5.0.6",
     "electron-json-storage": "^4.1.6",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "graphql-voyager": "^1.0.0-rc.27",
     "jss": "^9.8.7",
     "material-ui": "^0.20.2",
